@@ -1,0 +1,153 @@
+.footer {
+  background-color: #f8f4f4;
+  padding: 50px;
+  font-family: 'Urbanist', sans-serif;
+  color: #333;
+}
+
+.footer-section {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.subscription {
+  width: 30%;
+  margin-left: 5%;
+}
+
+.subscription-title {
+  font-size: 20px;
+  color: #7c3a4f;
+  margin-bottom: 20px;
+}
+
+.subscription p {
+  font-size: 16px;
+  margin-bottom: 10px; 
+}
+
+.subscription-form {
+  display: flex;
+}
+
+.email-input {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  flex-grow: 1;
+}
+
+.subscribe-btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #7c3a4f;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.subscribe-btn:hover {
+  background-color: #57223f;
+}
+
+.contact-info {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.contact-info h3 {
+  font-size: 20px;
+  color: #7c3a4f;
+  margin-bottom: 20px;
+}
+
+.contact-info p {
+  font-size: 18px !important;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.contact-info p svg {
+  color: #7c3a4f;
+  margin-right: 8px;
+}
+
+.contact-info p {
+  font-size: 16px;
+  color: #333;
+}
+
+.hours-info {
+  width: 25%;
+  justify-content: center;
+  align-items: center;
+}
+
+.hours-info h3 {
+  font-size: 20px;
+  color: #7c3a4f;
+  margin-bottom: 20px;
+}
+
+.hours-grid {
+  font-size: 16px !important;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+}
+
+.day {
+  white-space: nowrap;
+}
+
+.time {
+  text-align: left;
+}
+
+.footer-bottom {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-left: 5%;
+}
+
+.branding {
+  width: 30%;
+  display: flex;
+  font-family: 'Kaushan Script', cursive;
+  font-size: 32px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.description {
+  
+  display: flex;
+  font-size: 18px;
+  color: #333;
+}
+
+.social-media {
+  width: 30%;
+  display: flex;
+  gap: 20px;
+}
+
+.social-icon {
+  font-size: 18px;
+  color: #000;
+  cursor: pointer;
+}
+
+.social-icon:hover {
+  color: #7c3a4f;
+}

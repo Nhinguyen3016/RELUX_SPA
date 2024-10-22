@@ -1,0 +1,66 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 50px;
+  background-color: #fdfdf6;
+  border-bottom: 1px solid #e5e5e5;
+  height: 90px;
+  gap: 0px;
+  opacity: 1;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 120px;
+  height: 64.41px;
+}
+
+.logo h1 {
+  font-family: 'Kaushan Script', cursive;
+  font-size: 55px;
+  font-weight: 400;
+  line-height: 80px;
+  letter-spacing: 0.01em;
+  margin-left: 10px;
+  text-align: center;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 30px;
+}
+
+.nav-links li {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+  font-family: 'Arial', sans-serif;
+}
+
+.nav-links li a:hover {
+  color: #7c6e75;
+}
+
+.small-icon {
+  margin-left: 8px;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.icon img {
+  width: 50px;
+  height: 45px;
+  opacity: 1;
+}
