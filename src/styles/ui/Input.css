@@ -1,0 +1,32 @@
+.input {
+  width: 100%;
+  padding: 16px 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.input::placeholder {
+  color: #ccc;
+}
+
+.input:focus {
+  outline: 2px solid rgba(0, 0, 0, 0.1);
+  outline-offset: 2px;
+}
+
+.password {
+  position: relative;
+  width: 100%;
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}

@@ -7,10 +7,10 @@
 
 body {
   font-family: 'Kaushan Script', cursive;
-  background-color: #f4dede;
+  /* background-color: #f4dede;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
   min-height: 100vh;
   min-width: 100vw;
   overflow-x: hidden;

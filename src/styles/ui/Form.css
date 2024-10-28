@@ -1,0 +1,14 @@
+.form-field {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 16px;
+  margin-top: 5px;
+  font-weight: 600;
+}

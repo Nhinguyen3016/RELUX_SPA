@@ -1,25 +1,26 @@
 import React from 'react';
-import { BrowserRouter as Router} from 'react-router-dom';
-import Home from './components/Home';
-import Section from './components/Section';
-import Services from './components/Services';
-import RelaxSection from './components/RelaxSection';
-import MeetOurTeam from './components/MeetOurTeam';
+import { Route, Routes} from 'react-router-dom';
 import MainLayout from './layout/MainLayout'
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/login/LoginPage';
+import RegisterPage from './pages/register/RegisterPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import NewPasswordPage from './pages/NewPasswordPage';
+import "./App.css"
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-      <MainLayout>
-        <Home />
-        <Section />
-        <Services />
-        <RelaxSection />
-        <MeetOurTeam />
-      </MainLayout>
-      </div>
-    </Router>
+    <>
+      <Routes>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/new-password" element={<NewPasswordPage />} />
+          </Route>
+      </Routes>
+    </>
   );
 }
 

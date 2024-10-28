@@ -1,0 +1,23 @@
+.button {
+  border-radius: 8px;
+  background: #8EA097;
+  border: none;
+  color: white;
+  padding: 14px 80px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:focus {
+  outline: 2px solid rgba(0, 0, 0, 0.1);
+  outline-offset: 2px;
+}
+
+.button:focus-visible {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
