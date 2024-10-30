@@ -21,7 +21,26 @@ const ForgotPasswordPage = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
+    try {
+      const response = await fetch('/api/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to send reset code. Please try again.");
+      }
+
+      const result = await response.json();
+      console.log("Password reset email sent:", result);
+      // Optionally, display a success message or redirect the user
+    } catch (error) {
+      console.error("Error sending password reset request:", error);
+      // Optionally, display an error message
+    }
   };
 
   return (

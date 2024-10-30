@@ -26,9 +26,30 @@ const LoginForm = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
-    reset();
-    // setError("root");
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Login failed. Please check your credentials.");
+      }
+
+      const result = await response.json();
+      console.log("Login successful:", result);
+      reset(); // Clear form fields on success
+
+      // Redirect or perform further actions on successful login
+      navigate('/dashboard'); // Replace '/dashboard' with the route after login
+    } catch (error) {
+      console.error("Error during login:", error);
+      setError("root", { message: error.message });
+    }
   };
 
   return (

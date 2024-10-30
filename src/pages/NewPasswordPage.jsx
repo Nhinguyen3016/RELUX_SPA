@@ -21,8 +21,31 @@ const NewPasswordPage = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
+    try {
+      const response = await fetch('/api/reset-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          password: data.password,
+          confirmPassword: data.confirmPassword,
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to reset password. Please try again.");
+      }
+
+      const result = await response.json();
+      console.log("Password reset successful:", result);
+      // Optionally, navigate to login page or show success message
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      // Optionally, display an error message to the user
+    }
   };
+
   return (
     <div className="form_container">
       <h2 className="form-heading">Forgot password?</h2>

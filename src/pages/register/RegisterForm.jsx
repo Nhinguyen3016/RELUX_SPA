@@ -25,9 +25,27 @@ const RegisterForm = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
-    reset();
-    setError("root");
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to register. Please try again.");
+      }
+
+      const result = await response.json();
+      console.log("Registration successful:", result);
+      reset(); // Clear form fields on success
+    } catch (error) {
+      console.error("Error during registration:", error);
+      setError("root", { message: error.message });
+    }
   };
 
   return (
