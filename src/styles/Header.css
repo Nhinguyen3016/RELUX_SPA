@@ -52,6 +52,36 @@
   color: #7c6e75;
 }
 
+.dropdown {
+  position: relative;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #f9f9f9;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  min-width: 170px;
+  border-radius: 5px;
+  padding: 10px 0;
+  z-index: 3;
+}
+
+
+.dropdown-menu li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.dropdown-menu li:hover {
+  background-color: #e1e1e1;
+}
+
 .small-icon {
   margin-left: 8px;
   width: 16px;

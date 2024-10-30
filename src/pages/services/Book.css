@@ -1,0 +1,34 @@
+.book-the-service-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 460px;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    text-align: center;
+    color: #61133D;
+}
+
+.book-the-service-section h2 {
+    font-size: 64px;
+    margin-bottom: 40px;
+}
+
+.book-appointment-button {
+    padding: 10px 20px;
+    font-size: 42px;
+    margin-top: 40px;
+    background-color: #ffffff;
+    font-weight: bold;
+    color: #61133D;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.book-appointment-button:hover {
+    background-color: #ffffff;
+}

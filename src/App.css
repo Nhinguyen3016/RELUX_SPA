@@ -20,6 +20,14 @@ header ul li a {
   color: #333;
 }
 
+.app-services-title {
+  font-family: 'Urbanist', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: #5d1a40;
+  margin-top: 40px;
+}
+
 .hero {
   background: #f4f4f4;
   text-align: center;
