@@ -1,0 +1,80 @@
+
+.meet-our-team {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #e8d9d9;
+  padding: 50px;
+  border-radius: 10px;
+}
+
+.team-info {
+  width: 40%;
+  margin-left: 50px;
+}
+
+.team-title {
+  width: 350px;
+  font-family: 'Kaushan Script', cursive;
+  font-size: 56px;
+  color: #57223f;
+  margin-bottom: 30px;
+}
+
+.team-description {
+  width: 350px;
+  font-family: 'Urbanist', sans-serif;
+  font-size: 20px;
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 40px;
+}
+
+.appointment-btn {
+  padding: 10px 30px !important;
+  font-size: 20px !important;
+  font-family: 'Urbanist', sans-serif;
+  color: #fff;
+  background-color: #7c3a4f;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.appointment-btn:hover {
+  background-color: #57223f;
+}
+
+.team-members {
+  width: 60%;
+  margin-right: 100px;
+  display: flex;
+  gap: 5%;
+}
+
+.team-member {
+  text-align: center;
+}
+
+.member-image {
+  width: 380px;
+  height: 400px;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.member-name {
+  font-family: 'Urbanist', sans-serif;
+  font-size: 22px;
+  color: #57223f;
+  margin-bottom: 5px;
+}
+
+.member-role {
+  font-family: 'Urbanist', sans-serif;
+  font-size: 16px;
+  color: #666;
+}
+
