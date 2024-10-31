@@ -1,0 +1,190 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Kaushan Script', cursive;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  min-width: 100vw;
+  overflow-x: hidden;
+}
+
+.home {
+  background-color: #f0dede;
+  padding: 50px 80px;
+  position: relative;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100vw;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 50px;
+  width: 100%;
+}
+
+.home-text-left h1 {
+position: relative;
+top: -140px;
+left: 200px;
+font-size: 60px;
+font-weight: bold;
+line-height: 1.5;
+z-index: 2;
+color: #5c2b3c;
+}
+
+.home-text-left h1 span:first-child {
+display: block;
+margin-left: 100px;
+}
+
+.home-text-left h1 span:last-child {
+display: block;
+}
+
+.home-image {
+position: relative;
+width: 60%;
+max-width: 300px;
+height: auto;
+margin: 0 auto;
+border-radius: 0%;
+overflow: hidden;
+transform: rotate(28.44deg);
+}
+
+.home-image img {
+width: 80%;
+height: 100%;
+object-fit: cover;
+}
+
+.home-text-right {
+  flex: 1;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.contact-info {
+  align-items: center;
+  font-size: 30px;
+  margin-bottom: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
+
+.contact-info span {
+  float: left;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.contact-info p {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 20px !important;
+  color: #663333;
+}
+
+.description {
+  width: 400px;
+  text-align: left;
+  line-height: 30.02px;
+  font-size: 20px;
+  color: #311b1b;
+  margin-bottom: 40px;
+}
+
+.appointment-btn {
+  padding: 10px 50px !important;
+  background-color: #692453;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 25px !important;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: flex-start;
+}
+
+.appointment-btn:hover {
+  background-color: #501a3a;
+}
+
+.home-image {
+  position: relative;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  overflow: hidden;
+  z-index: 1;
+  margin-left: -80px;
+}
+
+.home-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.help-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+.message {
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.message span {
+  font-size: 15px;
+  color: #333;
+}
+
+.icon-arrow-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.help-icon img {
+  width: 50px;
+  height: 50px;
+  margin-right: 0px;
+}
+
+.help-arrow img {
+  width: 35px;
+  background-color: none;
+  height: auto;
+  position: relative;
+  top: -32px;
+}
+

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/Footer.css';
+import '../../styles/mainlayout/Footer.css';
 import { FaMapMarkerAlt, FaPhoneAlt, FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';
 
 const Footer = () => {

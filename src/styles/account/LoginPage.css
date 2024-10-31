@@ -1,0 +1,23 @@
+.login_page {
+    max-width: 680px;
+    margin: 40px auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .login_form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  
+    a {
+      color: #7A7A7A;
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
