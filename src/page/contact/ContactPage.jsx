@@ -93,7 +93,7 @@ const ContactPage = () => {
           </div>
           
           <div className="right-column">
-            <div className="image-container">
+            <div className="image-container-c">
               <img 
                 src={spaImage} 
                 alt="Spa relaxation"

@@ -30,9 +30,11 @@ const Header = () => {
             </div>
             {isServicesOpen && (
               <div className="dropdown-menu">
-                <Link to="/service1">Service 1</Link>
-                <Link to="/service2">Service 2</Link>
-                <Link to="/service3">Service 3</Link>
+                <Link to="/services">Services</Link>
+                <Link to="/services/body-treatments">Body Treatments</Link>
+                <Link to="/services/facials">Facials</Link>
+                <Link to="/services/massages">Massages</Link>
+                <Link to="/services/spa-programs">Spa Programs</Link>
               </div>
             )}
           </li>

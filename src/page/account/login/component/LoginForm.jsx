@@ -16,7 +16,7 @@ const LoginForm = () => {
   const {
     register,
     handleSubmit,
-    setError,  // Uncomment to set errors on failed login
+    setError,  
     reset,
     formState: { errors, isSubmitting },
   } = useForm({
@@ -44,10 +44,10 @@ const LoginForm = () => {
 
       const result = await response.json();
       console.log("Login successful:", result);
-      reset(); // Clear form fields on success
+      reset();
 
-      // Redirect or perform further actions on successful login
-      navigate('/dashboard'); // Replace '/dashboard' with the route after login
+     
+      navigate('/dashboard'); 
     } catch (error) {
       console.error("Error during login:", error);
       setError("root", { message: error.message });

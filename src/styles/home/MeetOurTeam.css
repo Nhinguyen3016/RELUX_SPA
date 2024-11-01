@@ -6,6 +6,8 @@
   background-color: #e8d9d9;
   padding: 50px;
   border-radius: 10px;
+  margin-right: 0;
+  text-align: left;
 }
 
 .team-info {
@@ -28,6 +30,7 @@
   color: #333;
   line-height: 1.5;
   margin-bottom: 40px;
+ 
 }
 
 .appointment-btn {
