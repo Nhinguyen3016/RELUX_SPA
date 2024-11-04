@@ -1,16 +1,15 @@
 import Header from "./component/Header"
 import Footer from "./component/Footer"
-import { Outlet } from "react-router-dom"
-
-const MainLayout = () => {
+import { SheetProvider } from "../context/SheetContext"
+const MainLayout = ({children}) => {
     return (
-        <>
+        <SheetProvider>
             <Header />
             <div>
-                <Outlet />
+                {children}
             </div>
             <Footer />
-        </>
+        </SheetProvider>
     )
 }
 
