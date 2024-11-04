@@ -7,6 +7,8 @@ import ThirdStepForm from "./components/ThirdStepForm";
 import FourthStepForm from "./components/FourthStepForm";
 import LastStepForm from "./components/LastStepForm";
 import { useSheetBooking } from "../../context/SheetContext";
+import { customerSchema } from "./validation";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const BookingSheetContainer = () => {
   const { show, toggleShow } = useSheetBooking();
@@ -25,7 +27,8 @@ const BookingSheetContainer = () => {
       phone: "",
       note: "",
       payMethod: "onSite"
-    }
+    }, 
+    resolver: zodResolver(customerSchema),
   })
 
   const nextStep = () => setCurrentStep((prev) => prev + 1);

@@ -31,7 +31,7 @@
   right: 0;
   width: 500px;
   height: 100%;
-  background: white;
+  background: #F3F3EF;
   padding: 32px 40px;
   transform: translateX(100%); /* Start off-screen */
   transition: transform 0.3s ease-in-out;
