@@ -1,24 +1,38 @@
-import logo from './logo.svg';
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
+import Header from './layout/component/header/header.jsx';
+import Sidebar from './layout/component/sidebar/sidebar.jsx';
+import ServiceMenu from './components/service-category.js';
+import Dashboard from './components/dashboard.js';
+import Feedback from './components/feedback.js';
+import Booking from './components/booking.js';
+import ServicePackage from './components/service.js';
+
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <Header />
+        <div className="main-container">
+          <div className="sidebar-container">
+            <Sidebar />
+          </div>
+          <div className="service-content">
+            <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/booking" element={<Booking />} />
+              <Route path="/service" element={<ServiceMenu />} />
+              <Route path="/feedback" element={<Feedback />} />
+              <Route path="/service/package" element={<ServicePackage />} />
+            </Routes>
+          </div>
+        </div>
+      </div> 
+    </BrowserRouter>  
   );
 }
 
