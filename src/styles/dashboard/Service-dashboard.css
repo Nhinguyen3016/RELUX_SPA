@@ -1,0 +1,297 @@
+.service-menu {
+    padding: 20px;
+  }
+  
+  .service-menu-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+  }
+  
+  .edit-button, .add-button {
+    width: 84px;
+    height: 40px;
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .service-cards-title {
+    display: flex;
+    overflow-x: auto;
+    flex-direction: column;
+    gap: 20px;
+    width: auto;
+    height: 160px;
+    border: 1px solid black;
+    background-color: #F7FAFC;
+    border-radius: 8px;
+    padding: 15px;
+  }
+  .service-title {
+    margin-bottom: 10px;
+    color: #000;
+  }
+
+  .service-details {
+    margin: 10px 0;
+  }
+
+  .detail-label {
+    font-weight: bold;
+    margin-right: 5px;
+  }
+
+  .service-small {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 0.5fr));
+    gap: 20px 0px;
+    overflow-x: auto;
+    margin-top: 50px;
+  }
+
+  .service-card1 {
+    width: 160px;
+    height: auto;
+    min-width: 180px;
+    margin: 0 auto;
+    border: 1px solid #000000;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f8f8;
+  }
+  .service-card1{
+    border-color: #000000;
+  }
+ 
+  
+  
+  .service-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+  @media (max-width: 1200px) {
+    .service-small-item {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .service-small-item {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+  }
+
+  .service-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .service-actions button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .service-actions button:first-child {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  .service-actions button:last-child {
+    background-color: #f44336;
+    color: white;
+  }
+  
+.serv {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.service-form {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+.service-form-title{
+  text-align: center;
+  padding-bottom: 15px;
+}
+
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.form-actions button {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form-actions button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+.form-actions button[type="button"] {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.feature-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.feature-title {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.feature-description {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+.service-header {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.service-header-content {
+  display: flex;
+  gap: 24px;
+}
+
+.service-icon-container {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.service-icon-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.service-header-info {
+  flex: 1;
+}
+
+.service-header-info h2 {
+  margin: 0 0 16px 0;
+  color: #333;
+}
+
+.description {
+  width: 100%;
+  min-height: 70px;
+  resize: vertical;
+}
+
+.massage-description-box {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.massage-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.massage-text {
+  margin: 8px 0 0 0;
+  color: #666;
+  line-height: 1.5;
+}
+  
