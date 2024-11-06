@@ -37,12 +37,14 @@ const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleFileChange,
           </div>
 
           <div className="form-group">
-            <label>Icon</label>
+            <label>TypeService</label>
             <input
-              type="file"
-              name="icon"
-              onChange={handleFileChange}
-              accept="image/*"
+              type="text"
+              name="typeService"
+              placeholder="Enter typeService"
+              value={formData.typeService}
+              onChange={handleInputChange}
+              required
             />
           </div>
 
@@ -61,13 +63,12 @@ const ServiceMenu = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [formData, setFormData] = useState({
-    id: null,
     serviceName: '',
     description: '',
     duration: '',
     price: '',
     promotion: '',
-    icon: null
+    typeService: '',
   });
 
   // Handle form input changes
@@ -88,41 +89,37 @@ const ServiceMenu = () => {
   };
 
   // Fetch all services
-  // const fetchServices = async () => {
-  //   try {
-  //     const response = await axios.get(`${API_BASE_URL}/services`, {
-  //       headers: {
-  //         'Authorization': `Bearer ${localStorage.getItem('token')}`
-  //       }
-  //     });
-  //     setServices(response.data);
-  //   } catch (error) {
-  //     console.error('Error fetching services:', error);
-  //     alert(error.response?.data?.message || 'Failed to fetch services');
-  //   }
-  // };
+  const fetchServices = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/services`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      setServices(response.data);
+      console.log('Fetched services:', response.data);
+    } catch (error) {
+      console.error('Error fetching services:', error);
+      alert(error.response?.data?.message || 'Failed to fetch services');
+    }
+  };
   // ... existing imports ...
-const fetchServices = async () => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/service`);
-    setServices(response.data);
-  } catch (error) {
-    console.error('Error fetching services:', error);
-    alert('Failed to fetch services');
-  }
-};
+// const fetchServices = async () => {
+//   try {
+//     const response = await axios.get(`${API_BASE_URL}/service`);
+//     setServices(response.data);
+//   } catch (error) {
+//     console.error('Error fetching services:', error);
+//     alert('Failed to fetch services');
+//   }
+// };
   // Create new service
   const createService = async () => {
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append('serviceName', formData.service);
+      formDataToSend.append('serviceName', formData.serviceName);
       formDataToSend.append('description', formData.description);
-      formDataToSend.append('duration', formData.duration);
-      formDataToSend.append('price', formData.price);
-      formDataToSend.append('promotion', formData.promotion);
-      if (formData.icon) {
-        formDataToSend.append('icon', formData.icon);
-      }
+      formDataToSend.append('typeService',formData.typeService);
 
       const response = await axios.post(`${API_BASE_URL}/services`, formDataToSend, {
         headers: {
@@ -148,12 +145,7 @@ const fetchServices = async () => {
       const formDataToSend = new FormData();
       formDataToSend.append('serviceName', formData.serviceName);
       formDataToSend.append('description', formData.description);
-      formDataToSend.append('duration', formData.duration);
-      formDataToSend.append('price', formData.price);
-      formDataToSend.append('promotion', formData.promotion);
-      if (formData.icon) {
-        formDataToSend.append('icon', formData.icon);
-      }
+      formDataToSend.append('typeService',formData.typeService);
 
       const response = await axios.put(`${API_BASE_URL}/services/${formData.id}`, formDataToSend, {
         headers: {
@@ -215,7 +207,7 @@ const fetchServices = async () => {
       duration: service.duration,
       price: service.price,
       promotion: service.promotion,
-      icon: null // Reset icon when editing
+      typeService: service.typeService,
     });
     setShowEditForm(true);
   };
@@ -228,7 +220,7 @@ const fetchServices = async () => {
       duration: '',
       price: '',
       promotion: '',
-      icon: null
+      typeService: '',
     });
     setShowAddForm(false);
     setShowEditForm(false);
@@ -250,19 +242,19 @@ const fetchServices = async () => {
       </div>
       <div className="service-cards-category">
       {services.map((service) => (
-        <Link to={`/servicecategory/service`} key={service.id} className='service-card-link'>
+        <Link to={`/servicecategory/service`} key={service.CategoryID} className='service-card-link'>
           <div className="service-card-category">
-            <img src={service.icon} alt={service.serviceName} className="service-icon" />
-            <h3 className="service-title-category">{service.serviceName}</h3>
-            <p className="service-description"><span className="detail-label">Description:</span> {service.description}</p>
+            <h3 className="service-title-category">{service.Name}</h3>
+            <p className="service-description"><span className="detail-label">Description:</span> {service.DescriptionShort || 'No description available'}</p>
+            <p className="service-typeService"><span className="detail-label">TypeService:</span> {service.TypeService || 'No type available'}</p>
             <div className="service-actions">
               <button onClick={(e) => {
                 e.preventDefault();
-                handleEditClick(service);
+                handleEditClick(service.CategoryID);
               }}>Edit</button>
               <button onClick={(e) => {
                 e.preventDefault();
-                deleteService(service.id);
+                deleteService(service.CategoryID);
               }}>Delete</button>
             </div>
           </div>
