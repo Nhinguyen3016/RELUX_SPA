@@ -1,0 +1,148 @@
+{
+  "service": [
+    {
+      "id": 1,
+      "serviceName": "Massage",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+      "duration": 60,
+      "price": 50,
+      "promotion": "10%",
+      "icon": "./src/image/massage-icon.png"
+    },
+    {
+      "id": 2,
+      "serviceName": "Squeeze acne",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+      "duration": 30,
+      "price": 40,
+      "promotion": "Free consultation",
+      "icon": "./src/image/squeeze_acne-icon.png"
+    },
+    {
+      "id": 3,
+      "serviceName": "Facial Treatment",
+      "description": "Deep cleansing facial",
+      "duration": 45,
+      "price": 60,
+      "promotion": "15% off",
+      "icon": "./src/image/facial-icon.png"
+    },
+    {
+      "id": 4,
+      "serviceName": "Body Scrub",
+      "description": "Full body exfoliation",
+      "duration": 50,
+      "price": 55,
+      "promotion": "Free moisturizer",
+      "icon": "./src/image/scrub-icon.png"
+    },
+    {
+      "id": 5,
+      "serviceName": "Hot Stone Massage",
+      "description": "Relaxing hot stone therapy",
+      "duration": 75,
+      "price": 70,
+      "promotion": "20% off",
+      "icon": "./src/image/hotstone-icon.png"
+    },
+    {
+      "id": 6,
+      "serviceName": "Aromatherapy",
+      "description": "Essential oil massage",
+      "duration": 60,
+      "price": 65,
+      "promotion": "Free oil sample",
+      "icon": "./src/image/aroma-icon.png"
+    },
+    {
+      "id": 7,
+      "serviceName": "Deep Tissue Massage",
+      "description": "Intensive muscle treatment",
+      "duration": 60,
+      "price": 75,
+      "promotion": "5% off",
+      "icon": "./src/image/deepmassage-icon.png"
+    },
+    {
+      "id": 8,
+      "serviceName": "Anti-aging Facial",
+      "description": "Premium facial treatment",
+      "duration": 90,
+      "price": 85,
+      "promotion": "Free skin analysis",
+      "icon": "./src/image/antiaging-icon.png"
+    },
+    {
+      "id": 9,
+      "serviceName": "Thai Massage",
+      "description": "Traditional Thai massage technique",
+      "duration": 90,
+      "price": 80,
+      "promotion": "25% off first visit",
+      "icon": "./src/image/thai-massage-icon.png"
+    },
+    {
+      "id": 10,
+      "serviceName": "Foot Reflexology",
+      "description": "Pressure point foot massage",
+      "duration": 45,
+      "price": 45,
+      "promotion": "Buy 3 get 1 free",
+      "icon": "./src/image/foot-icon.png"
+    },
+    {
+      "id": 11,
+      "serviceName": "Couples Massage",
+      "description": "Romantic couple massage experience",
+      "duration": 75,
+      "price": 150,
+      "promotion": "Complimentary wine",
+      "icon": "./src/image/couples-icon.png"
+    },
+    {
+      "id": 12,
+      "serviceName": "LED Light Therapy",
+      "description": "Advanced skin treatment",
+      "duration": 30,
+      "price": 65,
+      "promotion": "First trial 50% off",
+      "icon": "./src/image/led-icon.png"
+    },
+    {
+      "id": 13,
+      "serviceName": "Hydrafacial",
+      "description": "Deep hydration treatment",
+      "duration": 60,
+      "price": 120,
+      "promotion": "Free eye treatment",
+      "icon": "./src/image/hydrafacial-icon.png"
+    },
+    {
+      "id": 14,
+      "serviceName": "Back Treatment",
+      "description": "Back acne and relaxation",
+      "duration": 45,
+      "price": 70,
+      "promotion": "30% off second visit",
+      "icon": "./src/image/back-icon.png"
+    },
+    {
+      "id": 15,
+      "serviceName": "Lymphatic Drainage",
+      "description": "Detox massage therapy",
+      "duration": 60,
+      "price": 90,
+      "promotion": "Free consultation",
+      "icon": "./src/image/lymphatic-icon.png"
+    },
+    {
+      "id": 16,
+      "serviceName": "Microdermabrasion",
+      "description": "Skin resurfacing treatment",
+      "duration": 45,
+      "price": 85,
+      "promotion": "Package discount 15%",
+      "icon": "./src/image/microderm-icon.png"
+    }
+  ]
+}
