@@ -1,16 +1,4 @@
 import React from 'react';
-<<<<<<< HEAD
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import './App.css';
-import Header from './layout/component/header/header.jsx';
-import Sidebar from './layout/component/sidebar/sidebar.jsx';
-import ServiceMenu from './components/service-category.js';
-import Dashboard from './components/dashboard.js';
-import Feedback from './components/feedback.js';
-import Booking from './components/booking.js';
-import ServicePackage from './components/service.js';
-
-=======
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import MainLayout from './layout/MainLayout';
@@ -35,35 +23,11 @@ import Booking from './page/dashboard/booking-dashboard.jsx';
 import ServiceCategory from './page/dashboard/service-category-dashboard.jsx';
 import Feedback from './page/dashboard/feedback-dashboard.jsx';
 import Service from './page/dashboard/service-dashboard.jsx';
->>>>>>> b3a659fa0c6abdc1e3b7e3938523f2309793eb6d
+
 
 
 function App() {
   return (
-<<<<<<< HEAD
-    <BrowserRouter>
-      <div className="App">
-        <Header />
-        <div className="main-container">
-          <div className="sidebar-container">
-            <Sidebar />
-          </div>
-          <div className="service-content">
-            <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/booking" element={<Booking />} />
-              <Route path="/service" element={<ServiceMenu />} />
-              <Route path="/feedback" element={<Feedback />} />
-              <Route path="/service/package" element={<ServicePackage />} />
-            </Routes>
-          </div>
-        </div>
-      </div> 
-    </BrowserRouter>  
-  );
-}
-=======
     <Router>
       <div className="App">
         <Routes>
@@ -98,6 +62,5 @@ function App() {
     </Router>
   );
 };
->>>>>>> b3a659fa0c6abdc1e3b7e3938523f2309793eb6d
 
 export default App;

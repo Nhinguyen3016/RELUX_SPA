@@ -1,40 +1,4 @@
-<<<<<<< HEAD
-
-body {
-    background-color: #EDEDED;
-    width: 100%;
-    height: 100%;   
-  }
-  
-  .App {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  
-  .main-container {
-    display: flex;
-    flex: 1;
-  }
-  
-  .sidebar-container {
-    width: 281px;
-    height: 100%;
-  }
-  
-  .service-content {
-    flex: 1;
-    padding: 0 10px 10px 0;
-    overflow-y: auto;
-    background-color: #fff;
-    margin-top: 30px;
-    margin-right: 33px;
-  }
-  a:-webkit-any-link {
-    color: rgb(0, 0, 0);
-    text-decoration: none;
-}
-=======
+g
 body {
   font-family: Arial, sans-serif;
 }
@@ -72,4 +36,3 @@ footer {
   padding: 20px;
   background-color: #f4f4f4;
 }
->>>>>>> b3a659fa0c6abdc1e3b7e3938523f2309793eb6d
