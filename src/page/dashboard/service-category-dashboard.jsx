@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:3001';
 
-const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleFileChange, handleInputChange }) => {
+const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange }) => {
   return (
     <div className="service-form-overlay">
       <div className="service-form">
@@ -17,9 +17,9 @@ const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleFileChange,
             <label>Service Name</label>
             <input
               type="text"
-              name="serviceName"
+              name="Name"
               placeholder="Enter service name"
-              value={formData.serviceName}
+              value={formData.Name}
               onChange={handleInputChange}
               required
             />
@@ -28,9 +28,9 @@ const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleFileChange,
           <div className="form-group">
             <label>Description</label>
             <textarea className='description-category'
-              name="description"
+              name="DescriptionShort"
               placeholder="Enter description"
-              value={formData.description}
+              value={formData.DescriptionShort}
               onChange={handleInputChange}
               required
             />
@@ -40,9 +40,9 @@ const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleFileChange,
             <label>TypeService</label>
             <input
               type="text"
-              name="typeService"
+              name="TypeService"
               placeholder="Enter typeService"
-              value={formData.typeService}
+              value={formData.TypeService}
               onChange={handleInputChange}
               required
             />
@@ -63,12 +63,9 @@ const ServiceMenu = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [formData, setFormData] = useState({
-    serviceName: '',
-    description: '',
-    duration: '',
-    price: '',
-    promotion: '',
-    typeService: '',
+    Name: '',
+    DescriptionShort: '',
+    TypeService: '',
   });
 
   // Handle form input changes
@@ -76,17 +73,10 @@ const ServiceMenu = () => {
     const { name, value } = e.target;
     setFormData(prevData => ({
       ...prevData,
-      [name]: value
+      [name]: value  
     }));
   };
 
-  // Handle file input changes
-  const handleFileChange = (e) => {
-    setFormData(prevData => ({
-      ...prevData,
-      icon: e.target.files[0]
-    }));
-  };
 
   // Fetch all services
   const fetchServices = async () => {
@@ -103,27 +93,16 @@ const ServiceMenu = () => {
       alert(error.response?.data?.message || 'Failed to fetch services');
     }
   };
-  // ... existing imports ...
-// const fetchServices = async () => {
-//   try {
-//     const response = await axios.get(`${API_BASE_URL}/service`);
-//     setServices(response.data);
-//   } catch (error) {
-//     console.error('Error fetching services:', error);
-//     alert('Failed to fetch services');
-//   }
-// };
   // Create new service
   const createService = async () => {
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append('serviceName', formData.serviceName);
-      formDataToSend.append('description', formData.description);
-      formDataToSend.append('typeService',formData.typeService);
-
-      const response = await axios.post(`${API_BASE_URL}/services`, formDataToSend, {
+      const response = await axios.post(`${API_BASE_URL}/services`, {
+        Name: formData.Name,
+        DescriptionShort: formData.DescriptionShort,
+        TypeService: formData.TypeService,
+      },{
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
@@ -142,18 +121,17 @@ const ServiceMenu = () => {
   // Update existing service
   const updateService = async () => {
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append('serviceName', formData.serviceName);
-      formDataToSend.append('description', formData.description);
-      formDataToSend.append('typeService',formData.typeService);
-
-      const response = await axios.put(`${API_BASE_URL}/services/${formData.id}`, formDataToSend, {
+      const response = await axios.put(`${API_BASE_URL}/services/${formData.id}`, {
+        Name: formData.Name,
+        DescriptionShort: formData.DescriptionShort,
+        TypeService: formData.TypeService,
+      },{
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-
+      	  
       if (response.status === 200) {
         await fetchServices();
         handleCloseForm();
@@ -170,7 +148,6 @@ const ServiceMenu = () => {
     if (!window.confirm('Are you sure you want to delete this service?')) {
       return;
     }
-
     try {
       const response = await axios.delete(`${API_BASE_URL}/services/${serviceId}`, {
         headers: {
@@ -191,6 +168,8 @@ const ServiceMenu = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Data sent to API:", formData);
+
     if (showEditForm) {
       await updateService();
     } else {
@@ -201,13 +180,10 @@ const ServiceMenu = () => {
   // Handle edit button click
   const handleEditClick = (service) => {
     setFormData({
-      id: service.id,
-      serviceName: service.serviceName,
-      description: service.description,
-      duration: service.duration,
-      price: service.price,
-      promotion: service.promotion,
-      typeService: service.typeService,
+      id: service.CategoryID,
+      Name: service.Name,
+      DescriptionShort: service.DescriptionShort,
+      TypeService: service.TypeService,
     });
     setShowEditForm(true);
   };
@@ -215,12 +191,9 @@ const ServiceMenu = () => {
   const handleCloseForm = () => {
     setFormData({
       id: null,
-      serviceName: '',
-      description: '',
-      duration: '',
-      price: '',
-      promotion: '',
-      typeService: '',
+      Name: '',
+      DescriptionShort: '',
+      TypeService: '',
     });
     setShowAddForm(false);
     setShowEditForm(false);
@@ -250,7 +223,7 @@ const ServiceMenu = () => {
             <div className="service-actions">
               <button onClick={(e) => {
                 e.preventDefault();
-                handleEditClick(service.CategoryID);
+                handleEditClick(service);
               }}>Edit</button>
               <button onClick={(e) => {
                 e.preventDefault();
@@ -269,7 +242,6 @@ const ServiceMenu = () => {
           onSubmit={handleSubmit}
           onClose={handleCloseForm}
           handleInputChange={handleInputChange}
-          handleFileChange={handleFileChange}
         />
       )}
     </div>
