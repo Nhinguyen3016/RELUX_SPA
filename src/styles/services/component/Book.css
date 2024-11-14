@@ -1,3 +1,4 @@
+
 .book-the-service-section {
     width: 100%;
     display: flex;
@@ -13,13 +14,13 @@
 }
 
 .book-the-service-section h2 {
-    font-size: 64px;
+    font-size: 50px;
     margin-bottom: 40px;
 }
 
 .book-appointment-button {
     padding: 10px 20px;
-    font-size: 42px;
+    font-size: 30px;
     margin-top: 40px;
     background-color: #ffffff;
     font-weight: bold;

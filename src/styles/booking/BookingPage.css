@@ -1,3 +1,4 @@
+/* Container and Layout */
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -13,6 +14,7 @@
     color: #5c2b3c;
     margin-left: 50px;
     text-align: left;
+    margin-top: 70px;
 }
 
 .grid-container {
@@ -27,127 +29,7 @@
     }
 }
 
-.booking-card {
-    background: #F3F3EF;
-    padding: 24px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border: 10px solid #CEB2B5;
-}
-
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.calendar-header h3 {
-    font-size: 25px;
-    margin: 0;
-    text-align: center;
-    width: 100%;
-    color: #5c2b3c;
-}
-
-.next-month-btn {
-    background: none;
-    border: none;
-    color: #5c2b3c;
-    cursor: pointer;
-    padding: 8px;
-}
-
-.calendar {
-    margin-bottom: 24px;
-    background: #F3F3EF;
-}
-
-.weekdays {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
-    margin-bottom: 8px;
-}
-
-.weekdays div {
-    text-align: center;
-    color: #666;
-    font-size: 14px;
-    padding: 8px 0;
-}
-
-.calendar-days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
-}
-
-.calendar-day {
-    aspect-ratio: 1;
-    border: none;
-    background: none;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 14px;
-    padding: 8px;
-    transition: all 0.2s;
-}
-
-.calendar-day:hover {
-    background: #f0f0f0;
-}
-
-.calendar-day.selected {
-    background: #5c2b3c;
-    color: white;
-}
-
-.time-slots {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 24px;
-    padding: 30px;
-    justify-items: center;
-}
-
-.time-slot {
-    padding: 8px 16px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background: white;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 14px;
-    width: 100px;
-}
-
-.time-slot:hover {
-    border-color: #5c2b3c;
-}
-
-.time-slot.selected {
-    background: #5c2b3c;
-    color: white;
-    border-color: #5c2b3c;
-}
-
-.next-btn {
-    width: 23%;
-    background: #8EA098;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.2s;
-    margin-right: 270px;
-    height: 35px;
-}
-
-.next-btn:hover {
-    background: #5c2b3c;
-}
-
+/* Content Section Styles */
 .content-section {
     color: #333;
     margin-right: 0;
@@ -166,6 +48,7 @@
     margin-bottom: 24px;
 }
 
+/* Details Section Styles */
 .details {
     margin-top: 32px;
     margin-left: 150px;
@@ -201,120 +84,16 @@
     text-align: left;
 }
 
-.custom-calendar {
-    width: 100% !important;
-    border: none !important;
-    font-family: inherit !important;
-}
-
-.custom-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    padding: 10px;
-}
-
-.month-year {
-    font-size: 20px;
-    font-weight: 500;
-    color: #5c2b3c;
-    font-weight: bold;
-}
-
-.month-nav-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-    color: #5c2b3c;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.month-nav-btn:disabled {
-    color: #ccc !important;
-    cursor: not-allowed !important;
-}
-
-.month-nav-btn:hover:not(:disabled) {
-    background-color: #f0f0f0;
-    border-radius: 50%;
-}
-
-.react-datepicker {
-    font-family: inherit !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-.react-datepicker__month-container {
-    width: 100%;
-    background: #F3F3EF;
-}
-
-.react-datepicker__week {
-    display: flex;
-    justify-content: space-around;
-}
-
-.react-datepicker__day {
-    margin: 0;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 50%;
-    color: #333;
-}
-
-.react-datepicker__day:hover {
-    background-color: #f0f0f0;
-    border-radius: 50%;
-}
-
-.react-datepicker__day--selected {
-    background-color: #8EA098 !important;
-    color: white !important;
-    border-radius: 50%;
-}
-
-.react-datepicker__day--keyboard-selected {
-    background-color: rgba(82, 43, 91, 0.1);
-    border-radius: 50%;
-}
-
-.react-datepicker__header {
-    background-color: #F3F3EF !important;
-    border-bottom: none !important;
-    padding-top: 0 !important;
-}
-
-.react-datepicker__day-names {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 10px;
-}
-
-.react-datepicker__day-name {
-    color: #8EA098;
-    width: 40px;
-    font-weight: bold;
-}
-
-.react-datepicker__day.past-day {
-    color: #ccc !important;
-    cursor: not-allowed !important;
-    pointer-events: none;
-}
-
+/* Image Styles */
 img.w-full.h-48.object-cover.rounded-lg {
     width: 1200px;
     height: 300px;
     margin-top: 30px;
     margin-bottom: 30px;
 }
+
 img.mt-5 {
     width: 570px;
-    height: 150px;
+    height: 200px;
+    margin-bottom: 20px;
 }

@@ -1,0 +1,92 @@
+/* TeamPage.css */
+
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.team-page {
+    width: 100%;
+    max-width: none;
+    margin-top: -17px;
+    padding: 0;
+}
+
+.team-banner {
+    position: relative;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.team-banner h1 {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    transform: translate(-50%, -50%);
+    font-size: 36px;
+    color: rgb(0, 0, 0); 
+    border-radius: 5px;
+}
+
+.banner-image {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+}
+
+.team-members {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 50px;
+    padding: 100px 20px; 
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1200px; 
+}
+
+.team-member {
+    text-align: center;
+}
+
+.member-photo {
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+}
+
+h2 {
+    color: #61133D;
+}
+
+/* Pagination styling */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.pagination button:hover {
+    background-color: #f0dede;
+}
+
+.pagination button.active {
+    background-color: #5d1a40;
+    color: white;
+}
+
+.pagination button:disabled {
+    cursor: not-allowed;
+    background-color: #ccc;
+}

@@ -1,0 +1,99 @@
+.container-otp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px;
+  margin: 0 auto;
+}
+
+.back-button-otp {
+  align-self: flex-start;
+  padding: 8px;
+  margin-bottom: 24px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+}
+
+.title-otp {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.description-otp {
+  color: #666;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.input-group-otp {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.input-box-otp {
+  width: 500px;
+  height: 50px;
+  text-align: center;
+  font-size: 24px;
+  border: 2px solid #8EA097;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.input-box-otp.filled {
+  border-color: #9accb3;
+}
+
+.input-box-otp:focus {
+  border-color: #9accb3;
+}
+
+.verify-button-otp {
+  margin-bottom: 50px;
+  padding: 12px 24px;
+  background-color: #8EA097;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width:100px;
+}
+
+.verify-button-otp:hover {
+  background-color: #808080;
+}
+
+.resend-container-otp {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.resend-text-otp {
+  color: #333;
+}
+
+.resend-button-otp {
+  color: #8EA097;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+}
+
+.resend-button-otp:hover {
+  text-decoration: underline;
+}

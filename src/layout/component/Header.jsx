@@ -31,10 +31,10 @@ const Header = () => {
             {isServicesOpen && (
               <div className="dropdown-menu">
                 <Link to="/services">Services</Link>
-                <Link to="/services/body-treatments">Body Treatments</Link>
-                <Link to="/services/facials">Facials</Link>
-                <Link to="/services/massages">Massages</Link>
-                <Link to="/services/spa-programs">Spa Programs</Link>
+                <Link to="/services/body-treatments">Full Care Package</Link>
+                <Link to="/services/facials">Massage and Relaxation Therapy</Link>
+                <Link to="/services/massages">Skin Care and Body Scrub</Link>
+                <Link to="/services/spa-programs">Manicure, Pedicure, and Steam Bath</Link>
               </div>
             )}
           </li>
@@ -52,6 +52,7 @@ const Header = () => {
                 <Link to="/gallery">Gallery</Link>
                 <Link to="/team-our">Our Team</Link>
                 <Link to="/account">Account</Link>
+                <Link to="/giftcard">GiftCard</Link>
               </div>
             )}
           </li>

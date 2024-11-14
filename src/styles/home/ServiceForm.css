@@ -1,0 +1,43 @@
+.service-form {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 5px;
+  }
+  
+  .service-form label {
+    font-size: 18px;
+    font-family: 'Urbanist', sans-serif;
+    color: #333;
+    margin-bottom: -10px;
+    margin-right: 0;
+    text-align: left;
+  }
+  
+  .service-form select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
+  }
+  
+  .next-btn {
+    width: 100px;
+    height: 40px;
+    font-size: 18px;
+    color: white;
+    background-color: #8EA098;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 5px;
+  }
+  
+  .next-btn:hover {
+    background-color: #566952;
+  }
+  
