@@ -1,0 +1,83 @@
+.about-me-detailE {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.detail-container-detailE {
+    display: flex;
+    max-width: 1200px;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.image-container-detailE {
+    flex: 1;
+    max-width: 300px;
+}
+
+.detail-image-detailE {
+    width: 100%;
+    height: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.info-detailE {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.name-detailE {
+    font-size: 32px;
+    font-weight: bold;
+    color: #1a1a1a;
+}
+
+.description-detailE {
+    font-size: 16px;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.contact-details-detailE {
+    display: flex;
+    flex-direction: row;  /* Changed from column to row to align items horizontally */
+    gap: 40px; /* Adds spacing between the items */
+    flex-wrap: wrap; /* Allows items to wrap if the container width is insufficient */
+}
+
+.contact-item-detailE {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1; /* Ensures items stretch evenly */
+    justify-content: flex-start; /* Aligns items to the start of the row */
+}
+
+.contact-icon-detailE {
+    width: 24px;
+    height: 24px;
+}
+
+.contact-title-detailE {
+    font-size: 18px;
+    color: #61133D;
+    font-weight: 600;
+}
+
+.contact-info-detailE {
+    font-size: 16px;
+    color: #4b5563;
+}
+
+img.detail-image {
+    width: 400px;
+    height: 400px;
+}
+
+.detail-container {
+    display: flex;
+    margin: 50px 100px 50px 100px;
+}

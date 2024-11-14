@@ -6,7 +6,8 @@ import GalleryPage from './page/gallery/GalleryPage';
 import GiftCardPage from './page/giftcard/GiftCardPage';
 import BookNowPage from './page/giftcard/BookNowPage';
 import BookingPage from './page/booking/BookingPage';
-import TeamOurPage from './page/ourteam/OurTeamPage';  
+import TeamOurPage from './page/ourteam/OurTeamPage'; 
+import DetailEmployee from './page/ourteam/DetailEmployee'; 
 import ContactPage from './page/contact/ContactPage';
 import LoginPage from './page/account/login/LoginPage';
 import RegisterPage from './page/account/register/RegisterPage';
@@ -29,6 +30,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/team-our" element={<TeamOurPage />} />
+            <Route path="/employee" element={<DetailEmployee />} />
             <Route path="/account" element={<LoginPage />} />
             <Route path="/contacts" element={<ContactPage />} />
             <Route path="/register" element={<RegisterPage />} />

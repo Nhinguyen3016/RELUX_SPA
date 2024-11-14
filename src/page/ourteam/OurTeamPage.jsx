@@ -1,63 +1,72 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import '../../styles/ourteam/OurTeamPage.css';
 
-import bannerImage from '../../images/gall0.svg';
-import aliceImage from '../../images/alice.png';
-import doriImage from '../../images/dori.png';
+const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
 
 const TeamPage = () => {
-  const teamMembers = [
-    { name: 'Alice Doue', role: 'Beauty therapist', img: aliceImage },
-    { name: 'Dori Stuart', role: 'Beauty therapist', img: doriImage },
-    { name: 'Elly Faritale', role: 'Beauty therapist', img: aliceImage },
-    { name: 'Rachel Green', role: 'Beauty therapist', img: aliceImage },
-    { name: 'Susan Geller', role: 'Beauty therapist', img: aliceImage },
-    { name: 'Diana Milos', role: 'Beauty therapist', img: aliceImage },
-    { name: 'Rachel Green', role: 'Beauty therapist', img: aliceImage },
-    { name: 'Susan Geller', role: 'Beauty therapist', img: aliceImage },
-    { name: 'Diana Milos', role: 'Beauty therapist', img: aliceImage },
-    { name: 'Rachel Green', role: 'Beauty therapist', img: aliceImage },
-    { name: 'Susan Geller', role: 'Beauty therapist', img: aliceImage },
-    { name: 'Diana Milos', role: 'Beauty therapist', img: aliceImage },
-  ];
-
-  const itemsPerPage = 9; // Số lượng nhân viên hiển thị mỗi trang
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9; // Number of team members displayed per page
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const response = await axios.get(`${API_HOST}/v1/employees`);
+        const employees = response.data.data.map(employee => ({
+          id: employee.id,
+          name: employee.name,
+          role: employee.specialtyType, // Maps 'specialtyType' to 'role'
+          img: employee.avatar,
+          description: employee.description,
+          location: `${employee.location.locationName}, ${employee.location.address}`,
+        }));
+        setTeamMembers(employees);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching team data:', err);
+        setError('Failed to load team members. Please try again later.');
+        setLoading(false);
+      }
+    };
 
+    fetchTeamMembers();
+  }, []);
+
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
   const indexOfLastMember = currentPage * itemsPerPage;
   const indexOfFirstMember = indexOfLastMember - itemsPerPage;
   const currentMembers = teamMembers.slice(indexOfFirstMember, indexOfLastMember);
-
   const totalPages = Math.ceil(teamMembers.length / itemsPerPage);
 
   return (
     <div className="team-page">
       <section className="team-banner">
         <h1>Our Team</h1>
-        <img src={bannerImage} alt="Banner" className="banner-image" />
       </section>
 
-      <section className="team-members">
-        {currentMembers.map((member, index) => (
-          <div className="team-member" key={index}>
-            <img src={member.img} alt={member.name} className="member-photo" />
-            <h2>{member.name}</h2>
-            <p>{member.role}</p>
-          </div>
-        ))}
-      </section>
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p className="error-message">{error}</p>
+      ) : (
+        <section className="team-members">
+          {currentMembers.map((member) => (
+            <div className="team-member" key={member.id}>
+              <img src={member.img} alt={member.name} className="member-photo" />
+              <h2>{member.name}</h2>
+              <p>{member.role}</p>
+              <p>{member.location}</p>
+              <p>{member.description}</p>
+            </div>
+          ))}
+        </section>
+      )}
 
       <section className="pagination">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Prev
-        </button>
+        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Prev</button>
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index + 1}
@@ -67,12 +76,7 @@ const TeamPage = () => {
             {index + 1}
           </button>
         ))}
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
+        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
       </section>
     </div>
   );
