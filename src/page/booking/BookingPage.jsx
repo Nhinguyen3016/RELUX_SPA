@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom'; // Import useLocation
 import BookingCard from './components/BookingCard';
 import Spa from '../../images/spa.png';
 import '../../styles/booking/BookingPage.css';
-import BookingSheetProvider from './BookingSheetProvider';
 
 const BookingPage = () => {
     const location = useLocation(); // Get the location object
@@ -33,36 +32,35 @@ const BookingPage = () => {
                 />
             </div>
             <div className="header-1">
-                <h1>{serviceData?.name}</h1>
+                <h1>{serviceData.name}</h1>
             </div>
 
             <div className="grid-container">
-                {/* <BookingCard
+                <BookingCard
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
                     selectedTime={selectedTime}
                     setSelectedTime={setSelectedTime}
                     timeSlots={timeSlots}
                     onNext={handleNext}
-                /> */}
-                <BookingSheetProvider />
+                />
 
                 <div className="content-section">
                     <h2>Description</h2>
-                    <p>{serviceData?.description1}</p>
+                    <p>{serviceData.description1}</p>
                     <img
-                        src={serviceData?.imageDescription}
+                        src={serviceData.imageDescription}
                         alt="Service description"
                         className="mt-5"
                     />
-                    <p>{serviceData?.description2}</p>
+                    <p>{serviceData.description2}</p>
                 </div>
 
                 <div className="details">
                     <h2>Details</h2>
                     <ul>
-                        <li>Price: ${serviceData?.price}</li>
-                        <li>Duration: {serviceData?.duration} mins</li>
+                        <li>Price: ${serviceData.price}</li>
+                        <li>Duration: {serviceData.duration} mins</li>
                     </ul>
                 </div>
             </div>

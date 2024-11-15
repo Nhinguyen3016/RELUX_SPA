@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../../styles/ourteam/OurTeamPage.css';
+import Spa from '../../images/spa.png'; // Import the image
 
 const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
 
@@ -45,6 +46,8 @@ const TeamPage = () => {
     <div className="team-page">
       <section className="team-banner">
         <h1>Our Team</h1>
+        {/* Add the image below the heading */}
+        <img src={Spa} alt="Spa" className="spa-image" />
       </section>
 
       {loading ? (

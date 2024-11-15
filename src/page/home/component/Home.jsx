@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../../styles/home/Home.css";
 import homeImage from "../../../images/homeImage.png";
 import helpIcon from "../../../images/help.png";
 import helpArrow from "../../../images/help-arrow.png";
+import BookingSheetProvider from "../../booking/BookingSheetProvider"; 
 
 const Home = () => {
+  const [showBookingForm, setShowBookingForm] = useState(false); 
+
+  const handleBookAppointment = () => {
+    setShowBookingForm(true); 
+  };
+
   return (
     <div className="home">
       <div className="home-content">
@@ -27,9 +34,15 @@ const Home = () => {
           <p className="description">
             Younger face, elongated oval, smoothing nasolabial folds, chin lift. Younger and toned face after the first procedure.
           </p>
-          <button className="appointment-btn">Book an appointment</button>
+          <button className="appointment-btn" onClick={handleBookAppointment}>
+            Book an appointment
+          </button>
         </div>
       </div>
+
+      {/* Conditionally render the BookingSheetProvider */}
+      {showBookingForm && <BookingSheetProvider />}
+
       <div className="help-container">
         <div className="message">
           <span>Hello, Can I help you?</span>
