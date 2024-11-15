@@ -1,15 +1,15 @@
-import React,{useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../../styles/dashboard/Service-category-dashboard.css';
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL = 'http://localhost:3001/v1';
 
 const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange }) => {
   return (
     <div className="service-form-overlay">
-      <div className="service-form">
-        <h2 className="service-form-title">{isEditing ? 'Edit Service' : 'Add Service'}</h2>
+      <div className="service-form-category">
+        <h2 className="service-form-title">{isEditing ? 'Edit Service' : null}</h2>
         <button className="close-button" onClick={onClose}>×</button>
         
         <form onSubmit={onSubmit}>
@@ -17,9 +17,9 @@ const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange
             <label>Service Name</label>
             <input
               type="text"
-              name="Name"
+              name="name"
               placeholder="Enter service name"
-              value={formData.Name}
+              value={formData.name}
               onChange={handleInputChange}
               required
             />
@@ -27,10 +27,11 @@ const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange
 
           <div className="form-group">
             <label>Description</label>
-            <textarea className='description-category'
-              name="DescriptionShort"
+            <textarea
+              className="description-category"
+              name="descriptionShort"
               placeholder="Enter description"
-              value={formData.DescriptionShort}
+              value={formData.descriptionShort}
               onChange={handleInputChange}
               required
             />
@@ -40,15 +41,15 @@ const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange
             <label>TypeService</label>
             <input
               type="text"
-              name="TypeService"
+              name="typeService"
               placeholder="Enter typeService"
-              value={formData.TypeService}
+              value={formData.typeService}
               onChange={handleInputChange}
               required
             />
           </div>
 
-          <div className="form-actions">
+          <div className="form-action">
             <button type="submit">{isEditing ? 'Update' : 'Add'} Service</button>
             <button type="button" onClick={onClose}>Cancel</button>
           </div>
@@ -60,53 +61,48 @@ const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange
 
 const ServiceMenu = () => {
   const [services, setServices] = useState([]);
-  const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [formData, setFormData] = useState({
-    Name: '',
-    DescriptionShort: '',
-    TypeService: '',
+    name: '',
+    descriptionShort: '',
+    typeService: '',
   });
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value  
     }));
   };
 
-
-  // Fetch all services
   const fetchServices = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/services`, {
+      const response = await axios.get(`${API_BASE_URL}/service-categories`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      setServices(response.data);
-      console.log('Fetched services:', response.data);
+      console.log(response.data.data);
+      setServices(Array.isArray(response.data.data) ? response.data.data : []);
     } catch (error) {
-      console.error('Error fetching services:', error);
+      console.error('Error fetching services:', error.response ? error.response.data : error);
       alert(error.response?.data?.message || 'Failed to fetch services');
     }
   };
-  // Create new service
+
   const createService = async () => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/services`, {
-        Name: formData.Name,
-        DescriptionShort: formData.DescriptionShort,
-        TypeService: formData.TypeService,
+      const response = await axios.post(`${API_BASE_URL}/service-categories`, {
+        name: formData.name,
+        descriptionShort: formData.descriptionShort,
+        typeService: formData.typeService,
       },{
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-
       if (response.status === 201) {
         await fetchServices();
         handleCloseForm();
@@ -118,20 +114,19 @@ const ServiceMenu = () => {
     }
   };
 
-  // Update existing service
   const updateService = async () => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/services/${formData.id}`, {
-        Name: formData.Name,
-        DescriptionShort: formData.DescriptionShort,
-        TypeService: formData.TypeService,
+      console.log('Updating service with data:', formData);
+      const response = await axios.put(`${API_BASE_URL}/service-categories/${formData.id}`, {
+        name: formData.name,
+        descriptionShort: formData.descriptionShort,
+        typeService: formData.typeService,
       },{
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      	  
       if (response.status === 200) {
         await fetchServices();
         handleCloseForm();
@@ -139,22 +134,21 @@ const ServiceMenu = () => {
       }
     } catch (error) {
       console.error('Error updating service:', error);
+      console.error('Response data:', error.response?.data);
       alert(error.response?.data?.message || 'Failed to update service');
     }
   };
 
-  // Delete service
   const deleteService = async (serviceId) => {
     if (!window.confirm('Are you sure you want to delete this service?')) {
       return;
     }
     try {
-      const response = await axios.delete(`${API_BASE_URL}/services/${serviceId}`, {
+      const response = await axios.delete(`${API_BASE_URL}/service-categories/${serviceId}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-
       if (response.status === 200) {
         await fetchServices();
         alert('Service deleted successfully!');
@@ -165,77 +159,86 @@ const ServiceMenu = () => {
     }
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Data sent to API:", formData);
-
     if (showEditForm) {
       await updateService();
-    } else {
-      await createService();
     }
   };
 
-  // Handle edit button click
   const handleEditClick = (service) => {
     setFormData({
-      id: service.CategoryID,
-      Name: service.Name,
-      DescriptionShort: service.DescriptionShort,
-      TypeService: service.TypeService,
+      id: service.id,
+      name: service.name,
+      descriptionShort: service.descriptionShort,
+      typeService: service.typeService,
     });
     setShowEditForm(true);
   };
-  // Reset form and close
+
   const handleCloseForm = () => {
     setFormData({
-      id: null,
-      Name: '',
-      DescriptionShort: '',
-      TypeService: '',
+      categoryID: null,
+      name: '',
+      descriptionShort: '',
+      typeService: '',
     });
-    setShowAddForm(false);
-    setShowEditForm(false);
-  };
-  const handleAddClick = () => {
-    setShowAddForm(true);
     setShowEditForm(false);
   };
 
-  // Fetch services on component mount
+  // const handleAddClick = () => {
+  //   setFormData({
+  //     categoryID: null,
+  //     name: '',
+  //     descriptionShort: '',
+  //     typeService: '',
+  //   });
+  //   setShowAddForm(true);
+  // };
+
   useEffect(() => {
+    localStorage.setItem(
+      'token',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJxdW9jdmlldCIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTczMTM0MTUzMiwiZXhwIjoxNzMxOTQ2MzMyfQ.aceQSJj6KOxbQBXPenVx8giF2Ykoc3nQdmdyeGG69-A'
+    );
     fetchServices();
   }, []);
 
   return (
     <div className="service-menu-category">
-      <div className="service-menu-header-category">
-        <button className="add-button" onClick={handleAddClick}>Add</button>
-      </div>
       <div className="service-cards-category">
-      {services.map((service) => (
-        <Link to={`/servicecategory/service`} key={service.CategoryID} className='service-card-link'>
-          <div className="service-card-category">
-            <h3 className="service-title-category">{service.Name}</h3>
-            <p className="service-description"><span className="detail-label">Description:</span> {service.DescriptionShort || 'No description available'}</p>
-            <p className="service-typeService"><span className="detail-label">TypeService:</span> {service.TypeService || 'No type available'}</p>
-            <div className="service-actions">
-              <button onClick={(e) => {
-                e.preventDefault();
-                handleEditClick(service);
-              }}>Edit</button>
-              <button onClick={(e) => {
-                e.preventDefault();
-                deleteService(service.CategoryID);
-              }}>Delete</button>
-            </div>
-          </div>
-        </Link>
-      ))}
+        {Array.isArray(services) && services.length > 0 ? (
+          services.map((service) => (
+            <Link
+                to={`/servicecategory/service`}
+                key={service.categoryID}
+                className="service-card-category"
+                onClick={() => { localStorage.setItem('selectedServiceId', service.id);}}
+            >
+              <h3 className="service-title-category">{service.name}</h3>
+              <p className="service-description">
+                <span className="detail-label">Description Short:</span> {service.descriptionShort || 'No description short available'}
+              </p>
+              <p className="service-typeService">
+                <span className="detail-label">TypeService:</span> {service.typeService || 'No typeService available'}
+              </p>
+              <div className="service-action-category">
+                <button onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleEditClick(service);
+                }}>Edit</button>
+                
+              </div>
+            </Link>
+          ))
+        ) : (
+          <p>No services available.</p>
+        )}
       </div>
-      
-      {(showAddForm || showEditForm) && (
+
+
+      {(showEditForm) && (
         <ServiceForm
           isEditing={showEditForm}
           formData={formData}

@@ -23,6 +23,7 @@ import Booking from './page/dashboard/booking-dashboard.jsx';
 import ServiceCategory from './page/dashboard/service-category-dashboard.jsx';
 import Feedback from './page/dashboard/feedback-dashboard.jsx';
 import Service from './page/dashboard/service-dashboard.jsx';
+import Staff from './page/dashboard/staff-dashboard.jsx';
 
 
 
@@ -55,7 +56,9 @@ function App() {
             <Route path="/bookingdashboard" element={<Booking />} />
             <Route path="/servicecategory" element={<ServiceCategory />} />
             <Route path="/feedback" element={<Feedback />} />
+            <Route path="/staff" element={<Staff />} />
             <Route path="/servicecategory/service" element={<Service />} />
+
           </Route>
         </Routes>
       </div>

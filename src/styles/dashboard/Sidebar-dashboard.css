@@ -1,9 +1,13 @@
 .sidebar {
-    width: 281px;
-    height: 100vh;
+    width: 280px;
+    height: auto;
+    min-height: 100vh;
     color: white;
     padding: 20px;
     box-sizing: border-box;
+    background-color: rgb(209, 220, 231);
+    position: fixed;
+    top: 0;
   }
   
   .logo-sidebar {
@@ -11,6 +15,7 @@
     flex-direction: column;
     align-items: center;
     margin: 0 0 30 29;
+    margin-top: 60px;
   }
   
   .logo-sidebar img {

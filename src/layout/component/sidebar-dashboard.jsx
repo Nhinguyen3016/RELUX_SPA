@@ -7,15 +7,18 @@ import dashboardIcon from '../../images/dashboard.png';
 import bookingIcon from '../../images/booking.png';
 import servicesIcon from '../../images/Service.png';
 import feekbackIcon from '../../images/feekback.png';
+import staffIcon from '../../image/staff.png';
+
+
 const Sidebar = () => {
   const pathName=useLocation().pathname;
   console.log(pathName);
   return (
     <div className="sidebar">
-      <div className="logo-sidebar">
+      <Link to="/dashboard" className="logo-sidebar">
         <img src={logo} alt="ReLux" /> 
         <h1>ReLux</h1>
-      </div>
+      </Link>
       <nav>
         <ul  className="nav-links-sidebar">
           <li className={(pathName=== '/dashboard')?'active' :''}>
@@ -40,6 +43,12 @@ const Sidebar = () => {
             <Link to="/feedback">
               <img src={feekbackIcon} alt="icon feekback" className="icon" />
               Feedback
+            </Link>
+          </li>
+          <li className={(pathName=== '/staff')?'active' :''}>
+            <Link to="/staff">
+              <img src={feekbackIcon} alt="icon staff" className="icon" />
+              Staff
             </Link>
           </li>
         </ul>

@@ -1,41 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import '../../styles/dashboard/Service-dashboard.css';	
+import '../../styles/dashboard/Service-dashboard.css';
 import axios from 'axios';
+const API_BASE_URL = 'http://localhost:3001/v1';
 
-const API_BASE_URL = 'http://localhost:3001';
-
-const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleFileChange, handleInputChange }) => {
+const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange }) => {
   return (
-    <div className="service-form-overlay">
-      <div className="service-form">
-        <h2 className="service-form-title">{isEditing ? 'Edit Service' : 'Add Service'}</h2>
+    <div className="service-form-overlays">
+      <div className="service-forms">
+        <h2 className="service-form-titles">{isEditing ? 'Edit Service' : 'Add Service'}</h2>
         <button className="close-button" onClick={onClose}>×</button>
         
         <form onSubmit={onSubmit}>
-          <div className="form-group">
+          <div className="form-groups">
             <label>Service Name</label>
             <input
               type="text"
-              name="serviceName"
+              name="name"
               placeholder="Enter service name"
-              value={formData.serviceName}
+              value={formData.name}
               onChange={handleInputChange}
               required
             />
           </div>
 
-          <div className="form-group">
-            <label>Description</label>
-            <textarea className='description-category'
-              name="description"
-              placeholder="Enter description"
-              value={formData.description}
+          <div className="form-groups">
+            <label>Description Short</label>
+            <textarea
+              name="descriptionShort"
+              placeholder="Enter short description"
+              value={formData.descriptionShort}
               onChange={handleInputChange}
               required
             />
           </div>
 
-          <div className="form-group">
+          <div className="form-groups">
             <label>Duration (minutes)</label>
             <input
               type="number"
@@ -47,7 +46,7 @@ const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleFileChange,
             />
           </div>
 
-          <div className="form-group">
+          <div className="form-groups">
             <label>Price ($)</label>
             <input
               type="number"
@@ -59,24 +58,69 @@ const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleFileChange,
             />
           </div>
 
-          <div className="form-group">
-            <label>Promotion</label>
+          <div className="form-groups">
+            <label>Image Icon</label>
             <input
               type="text"
-              name="promotion"
-              placeholder="Enter promotion"
-              value={formData.promotion}
+              name="imageIcon"
+              placeholder="Enter icon image URL"
+              value={formData.imageIcon}
               onChange={handleInputChange}
             />
           </div>
 
-          <div className="form-group">
-            <label>Icon</label>
+          <div className="form-groups">
+            <label>Promotion ID</label>
             <input
-              type="file"
-              name="icon"
-              onChange={handleFileChange}
-              accept="image/*"
+              type="number"
+              name="promotionId"
+              placeholder="Enter promotion ID"
+              value={formData.promotionId}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="form-groups">
+            <label>Description 1</label>
+            <input
+              type="text"
+              name="description1"
+              placeholder="Enter description 1"
+              value={formData.description1}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="form-groups">
+            <label>Description 2</label>
+            <input
+              type="text"
+              name="description2"
+              placeholder="Enter description 2"
+              value={formData.description2}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="form-groups">
+            <label>Image Main</label>
+            <input
+              type="text"
+              name="imageMain"
+              placeholder="Enter image main URL"
+              value={formData.imageMain}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="form-groups">
+            <label>Image Description</label>
+            <input
+              type="text"
+              name="imageDescription"
+              placeholder="Enter image description"
+              value={formData.imageDescription}
+              onChange={handleInputChange}
             />
           </div>
 
@@ -95,100 +139,125 @@ const ServicePackage = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [formData, setFormData] = useState({
-    id: null,
-    serviceName: '',
-    description: '',
-    duration: '',
-    price: '',
-    promotion: ''
+    serviceId: null,
+    name: '',
+    price: 0,
+    descriptionShort: '',
+    duration: 0,
+    imageIcon: '',
+    imageDescription: '',
+    categoryId: 0,
+    promotionId: 0,
+    description1: '',
+    description2: '',
+    imageMain: ''
   });
+
+  useEffect(() => {
+    const selectedServiceId = localStorage.getItem('selectedServiceId');
+    console.log("Selected Service ID from localStorage:", selectedServiceId);
   
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
+    if (selectedServiceId) {
+      const id = Number(selectedServiceId); // Chuyển đổi thành số
+      console.log("Converted ID:", id); // Log giá trị đã chuyển đổi
+      if (!isNaN(id) && id > 0) { // Kiểm tra xem id có hợp lệ không
+        console.log("Valid Service ID:", id);
+        fetchServices(id); // Fetch services based on selectedServiceId
+      } else {
+        console.error('Invalid service ID:', selectedServiceId); // In ra lỗi nếu serviceId không hợp lệ
+      }
+    } else {
+      console.log('No service ID found in localStorage');
+    }
+  }, []);
+
+  const fetchServices = async (id) => {
+    if (isNaN(id) || id <= 0) {
+      console.error('Invalid ID provided to fetchServices:', id);
+      return; // Dừng hàm nếu ID không hợp lệ
+    }
+  
+    try {
+      const response = await axios.get(`${API_BASE_URL}/services/category/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      
+      // Kiểm tra xem phản hồi có chứa dữ liệu không
+      console.log("Fetched services:", response.data); // Log phản hồi từ API
+  
+      // Giả sử phản hồi có cấu trúc { data: [...] }
+      if (response.data && Array.isArray(response.data.data)) {
+        setServices(response.data.data); // Cập nhật state với mảng dịch vụ
+      } else {
+        console.error('Unexpected response structure:', response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching services:', error.response ? error.response.data : error);
+      alert(error.response?.data?.message || 'Failed to fetch services');
+    }
   };
 
-  // Handle file input changes
-  const handleFileChange = (e) => {
-    setFormData(prevData => ({
-      ...prevData,
-      icon: e.target.files[0]
-    }));
-  };
-
-  // Fetch all services
-  // const fetchServices = async () => {
-  //   try {
-  //     const response = await axios.get(`${API_BASE_URL}/services`); 
-  //     setServices(response.data);
-  //   } catch (error) {
-  //     console.error('Error fetching services:', error);
-  //     alert(error.response?.data?.message || 'Failed to fetch services');
-  //   }
-  // };
-const fetchServices = async () => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/service`);
-    setServices(response.data);
-  } catch (error) {
-    console.error('Error fetching services:', error);
-    alert('Failed to fetch services');
-  }
-};
-  // Create new service
+  
   const createService = async () => {
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append('serviceName', formData.service);
-      formDataToSend.append('description', formData.description);
-      formDataToSend.append('duration', formData.duration);
-      formDataToSend.append('price', formData.price);
-      formDataToSend.append('promotion', formData.promotion);
-      if (formData.icon) {
-        formDataToSend.append('icon', formData.icon);
-      }
+      const categoryId =Number(localStorage.getItem('selectedServiceId')) ; 
 
-      const response = await axios.post(`${API_BASE_URL}/services`, formDataToSend, {
+      const response = await axios.post(`${API_BASE_URL}/services`, {
+        name: formData.name,
+        price: Number(formData.price),
+        descriptionShort: formData.descriptionShort,
+        duration: Number(formData.duration),
+        imageIcon: formData.imageIcon,
+        imageDescription: formData.imageDescription,
+        categoryId: categoryId,
+        promotionId: Number(formData.promotionId),
+        description1: formData.description1,
+        description2: formData.description2,
+        imageMain: formData.imageMain
+      },{
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
 
       if (response.status === 201) {
-        await fetchServices();
+        const selectedServiceId = localStorage.getItem('selectedServiceId');
+        if (selectedServiceId) {
+          const id = Number(selectedServiceId);
+          if (!isNaN(id) && id > 0) {
+            await fetchServices(id); // Gọi lại hàm fetchServices với ID hợp lệ
+          } else {
+            console.error('Invalid service ID after deletion:', selectedServiceId);
+          }
+        } else {
+          console.log('No service ID found in localStorage after deletion');
+        }
         handleCloseForm();
         alert('Service created successfully!');
       }
     } catch (error) {
       console.error('Error creating service:', error);
-      alert(error.response?.data?.message || 'Failed to create service');
+      if (error.response) {
+        console.error('Server response:', error.response.data);
+        alert(error.response.data.message || 'Failed to create service');
+      } else {
+        alert('Failed to create service');
+      }
     }
   };
 
-  // Update existing service
   const updateService = async () => {
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append('serviceName', formData.serviceName);
-      formDataToSend.append('description', formData.description);
-      formDataToSend.append('duration', formData.duration);
-      formDataToSend.append('price', formData.price);
-      formDataToSend.append('promotion', formData.promotion);
-      if (formData.icon) {
-        formDataToSend.append('icon', formData.icon);
-      }
-
-      const response = await axios.put(`${API_BASE_URL}/services/${formData.id}`, formDataToSend, {
+      const response = await axios.put(`${API_BASE_URL}/services/${formData.serviceId}`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-
       if (response.status === 200) {
         await fetchServices();
         handleCloseForm();
@@ -200,30 +269,72 @@ const fetchServices = async () => {
     }
   };
 
-  // Delete service
-  const deleteService = async (serviceId) => {
+  //   if (!window.confirm('Are you sure you want to delete this service?')) {
+  //     return;
+  //   }
+  //   try {
+  //     const response = await axios.delete(`${API_BASE_URL}/services/${id}`, {
+  //       headers: {
+  //         'Authorization': `Bearer ${localStorage.getItem('token')}`
+  //       }
+  //     });
+  //     if (response.status === 200) {
+  //       await fetchServices();
+  //       alert('Service deleted successfully!');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error deleting service:', error);
+  //     alert(error.response?.data?.message || 'Failed to delete service');
+  //   }
+  // };
+  // const deleteService = async (id) => {
+  //   if (!window.confirm('Are you sure you want to delete this service?')) {
+  //     return;
+  //   }
+  //   try {
+  //     const response = await axios.delete(`${API_BASE_URL}/services/${id}`, {
+  //       headers: {
+  //         'Authorization': `Bearer ${localStorage.getItem('token')}`
+  //       }
+  //     });
+  //     if (response.status === 200) {
+  //       await fetchServices(); // Gọi lại hàm fetchServices để cập nhật danh sách
+  //       alert('Service deleted successfully!');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error deleting service:', error);
+  //     alert(error.response?.data?.message || 'Failed to delete service');
+  //   }
+  // };
+  const deleteService = async (id) => {
     if (!window.confirm('Are you sure you want to delete this service?')) {
       return;
     }
-
     try {
-      const response = await axios.delete(`${API_BASE_URL}/services/${serviceId}`, {
+      const response = await axios.delete(`${API_BASE_URL}/services/${id}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-
+  
       if (response.status === 200) {
-        await fetchServices();
-        alert('Service deleted successfully!');
+        const selectedServiceId = localStorage.getItem('selectedServiceId');
+        if (selectedServiceId) {
+          const id = Number(selectedServiceId);
+          if (!isNaN(id) && id > 0) {
+            await fetchServices(id); // Gọi lại hàm fetchServices với ID hợp lệ
+          } else {
+            console.error('Invalid service ID after deletion:', selectedServiceId);
+          }
+        } else {
+          console.log('No service ID found in localStorage after deletion');
+        }
       }
     } catch (error) {
       console.error('Error deleting service:', error);
       alert(error.response?.data?.message || 'Failed to delete service');
     }
   };
-
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (showEditForm) {
@@ -233,63 +344,92 @@ const fetchServices = async () => {
     }
   };
 
-  // Handle edit button click
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
+
   const handleEditClick = (service) => {
     setFormData({
-      id: service.id,
-      serviceName: service.serviceName,
-      description: service.description,
-      duration: service.duration,
-      price: service.price,
-      promotion: service.promotion,
-      icon: null // Reset icon when editing
+      serviceId: null,
+    name: '',
+    price: '',
+    descriptionShort: '',
+    duration: '',
+    imageIcon: null,
+    imageDescription: null,
+    categoryId: null,
+    promotionId: null,
+    description1: null,
+    description2: null,
+    imageMain: null
     });
     setShowEditForm(true);
     setShowAddForm(false);
   };
 
   const handleAddClick = () => {
+    setFormData({
+      serviceId: null,
+    name: '',
+    price: '',
+    descriptionShort: '',
+    duration: '',
+    imageIcon: null,
+    imageDescription: null,
+    categoryId: null,
+    promotionId: null,
+    description1: null,
+    description2: null,
+    imageMain: null
+    });
     setShowAddForm(true);
     setShowEditForm(false);
   };
-  // Handle close form
+
   const handleCloseForm = () => {
     setFormData({
-      id: null,
-      serviceName: '',
-      description: '',
-      duration: '',
+      serviceId: null,
+      name: '',
       price: '',
-      promotion: '',
-      icon: null
+      descriptionShort: '',
+      duration: '',
+      imageIcon: '',
+      categoryId: null,
+      promotionId: null
     });
     setShowAddForm(false);
     setShowEditForm(false);
   };
-
-  // Fetch services on component mount
   useEffect(() => {
-    fetchServices();
+    localStorage.setItem(
+      'token',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJxdW9jdmlldCIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTczMTM0MTUzMiwiZXhwIjoxNzMxOTQ2MzMyfQ.aceQSJj6KOxbQBXPenVx8giF2Ykoc3nQdmdyeGG69-A'
+    );
   }, []);
-
   return (
-    <div className="service-menu-category">
-      <div className="service-menu-header-category">
-      <button className="add-button" onClick={handleAddClick}>Add</button>
+    <div className="service-menu">
+      <div className="service-menu-header">
+        <button className="add-button" onClick={handleAddClick}>Add</button>
       </div>
       <div className="service-small">
-        {services.map((service) => (
-          <div key={service.id} className="service-card1">
-            <img src={service.icon} alt={service.serviceName} className="service-icon" />
-            <h3 className="service-title-dashboard">{service.serviceName}</h3>
-            <div className="service-details">
-              <p><span className="detail-label">Duration:</span> {service.duration} mins</p>
-              <p><span className="detail-label">Price:</span> ${service.price}</p>
-              <p><span className="detail-label">Promotion:</span> {service.promotion}</p>
+         {Array.isArray(services) && services.length > 0 ? (
+           services.map((service) => (
+          <div
+           key={service.serviceId} 
+           className="service-card1"
+           >
+              <h3 className="service-title-category">{service.name}</h3>
+              <div className="service-details">
+              <p><span className="detail-label1">Duration:</span> {service.duration} mins</p>
+              <p><span className="detail-label1">Price:</span> ${service.price}</p>
+              <p className="service-description"><span className="detail-label1">Description Short:</span> {service.descriptionShort}</p>
             </div>
-            <p className="service-description"><span className="detail-label">Description:</span> {service.description}</p>
-            <div className="service-actions">
-            <button onClick={(e) => {
+              <div className="service-actions">
+              <button onClick={(e) => {
                 e.preventDefault();
                 handleEditClick(service);
               }}>Edit</button>
@@ -297,11 +437,14 @@ const fetchServices = async () => {
                 e.preventDefault();
                 deleteService(service.id);
               }}>Delete</button>
-            </div>
+              </div>
           </div>
-        ))}
+          ))
+        ) : (
+          <p>No services available.</p>
+        )}
       </div>
-
+  
       {(showAddForm || showEditForm) && (
         <ServiceForm
           isEditing={showEditForm}
@@ -309,10 +452,11 @@ const fetchServices = async () => {
           onSubmit={handleSubmit}
           onClose={handleCloseForm}
           handleInputChange={handleInputChange}
-          handleFileChange={handleFileChange}
         />
-        )}
+      )}
     </div>
   );
+  
 };
+
 export default ServicePackage;
