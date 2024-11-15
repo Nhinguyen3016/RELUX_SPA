@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom'; // Import useLocation
-import BookingCard from './component/BookingCard';
+import BookingCard from './components/BookingCard';
 import Spa from '../../images/spa.png';
 import '../../styles/booking/BookingPage.css';
+import BookingSheetProvider from './BookingSheetProvider';
 
 const BookingPage = () => {
     const location = useLocation(); // Get the location object
@@ -36,14 +37,15 @@ const BookingPage = () => {
             </div>
 
             <div className="grid-container">
-                <BookingCard
+                {/* <BookingCard
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
                     selectedTime={selectedTime}
                     setSelectedTime={setSelectedTime}
                     timeSlots={timeSlots}
                     onNext={handleNext}
-                />
+                /> */}
+                <BookingSheetProvider />
 
                 <div className="content-section">
                     <h2>Description</h2>
