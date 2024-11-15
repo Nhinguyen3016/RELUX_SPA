@@ -57,11 +57,11 @@ const LoginForm = () => {
   return (
     <form className="login_form" onSubmit={handleSubmit(onSubmit)}>
       <FormField>
-        <Label htmlFor="emailOrUsername">Username or Email</Label>
+        <Label htmlFor="emailOrUsername">Username </Label>
         <Input
           register={register}
           name="emailOrUsername"
-          placeholder="Username or Email"
+          placeholder=" Enter username "
         />
         {errors.emailOrUsername && (
           <FormErrorMessage>{errors.emailOrUsername.message}</FormErrorMessage>
@@ -69,7 +69,7 @@ const LoginForm = () => {
       </FormField>
       <FormField>
         <Label htmlFor="password">Password</Label>
-        <PasswordInput register={register} name="password" placeholder="Your password" />
+        <PasswordInput register={register} name="password" placeholder="Enter your password" />
         {errors.password && (
           <FormErrorMessage>{errors.password.message}</FormErrorMessage>
         )}
