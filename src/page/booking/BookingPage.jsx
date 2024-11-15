@@ -32,7 +32,7 @@ const BookingPage = () => {
                 />
             </div>
             <div className="header-1">
-                <h1>{serviceData.name}</h1>
+                <h1>{serviceData?.name}</h1>
             </div>
 
             <div className="grid-container">
@@ -47,20 +47,20 @@ const BookingPage = () => {
 
                 <div className="content-section">
                     <h2>Description</h2>
-                    <p>{serviceData.description1}</p>
+                    <p>{serviceData?.description1}</p>
                     <img
-                        src={serviceData.imageDescription}
+                        src={serviceData?.imageDescription}
                         alt="Service description"
                         className="mt-5"
                     />
-                    <p>{serviceData.description2}</p>
+                    <p>{serviceData?.description2}</p>
                 </div>
 
                 <div className="details">
                     <h2>Details</h2>
                     <ul>
-                        <li>Price: ${serviceData.price}</li>
-                        <li>Duration: {serviceData.duration} mins</li>
+                        <li>Price: ${serviceData?.price}</li>
+                        <li>Duration: {serviceData?.duration} mins</li>
                     </ul>
                 </div>
             </div>
