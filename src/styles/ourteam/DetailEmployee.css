@@ -1,4 +1,35 @@
 
+.banner-image {
+    width: 100%;  
+    height: 400px;  
+    object-fit: cover;  
+    display: block;  
+    margin: 0;
+}
+
+
+.team-banner h1 {
+    position: absolute;
+    top: 10%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+    font-size: 36px;
+    color: rgb(0, 0, 0);
+    border-radius: 5px;
+    z-index: 2;
+}
+.name-detailE {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    text-align: center;
+}
+
 .about-me-detailE {
     display: flex;
     justify-content: center;
@@ -9,10 +40,11 @@
 .detail-container-detailE {
     display: flex;
     max-width: 1200px;
-    gap: 40px;
+    gap: 70px;
     align-items: flex-start;
     flex-wrap: wrap;
-    margin-top:100px;
+    margin-top: 250px;
+    margin-bottom:50px;
 }
 
 .image-container-detailE {
@@ -23,9 +55,9 @@
 .detail-image-detailE {
     width: 300px;
     height: 300px;
-    border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s, box-shadow 0.3s;
+    margin-top: 30px;
 }
 
 .detail-image-detailE:hover {
@@ -38,6 +70,7 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
+    width: 800px;
 }
 
 .section-title {
@@ -45,12 +78,7 @@
     font-size: 2.5rem;
     color: #61133D;
     text-align: center;
-}
-
-.name-detailE {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #1a1a1a;
+    margin-bottom: 20px;
 }
 
 .description-detailE {

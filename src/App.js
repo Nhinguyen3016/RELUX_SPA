@@ -30,7 +30,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/team-our" element={<TeamOurPage />} />
-            <Route path="/employee" element={<DetailEmployee />} />
+            <Route path="/team/:id" element={<DetailEmployee />} />
             <Route path="/account" element={<LoginPage />} />
             <Route path="/contacts" element={<ContactPage />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -41,13 +41,13 @@ function App() {
             <Route path="/booking" element={<BookingPage />} />
             <Route path="/giftcard" element={<GiftCardPage />} />
             <Route path="/booknow" element={<BookNowPage />} />
-            {/* Services routes - separated */}
+            {/* Services routes */}
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/services/body-treatments" element={<BodyTreatments />} />
-            <Route path="/booking/:programId" element={<BookingPage />} />
             <Route path="/services/facials" element={<Facials />} />
             <Route path="/services/massages" element={<Massages />} />
             <Route path="/services/spa-programs" element={<SpaPrograms />} />
+            <Route path="/booking/:programId" element={<BookingPage />} />
           </Routes>
         </MainLayout>
       </div>

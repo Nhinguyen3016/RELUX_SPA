@@ -1,35 +1,70 @@
-import React from 'react';
-import aliceImage from '../../images/alice.png';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import getintouchIcon from '../../images/getintouch.svg';
 import servicesIcon from '../../images/service.svg';
 import hoursIcon from '../../images/hours.svg';
+import Spa from '../../images/spa.png';
 import '../../styles/ourteam/DetailEmployee.css';
 
-const DoriStuartDetail = () => {
+const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
+
+const EmployeeDetail = () => {
+  const { id } = useParams(); // Get the employee ID from the URL
+  const [employee, setEmployee] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchEmployeeDetail = async () => {
+      try {
+        const response = await axios.get(`${API_HOST}/v1/employees/${id}`);
+        const employeeData = response.data.data;
+        setEmployee(employeeData);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching employee detail:', err);
+        setError('Failed to load employee details. Please try again later.');
+        setLoading(false);
+      }
+    };
+
+    fetchEmployeeDetail();
+  }, [id]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p className="error-message">{error}</p>;
+  }
+
+  const avatarUrl = employee.avatar;
   return (
     <section className="about-me-detailE">
+      {/* Banner image at the top */}
+      <img src={Spa} alt="Spa" className="banner-image" />
+
+      <section className="team-banner">
+        <h1 className="name-detailE">{employee.name}</h1>
+      </section>
+
       <div className="detail-container-detailE">
         <div className="image-container-detailE">
           <img
-            src={aliceImage}
-            alt="Portrait of Dori Stuart"
+            src={avatarUrl}
+            alt={`Portrait of ${employee.name}`}
             className="detail-image-detailE"
-            aria-label="Image of Dori Stuart"
+            aria-label={`Image of ${employee.name}`}
           />
         </div>
 
         <div className="info-detailE">
           <h2 className="section-title">About Me</h2>
-          <h1 className="name-detailE">Dori Stuart</h1>
-          <p className="description-detailE">
-            Welcome! With over 20 professional massage therapists on our team, we’re here to help
-            you feel your best. Relax, rejuvenate, and let us pamper you!
-          </p>
-          <p className="description-detailE">
-            Prefer booking online? Simply select your desired service, time slot, and therapist, then
-            complete the contact form. It's quick and hassle-free!
-          </p>
+          <p className="description-detailE">{employee.description}</p>
 
+          <hr />
           <div className="contact-details-detailE">
             <div className="contact-item-detailE">
               <img
@@ -40,10 +75,10 @@ const DoriStuartDetail = () => {
               />
               <div className="contact-content">
                 <h3 className="contact-title-detailE">Get in Touch</h3>
-                <p className="contact-info-detailE">+(84) 123-456-789</p>
+                <p className="contact-info-detailE">{employee.phone}</p> {/* Display phone */}
               </div>
             </div>
-
+            <hr />
             <div className="contact-item-detailE">
               <img
                 src={servicesIcon}
@@ -52,13 +87,13 @@ const DoriStuartDetail = () => {
                 aria-hidden="true"
               />
               <div className="contact-content">
-                <h3 className="contact-title-detailE">Services</h3>
+                <h3 className="contact-title-detailE">Specialty Type</h3>
                 <ul className="contact-info-list-detailE">
-                  <li>2-Day Programs</li>
-                  <li>Body Relaxation</li>
+                  <li>{employee.specialtyType}</li> {/* Display specialty type */}
                 </ul>
               </div>
             </div>
+            <hr />
 
             <div className="contact-item-detailE">
               <img
@@ -68,14 +103,14 @@ const DoriStuartDetail = () => {
                 aria-hidden="true"
               />
               <div className="contact-content">
-                <h3 className="contact-title-detailE">Working Hours</h3>
+                <h3 className="contact-title-detailE">Location</h3>
                 <ul className="contact-info-list-detailE">
-                  <li>Mon-Tue: 8:00 AM - 9:00 PM</li>
-                  <li>Wed-Fri: 8:00 AM - 10:00 PM</li>
-                  <li>Sat-Sun: 9:00 AM - 11:00 PM</li>
+                  <li>{employee.location.locationName}</li>
+                  <li>{employee.location.address}</li>
                 </ul>
               </div>
             </div>
+            <hr />
           </div>
 
           <button
@@ -91,5 +126,4 @@ const DoriStuartDetail = () => {
   );
 };
 
-
-export default DoriStuartDetail;
+export default EmployeeDetail;

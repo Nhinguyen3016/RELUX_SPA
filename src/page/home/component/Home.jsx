@@ -3,7 +3,7 @@ import "../../../styles/home/Home.css";
 import homeImage from "../../../images/homeImage.png";
 import helpIcon from "../../../images/help.png";
 import helpArrow from "../../../images/help-arrow.png";
-import BookingSheetProvider from "../../booking/BookingSheetProvider"; 
+
 
 const Home = () => {
   const [showBookingForm, setShowBookingForm] = useState(false); 
@@ -40,8 +40,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Conditionally render the BookingSheetProvider */}
-      {showBookingForm && <BookingSheetProvider />}
+    
 
       <div className="help-container">
         <div className="message">

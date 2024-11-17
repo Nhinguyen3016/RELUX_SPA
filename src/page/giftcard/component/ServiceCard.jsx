@@ -6,7 +6,7 @@ const ServiceCard = ({ title, price, oldPrice, image }) => {
   const navigate = useNavigate();
 
   const handleBooking = () => {
-    navigate('/booknow');
+    navigate('/booknow', { state: { serviceName: title } });
   };
 
   return (

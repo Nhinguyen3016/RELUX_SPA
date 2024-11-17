@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom'; 
 import '../../styles/ourteam/OurTeamPage.css';
-import Spa from '../../images/spa.png'; // Import the image
+import Spa from '../../images/spa.png';
 
 const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
 
@@ -10,7 +11,7 @@ const TeamPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 9; // Number of team members displayed per page
+  const itemsPerPage = 9; 
 
   useEffect(() => {
     const fetchTeamMembers = async () => {
@@ -19,10 +20,11 @@ const TeamPage = () => {
         const employees = response.data.data.map(employee => ({
           id: employee.id,
           name: employee.name,
-          role: employee.specialtyType, // Maps 'specialtyType' to 'role'
+          role: employee.specialtyType,
           img: employee.avatar,
           description: employee.description,
           location: `${employee.location.locationName}, ${employee.location.address}`,
+          phone: employee.phone, 
         }));
         setTeamMembers(employees);
         setLoading(false);
@@ -46,7 +48,6 @@ const TeamPage = () => {
     <div className="team-page">
       <section className="team-banner">
         <h1>Our Team</h1>
-        {/* Add the image below the heading */}
         <img src={Spa} alt="Spa" className="spa-image" />
       </section>
 
@@ -59,10 +60,12 @@ const TeamPage = () => {
           {currentMembers.map((member) => (
             <div className="team-member" key={member.id}>
               <img src={member.img} alt={member.name} className="member-photo" />
-              <h2>{member.name}</h2>
+              <h2>
+                <Link to={`/team/${member.id}`}>{member.name}</Link> {/* Link to employee detail page */}
+              </h2>
               <p>{member.role}</p>
               <p>{member.location}</p>
-              <p>{member.description}</p>
+             
             </div>
           ))}
         </section>

@@ -1,32 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ServiceCard from './component/ServiceCard';
 import '../../styles/giftcard/GiftCardPage.css';
-
-import massageImg from '../../images/gall1.svg';
-import spaImg from '../../images/gall1.svg';
-import bodycareImg from '../../images/gall1.svg';
-import facialImg from '../../images/gall1.svg';
-import facecareImg from '../../images/gall1.svg';
-import oilwrapImg from '../../images/gall1.svg';
+import axios from 'axios';
 
 const GiftCardsPage = () => {
-  const services = [
-    { title: 'Massage', price: 55, image: massageImg },
-    { title: 'Basic SPA', price: 55, image: spaImg },
-    { title: 'Body Care', price: 35, oldPrice: 80, image: bodycareImg },
-    { title: 'Facial Massage', price: 55, image: facialImg },
-    { title: 'Face Care', price: 35, oldPrice: 80, image: facecareImg },
-    { title: 'Oil Wrap', price: 55, image: oilwrapImg },
-    { title: 'Massage', price: 55, image: massageImg },
-    { title: 'Basic SPA', price: 55, image: spaImg },
-    { title: 'Body Care', price: 35, oldPrice: 80, image: bodycareImg },
-    { title: 'Facial Massage', price: 55, image: facialImg },
-    { title: 'Face Care', price: 35, oldPrice: 80, image: facecareImg },
-    { title: 'Oil Wrap', price: 55, image: oilwrapImg },
-  ];
-
-  const itemsPerPage = 9; // Number of services per page
+  const [services, setServices] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9; // Number of services per page
+
+  useEffect(() => {
+    // Fetching data from the API
+    const fetchServices = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_HOST || 'http://localhost:3000'}/v1/services/promotion`);
+        setServices(response.data.data); // Assuming the API response is in the format `{ data: [...] }`
+      } catch (error) {
+        console.error('Error fetching services:', error);
+      }
+    };
+
+    fetchServices();
+  }, []);
 
   // Calculate total pages
   const totalPages = Math.ceil(services.length / itemsPerPage);
@@ -48,14 +42,15 @@ const GiftCardsPage = () => {
       </div>
 
       <div className="services-grid-gallery">
-        {currentServices.map((service, index) => (
+        {currentServices.map((service) => (
           <ServiceCard
-            key={index}
-            title={service.title}
-            price={service.price}
-            oldPrice={service.oldPrice}
-            image={service.image}
-          />
+          key={service.id}
+          title={service.name}
+          price={service.price}
+          oldPrice={service.discountPercentage ? (service.price / (1 - service.discountPercentage / 100)).toFixed(2) : null}
+          image={service.imageMain}
+        />
+        
         ))}
       </div>
 
