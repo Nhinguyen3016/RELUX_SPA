@@ -3,14 +3,11 @@ import "../../../styles/home/Home.css";
 import homeImage from "../../../images/homeImage.png";
 import helpIcon from "../../../images/help.png";
 import helpArrow from "../../../images/help-arrow.png";
+import { useSheetBooking } from "../../../context/SheetContext";
 
 
 const Home = () => {
-  const [showBookingForm, setShowBookingForm] = useState(false); 
-
-  const handleBookAppointment = () => {
-    setShowBookingForm(true); 
-  };
+  const { toggleShow } = useSheetBooking();
 
   return (
     <div className="home">
@@ -34,13 +31,9 @@ const Home = () => {
           <p className="description">
             Younger face, elongated oval, smoothing nasolabial folds, chin lift. Younger and toned face after the first procedure.
           </p>
-          <button className="appointment-btn" onClick={handleBookAppointment}>
-            Book an appointment
-          </button>
+          <button className="appointment-btn" onClick={toggleShow}>Book an appointment</button>
         </div>
       </div>
-
-    
 
       <div className="help-container">
         <div className="message">

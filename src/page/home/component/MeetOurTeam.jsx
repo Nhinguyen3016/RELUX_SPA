@@ -2,8 +2,10 @@ import React from 'react';
 import "../../../styles/home/MeetOurTeam.css";
 import aliceImage from '../../../images/alice.png';
 import doriImage from '../../../images/dori.png';
+import { useSheetBooking } from '../../../context/SheetContext';
 
 const MeetOurTeam = () => {
+  const { toggleShow } = useSheetBooking();
   return (
     <div className="meet-our-team">
       <div className="team-info">
@@ -11,7 +13,7 @@ const MeetOurTeam = () => {
         <p className="team-description">
           Our crazy-talented master stylists will connect with you on a personal level, using their creativity and skill to envision a natural style
         </p>
-        <button className="appointment-btn">Book an appointment</button>
+        <button className="appointment-btn" onClick={toggleShow}>Book an appointment</button>
       </div>
       <div className="team-members">
         <div className="team-member">
