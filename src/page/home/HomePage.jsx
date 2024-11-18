@@ -4,10 +4,6 @@ import Section from './component/Section';
 import Services from './component/Services';
 import RelaxSection from './component/RelaxSection';
 import MeetOurTeam from './component/MeetOurTeam';
-<<<<<<< HEAD
-import BookingSheetContainer from '../booking/BookingSheetContainer';
-=======
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
 
 const HomePage = () => {
   return (
@@ -17,10 +13,6 @@ const HomePage = () => {
       <Services />
       <RelaxSection />
       <MeetOurTeam />
-<<<<<<< HEAD
-      <BookingSheetContainer />
-=======
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
     </>
   );
 };

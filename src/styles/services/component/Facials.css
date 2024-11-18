@@ -16,33 +16,19 @@
 .facial-service-image {
     width: 100%;
     border-radius: 8px;
-<<<<<<< HEAD
-    height: auto;
-    max-width: 1400px;
-    text-align: center;
-=======
     max-width: 3000px;
     text-align: center;
     margin-bottom: 100px;
     height: 300px;
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
 }
 
 .facial-service-title {
     position: absolute;
-<<<<<<< HEAD
-    top: 40%;
-    left: 30%;
-    transform: translate(-50%, -50%);
-    color: rgba(0, 0, 0, 1);
-    font-size: 70px;
-=======
     top: 30%;
     left: 20%;
     transform: translate(-50%, -50%);
     color: rgba(0, 0, 0, 1);
     font-size: 50px;
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
     font-weight: bold;
 }
 
@@ -75,39 +61,15 @@
 }
 
 .facial-image-large {
-<<<<<<< HEAD
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    border-radius: 8px;
-=======
     width: 400px;
     height: 400px;
     object-fit: cover;
     
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
 }
 
 .facial-image-small {
     position: absolute;
     object-fit: cover;
-<<<<<<< HEAD
-    border-radius: 8px;
-}
-
-.facial-image-small:nth-child(3) {
-    width: 236px;
-    height: 209px;
-    bottom: -220px;
-    left: 20px;
-}
-
-.facial-image-small:nth-child(2) {
-    width: 236px;
-    height: 209px;
-    top: 85%;
-    right: -90px;
-=======
    
 }
 
@@ -123,7 +85,6 @@
     height: 200px;
     top: 85%;
     right: 0;
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
 }
 
 .facial-programs-right {
@@ -144,13 +105,6 @@
 .program-title {
     font-size: 20px;
     font-weight: bold;
-<<<<<<< HEAD
-    color: #9F2C2E;
-    margin-bottom: 5px;
-    float: left;
-}
-
-=======
     color: #61133D;
     margin-bottom: 5px;
     float: left;
@@ -159,7 +113,6 @@
 .program-title:hover {
     text-decoration: underline;  
 }
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
 .program-description {
     font-size: 15px;
     color: #5A5A5A;

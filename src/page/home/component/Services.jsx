@@ -1,32 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-import '../../../styles/home/Services.css';
-
-const servicesData = [
-  {
-    title: 'Facials',
-    description: 'Our crazy-talented master stylists will connect with you on a personal level',
-    icon: '💆‍♀️',
-  },
-  {
-    title: 'SPA Programs',
-    description: 'Our crazy-talented master stylists will connect with you on a personal level',
-    icon: '🧖‍♀️',
-  },
-  {
-    title: 'Massages',
-    description: 'Our crazy-talented master stylists will connect with you on a personal level',
-    icon: '💆‍♂️',
-  },
-  {
-    title: 'Body Treatments',
-    description: 'Our crazy-talented master stylists will connect with you on a personal level',
-    icon: '👣',
-  },
-];
-
-const Services = () => {
-=======
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../../styles/home/Services.css';
@@ -108,18 +79,10 @@ const Services = () => {
     return <p>Loading services...</p>;
   }
 
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
   return (
     <div className="services-container">
       <h2 className="services-title">Our Services</h2>
       <div className="services-grid">
-<<<<<<< HEAD
-        {servicesData.map((service, index) => (
-          <div className="service-card" key={index}>
-            <div className="service-icon">{service.icon}</div>
-            <h3 className="service-title">{service.title}</h3>
-            <p className="service-description">{service.description}</p>
-=======
         {services.map((service, index) => (
           <div
             className="service-card"
@@ -130,7 +93,6 @@ const Services = () => {
             <h3 className="service-title">{service.name}</h3>
             <p className="service-description">{service.descriptionShort}</p>
             <p className="service-type">{service.typeService}</p>
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
           </div>
         ))}
       </div>

@@ -84,20 +84,12 @@ const GalleryPage = () => {
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
-<<<<<<< HEAD
-    document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
-=======
     document.body.style.overflow = 'hidden'; 
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
   };
 
   const handleCloseModal = () => {
     setSelectedImage(null);
-<<<<<<< HEAD
-    document.body.style.overflow = 'auto'; // Restore scrolling when modal is closed
-=======
     document.body.style.overflow = 'auto'; 
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
   };
 
   return (

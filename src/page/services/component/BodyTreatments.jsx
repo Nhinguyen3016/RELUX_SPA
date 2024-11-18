@@ -1,25 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-<<<<<<< HEAD
-import '../../../styles/services/component/BodyTreatments.css';
-import Book from '../../../page/services/component/Book';
-import FaqSection from '../../../page/services/component/FaqSection';
-=======
 import { useNavigate } from 'react-router-dom';
 import '../../../styles/services/component/BodyTreatments.css';
 import Book from './Book';
 import FaqSection from './FaqSection';
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
 import Pexemas from '../../../images/massages.png';
 import Elly from '../../../images/elly.png';
 import Karoli from '../../../images/karoli.png';
 import BodyImage from '../../../images/body.png';
 
-<<<<<<< HEAD
-const BodyTreatments = () => {
-    const [programs, setPrograms] = useState([]);
-    const [loading, setLoading] = useState(true);
-=======
 const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
 
 const BodyTreatments = () => {
@@ -27,18 +16,10 @@ const BodyTreatments = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
 
     useEffect(() => {
         const fetchPrograms = async () => {
             try {
-<<<<<<< HEAD
-                const response = await axios.get('http://localhost:5000/api/programs');
-                setPrograms(response.data);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error while retrieving data:', error);
-=======
                 // Gửi yêu cầu API với categoryId = 2
                 const response = await axios.get(`${API_HOST}/v1/services/category/1`);
 
@@ -57,15 +38,11 @@ const BodyTreatments = () => {
             } catch (err) {
                 console.error('Error while retrieving data:', err);
                 setError('Failed to load programs. Please try again later.');
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
                 setLoading(false);
             }
         };
 
         fetchPrograms();
-<<<<<<< HEAD
-    }, []);
-=======
     }, []); 
 
     const handleProgramClick = (program) => {
@@ -80,31 +57,18 @@ const BodyTreatments = () => {
             }
         });
     };
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
 
     return (
         <div className="body-page">
             <div className="body-the-service-section">
                 <h2 className="body-service-title">Body Treatments</h2>
-<<<<<<< HEAD
-                <img src={BodyImage} alt="Service Promotion" className="body-service-image" /> 
-=======
                 <img src={BodyImage} alt="Service Promotion" className="body-service-image" />
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
             </div>
 
             <div className="body-programs-container">
                 <div className="body-programs-right">
                     {loading ? (
                         <p>Loading...</p>
-<<<<<<< HEAD
-                    ) : (
-                        programs.map((program, index) => (
-                            <div className="body-program" key={index}>
-                                <h2 className="program-title">{program.title}</h2>
-                                <span className="program-price">{program.price}$</span>
-                                <p className="program-description">{program.description}</p>
-=======
                     ) : error ? (
                         <p className="error-message">{error}</p>
                     ) : (
@@ -118,7 +82,6 @@ const BodyTreatments = () => {
                                 </h2>
                                 <span className="program-price">{program.price}$</span>
                                 <p className="program-description">{program.descriptionShort}</p>
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
                             </div>
                         ))
                     )}
@@ -133,17 +96,9 @@ const BodyTreatments = () => {
             </div>
 
             <FaqSection />
-<<<<<<< HEAD
-
-=======
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
             <Book />
         </div>
     );
 };
 
-<<<<<<< HEAD
 export default BodyTreatments;
-=======
-export default BodyTreatments;
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b

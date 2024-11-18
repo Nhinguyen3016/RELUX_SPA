@@ -1,26 +1,13 @@
-<<<<<<< HEAD
-import React from 'react';
-import '../../styles/contact/ContactPage.css';
-
-
-=======
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../../styles/contact/ContactPage.css';
 
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
 import iconHome from "../../images/icon-address.svg";
 import iconPhone from "../../images/icon-phone.svg";
 import iconClock from "../../images/icon-clock.svg";
 import heroImage from "../../images/icon-page.svg";
 import spaImage from "../../images/icon-item.svg";
 
-<<<<<<< HEAD
-const ContactPage = () => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-=======
 const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
 
 const ContactPage = () => {
@@ -80,33 +67,19 @@ const ContactPage = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
   };
 
   return (
     <div className="contact-page">
-<<<<<<< HEAD
-     
-=======
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
       <div className="hero-section" style={{ backgroundImage: `url(${heroImage})` }}>
         <div className="hero-content">
           <h1>Contact Us</h1>
         </div>
       </div>
 
-<<<<<<< HEAD
-     
-      <div className="main-content">
-        <div className="content-wrapper">
-         
-          <div className="left-column">
-           
-=======
       <div className="main-content">
         <div className="content-wrapper">
           <div className="left-column">
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
             <div className="contact-info-1">
               <div className="info-item">
                 <img src={iconHome} alt="Address" className="info-icon" />
@@ -114,11 +87,7 @@ const ContactPage = () => {
                   <h3>Address</h3>
                 </div>
                 <div className="info-add">
-<<<<<<< HEAD
-                <p>Da Nang, Viet Nam</p>
-=======
                   <p>Da Nang, Viet Nam</p>
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
                 </div>
               </div>
               <hr className="divider" />
@@ -128,62 +97,30 @@ const ContactPage = () => {
                   <h3>Get in Touch</h3> 
                 </div>
                 <div className="info-add">
-<<<<<<< HEAD
-                <p>+ (84) 123456789</p>
-=======
                   <p>+ (84) 123456789</p>
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
                 </div>
               </div>
               <hr className="divider" />
               <div className="info-item">
                 <img src={iconClock} alt="Hours" className="info-icon" />
                 <div className="info-content">
-<<<<<<< HEAD
-                  <h3>Hours</h3></div>
-                  <div className="info-hours">
-                    <p>Mon to Fri: 7:30 am — 1:00 am</p>
-                    <p>Sat: 9:00 am — 1:00 am</p>
-                    <p>Sun: 9:00 am — 11:30 pm</p>
-                  
-=======
                   <h3>Hours</h3>
                 </div>
                 <div className="info-hours">
                   <p>Mon to Fri: 7:30 am — 1:00 am</p>
                   <p>Sat: 9:00 am — 1:00 am</p>
                   <p>Sun: 9:00 am — 11:30 pm</p>
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
                 </div>
               </div>
               <hr className="divider" />
             </div>
 
-<<<<<<< HEAD
-           
-=======
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
             <div className="contact-form">
               <h2>Leave A Reply</h2>
               <form onSubmit={handleSubmit}>
                 <div className="form-row">
                   <input
                     type="text"
-<<<<<<< HEAD
-                    placeholder="Name"
-                    className="form-input"
-                  />
-                  <input
-                    type="email"
-                    placeholder="E-mail"
-                    className="form-input"
-                  />
-                </div>
-                <textarea
-                  placeholder="Message"
-                  rows={6}
-                  className="form-textarea"
-=======
                     name="customerName"  // Thay đổi từ "name" thành "customerName"
                     value={formData.customerName}  // Dùng customerName thay vì name
                     onChange={handleChange}
@@ -209,24 +146,16 @@ const ContactPage = () => {
                   rows={6}
                   className="form-textarea"
                   required
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
                 />
                 <button type="submit" className="submit-button">
                   Send Message
                 </button>
-<<<<<<< HEAD
-              </form>
-            </div>
-          </div>
-          
-=======
                 {error && <p className="error-message">{error}</p>}
                 {success && <p className="success-message-ct">{success}</p>}
               </form>
             </div>
           </div>
 
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
           <div className="right-column">
             <div className="image-container-c">
               <img 
@@ -242,8 +171,4 @@ const ContactPage = () => {
   );
 };
 
-<<<<<<< HEAD
-export default ContactPage; 
-=======
 export default ContactPage;
->>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
