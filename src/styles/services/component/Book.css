@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
 .book-the-service-section {
     width: 100%;
     display: flex;
@@ -13,13 +17,21 @@
 }
 
 .book-the-service-section h2 {
+<<<<<<< HEAD
     font-size: 64px;
+=======
+    font-size: 50px;
+>>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
     margin-bottom: 40px;
 }
 
 .book-appointment-button {
     padding: 10px 20px;
+<<<<<<< HEAD
     font-size: 42px;
+=======
+    font-size: 30px;
+>>>>>>> 5e54b7db1a2b413a75d4ed18f1463daecf777e0b
     margin-top: 40px;
     background-color: #ffffff;
     font-weight: bold;
