@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import '../../styles/dashboard/Service-category-dashboard.css';
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3001/v1';
+const API_BASE_URL = 'http://localhost:3003/v1';
 
 const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange }) => {
   return (

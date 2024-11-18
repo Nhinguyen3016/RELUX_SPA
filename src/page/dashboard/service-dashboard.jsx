@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/dashboard/Service-dashboard.css';
 import axios from 'axios';
-const API_BASE_URL = 'http://localhost:3001/v1';
+const API_BASE_URL = 'http://localhost:3003/v1';
 
 const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange }) => {
   return (
@@ -139,7 +139,7 @@ const ServicePackage = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [formData, setFormData] = useState({
-    serviceId: null,
+    
     name: '',
     price: 0,
     descriptionShort: '',
@@ -184,9 +184,6 @@ const ServicePackage = () => {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      
-      // Kiểm tra xem phản hồi có chứa dữ liệu không
-      console.log("Fetched services:", response.data); // Log phản hồi từ API
   
       // Giả sử phản hồi có cấu trúc { data: [...] }
       if (response.data && Array.isArray(response.data.data)) {
@@ -250,24 +247,37 @@ const ServicePackage = () => {
     }
   };
 
-  const updateService = async () => {
-    try {
-      const response = await axios.put(`${API_BASE_URL}/services/${formData.serviceId}`, formData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      if (response.status === 200) {
-        await fetchServices();
-        handleCloseForm();
-        alert('Service updated successfully!');
-      }
-    } catch (error) {
-      console.error('Error updating service:', error);
-      alert(error.response?.data?.message || 'Failed to update service');
-    }
-  };
+  // const updateService = async () => {
+  //   const categoryId =Number(localStorage.getItem('selectedServiceId')) ; 
+  //   try {
+  //     const response = await axios.put(`${API_BASE_URL}/services/${formData.serviceId}`, {
+  //       name: formData.name,
+  //       price: Number(formData.price),
+  //       descriptionShort: formData.descriptionShort,
+  //       duration: Number(formData.duration),
+  //       imageIcon: formData.imageIcon,
+  //       imageDescription: formData.imageDescription,
+  //       categoryId: categoryId,
+  //       promotionId: Number(formData.promotionId),
+  //       description1: formData.description1,
+  //       description2: formData.description2,
+  //       imageMain: formData.imageMain,
+  //     },{
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${localStorage.getItem('token')}`
+  //       }
+  //     });
+  //     if (response.status === 200) {
+  //       await fetchServices();
+  //       handleCloseForm();
+  //       alert('Service updated successfully!');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error updating service:', error);
+  //     alert(error.response?.data?.message || 'Failed to update service');
+  //   }
+  // };
 
   //   if (!window.confirm('Are you sure you want to delete this service?')) {
   //     return;
@@ -306,6 +316,131 @@ const ServicePackage = () => {
   //     alert(error.response?.data?.message || 'Failed to delete service');
   //   }
   // };
+  // const updateService = async () => {
+  //   // Kiểm tra sự tồn tại của serviceId trước khi thực hiện yêu cầu
+  //   if (!formData.serviceId) {
+  //     alert("Service ID is missing. Please try again.");
+  //     console.log("formData.serviceId:", formData.serviceId); 
+  //     return;
+  //   }
+  
+  //   // Kiểm tra sự tồn tại của categoryId trong localStorage
+  //   const categoryId = Number(localStorage.getItem('selectedServiceId'));
+  //   if (isNaN(categoryId) || categoryId <= 0) {
+  //     alert("Invalid category ID. Please select a valid category.");
+  //     return;
+  //   }
+  
+  //   // Kiểm tra dữ liệu formData có đầy đủ không
+  //   if (!formData.name || !formData.price || !formData.descriptionShort || !formData.duration) {
+  //     alert("Please fill all required fields.");
+  //     return;
+  //   }
+  
+  //   try {
+  //     // Gửi PUT request để cập nhật dịch vụ
+  //     const response = await axios.put(`${API_BASE_URL}/services/${formData.serviceId}`,
+  //       {
+  //         name: formData.name,
+  //         price: Number(formData.price),
+  //         descriptionShort: formData.descriptionShort,
+  //         duration: Number(formData.duration),
+  //         imageIcon: formData.imageIcon,
+  //         imageDescription: formData.imageDescription,
+  //         categoryId: categoryId,
+  //         promotionId: Number(formData.promotionId),
+  //         description1: formData.description1,
+  //         description2: formData.description2,
+  //         imageMain: formData.imageMain
+  //       },
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'Authorization': `Bearer ${localStorage.getItem('token')}`
+  //         }
+  //       }
+  //     );
+  
+  //     // Kiểm tra xem phản hồi từ server có thành công hay không
+  //     if (response.status === 200) {
+  //       // Gọi lại hàm fetchServices để tải lại danh sách dịch vụ
+  //       await fetchServices();
+  //       handleCloseForm();
+  //       alert('Service updated successfully!');
+  //     } else {
+  //       alert('Failed to update service. Please try again.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error updating service:', error);
+      
+  //     // Kiểm tra xem phản hồi lỗi có từ server hay không
+  //     if (error.response) {
+  //       alert(error.response.data.message || 'An error occurred while updating the service.');
+  //     } else {
+  //       alert('Failed to update service due to network error.');
+  //     }
+  //   }
+  // };
+
+  const updateService = async () => {
+    
+    if (!formData.serviceId) {
+      alert("Service ID is missing. Please try again.");
+      console.log("formData.serviceId:", formData.serviceId); 
+      return;
+    }
+    const categoryId = Number(localStorage.getItem('selectedServiceId'));
+    console.log("categoryId from localStorage:", categoryId); 
+  
+    if (isNaN(categoryId) || categoryId <= 0) {
+      alert("Invalid category ID. Please select a valid category.");
+      return;
+    }
+  
+    if (!formData.name || !formData.price || !formData.descriptionShort || !formData.duration) {
+      alert("Please fill all required fields.");
+      return;
+    }
+  
+    try {
+      const response = await axios.put(`${API_BASE_URL}/services/${formData.serviceId}`, {
+        name: formData.name,
+        price: Number(formData.price),
+        descriptionShort: formData.descriptionShort,
+        duration: Number(formData.duration),
+        imageIcon: formData.imageIcon,
+        imageDescription: formData.imageDescription,
+        categoryId: categoryId, 
+        promotionId: Number(formData.promotionId),
+        description1: formData.description1,
+        description2: formData.description2,
+        imageMain: formData.imageMain
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (response.status === 200) {
+        console.log("Service updated:", response.data);
+        await fetchServices(); 
+        handleCloseForm();
+        alert('Service updated successfully!');
+      } else {
+        alert('Failed to update service. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error updating service:', error);
+  
+      if (error.response) {
+        alert(error.response.data.message || 'An error occurred while updating the service.');
+      } else {
+        alert('Failed to update service due to network error.');
+      }
+    }
+  };
+  
+  
   const deleteService = async (id) => {
     if (!window.confirm('Are you sure you want to delete this service?')) {
       return;
@@ -322,7 +457,7 @@ const ServicePackage = () => {
         if (selectedServiceId) {
           const id = Number(selectedServiceId);
           if (!isNaN(id) && id > 0) {
-            await fetchServices(id); // Gọi lại hàm fetchServices với ID hợp lệ
+            await fetchServices(id);
           } else {
             console.error('Invalid service ID after deletion:', selectedServiceId);
           }
@@ -337,12 +472,22 @@ const ServicePackage = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("formData trong handleSubmit:", formData);
+  
+
+    if (showEditForm && !formData.serviceId) {
+      alert("Mã dịch vụ bị thiếu. Vui lòng thử lại.");
+      console.error("Mã dịch vụ bị thiếu hoặc không xác định:", formData.serviceId);
+      return;
+    }
+ 
     if (showEditForm) {
       await updateService();
     } else {
       await createService();
     }
   };
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -353,23 +498,27 @@ const ServicePackage = () => {
   };
 
   const handleEditClick = (service) => {
+    console.log("Chỉnh sửa dịch vụ:", service); 
+    console.log("Service ID:", service.serviceId); 
+  
     setFormData({
-      serviceId: null,
-    name: '',
-    price: '',
-    descriptionShort: '',
-    duration: '',
-    imageIcon: null,
-    imageDescription: null,
-    categoryId: null,
-    promotionId: null,
-    description1: null,
-    description2: null,
-    imageMain: null
+      serviceId: service.serviceId || null,
+      name: service.name || '',
+      price: service.price || 0,
+      descriptionShort: service.descriptionShort || '',
+      duration: service.duration || 0,
+      imageIcon: service.imageIcon || '',
+      imageDescription: service.imageDescription || '',
+      categoryId: service.categoryId || 0,
+      promotionId: service.promotionId || 0,
+      description1: service.description1 || '',
+      description2: service.description2 || '',
+      imageMain: service.imageMain || ''
     });
-    setShowEditForm(true);
-    setShowAddForm(false);
+    setShowEditForm(true); 
   };
+  
+  
 
   const handleAddClick = () => {
     setFormData({
