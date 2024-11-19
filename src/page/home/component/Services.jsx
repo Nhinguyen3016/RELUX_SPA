@@ -12,10 +12,10 @@ const Services = () => {
     const fetchServicesData = async () => {
       try {
         const endpoints = [
-          `${API_HOST}/v1/service-categories/1`,
-          `${API_HOST}/v1/service-categories/2`,
-          `${API_HOST}/v1/service-categories/3`,
-          `${API_HOST}/v1/service-categories/4`
+          `${API_HOST}/v1/service-categories/6`,
+          `${API_HOST}/v1/service-categories/7`,
+          `${API_HOST}/v1/service-categories/8`,
+          `${API_HOST}/v1/service-categories/9`
         ];
 
         const responses = await Promise.all(endpoints.map((url) => fetch(url)));
@@ -37,7 +37,7 @@ const Services = () => {
 
   const getServiceIcon = (typeService) => {
     switch (typeService) {
-      case 'Skin care':
+      case 'Skin Care':
         return '💆‍♀️';
       case 'Therapy':
         return '🧖‍♀️';
@@ -45,7 +45,7 @@ const Services = () => {
         return '💆‍♂️';
       case 'Body Care':
         return '👣';
-      case 'Wellness':
+      case 'wellness':
         return '🌿';
       case 'Beauty':
         return '💅';
@@ -57,13 +57,13 @@ const Services = () => {
   const handleServiceClick = (typeService) => {
     let path = '/services';
     switch (typeService) {
-      case 'Wellness':
+      case 'wellness':
         path += '/body-treatments';
         break;
       case 'Relaxation':
         path += '/facials';
         break;
-      case 'Skin care':
+      case 'Skin Care':
         path += '/massages';
         break;
       case 'Beauty':

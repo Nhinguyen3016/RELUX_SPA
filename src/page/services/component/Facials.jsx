@@ -21,7 +21,7 @@ const Facials = () => {
         const fetchPrograms = async () => {
             try {
                 
-                const response = await axios.get(`${API_HOST}/v1/services/category/2`);
+                const response = await axios.get(`${API_HOST}/v1/services/category/7`);
 
                 // Lọc và xử lý dữ liệu trả về với đầy đủ thông tin
                 const filteredPrograms = response.data.data.map((program) => ({

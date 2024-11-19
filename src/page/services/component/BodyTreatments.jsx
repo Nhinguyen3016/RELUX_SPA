@@ -21,7 +21,7 @@ const BodyTreatments = () => {
         const fetchPrograms = async () => {
             try {
                 // Gửi yêu cầu API với categoryId = 2
-                const response = await axios.get(`${API_HOST}/v1/services/category/1`);
+                const response = await axios.get(`${API_HOST}/v1/services/category/6`);
 
                 // Lọc và xử lý dữ liệu trả về chỉ với 3 trường: name, price, descriptionShort
                 const filteredPrograms = response.data.data.map((program) => ({

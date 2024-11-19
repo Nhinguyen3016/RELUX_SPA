@@ -48,7 +48,7 @@ const TeamPage = () => {
     <div className="team-page">
       <section className="team-banner">
         <h1>Our Team</h1>
-        <img src={Spa} alt="Spa" className="spa-image" />
+        <img src={Spa} alt="Spa" className="spa-image-team" />
       </section>
 
       {loading ? (

@@ -20,7 +20,7 @@ const SpaPrograms = () => {
         const fetchPrograms = async () => {
             try {
                 // Gửi yêu cầu API với categoryId = 4
-                const response = await axios.get(`${API_HOST}/v1/services/category/4`);
+                const response = await axios.get(`${API_HOST}/v1/services/category/9`);
 
                 // Lọc và xử lý dữ liệu trả về với các trường đầy đủ
                 const filteredPrograms = response.data.data.map((program) => ({

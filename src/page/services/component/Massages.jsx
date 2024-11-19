@@ -21,7 +21,7 @@ const Massages = () => {
         const fetchPrograms = async () => {
             try {
                 // Fetch data with categoryId = 3 for massages
-                const response = await axios.get(`${API_HOST}/v1/services/category/3`);
+                const response = await axios.get(`${API_HOST}/v1/services/category/8`);
 
                 // Process the response to extract relevant fields
                 const filteredPrograms = response.data.data.map((program) => ({
