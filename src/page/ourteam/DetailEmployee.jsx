@@ -46,7 +46,7 @@ const EmployeeDetail = () => {
       {/* Banner image at the top */}
       <img src={Spa} alt="Spa" className="banner-image" />
 
-      <section className="team-banner">
+      <section className="team-banner-detail">
         <h1 className="name-detailE">{employee.name}</h1>
       </section>
 
