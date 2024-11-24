@@ -12,7 +12,7 @@ const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
-    customerName: '',  // Chỉnh lại tên trường này
+    customerName: '', 
     email: '',
     message: '',
   });
@@ -121,8 +121,8 @@ const ContactPage = () => {
                 <div className="form-row">
                   <input
                     type="text"
-                    name="customerName"  // Thay đổi từ "name" thành "customerName"
-                    value={formData.customerName}  // Dùng customerName thay vì name
+                    name="customerName" 
+                    value={formData.customerName} 
                     onChange={handleChange}
                     placeholder="Name"
                     className="form-input"

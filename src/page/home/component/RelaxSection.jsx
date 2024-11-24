@@ -6,7 +6,7 @@ import mainImage from '../../../images/facialTreatment.png';
 const RelaxSection = () => {
   return (
     <div className="relax-section">
-      <h2 className="section-title">Relax, Enjoy and Love Yourself</h2>
+      <h2 className="section-title-rl">Relax, Enjoy and Love Yourself</h2>
       <div className="image-container-home">
         <FaArrowLeft className="arrow left-arrow" />
         <img src={mainImage} alt="Facial Treatment" className="main-image" />

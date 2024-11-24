@@ -5,6 +5,7 @@
     flex-direction: column;
     gap: 15px;
     margin-bottom: 5px;
+    padding: 30px;
   }
   
   .service-form label {

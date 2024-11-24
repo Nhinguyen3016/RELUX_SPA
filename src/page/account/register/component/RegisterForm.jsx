@@ -8,6 +8,7 @@ import Input from "../../../account/component/Input";
 import FormErrorMessage from "../../../account/component/FormErrorMessage";
 import PasswordInput from "../../../account/component/PasswordInput";
 import Button from "../../../account/component/Button";
+import { useState } from "react";  // Import useState
 
 const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
 
@@ -20,6 +21,8 @@ const registerSchema = z.object({
 });
 
 const RegisterForm = () => {
+  const [successMessage, setSuccessMessage] = useState("");  // State for success message
+
   const {
     register,
     handleSubmit,
@@ -42,10 +45,12 @@ const RegisterForm = () => {
       const response = await axios.post(`${API_HOST}/v1/register`, data);
 
       console.log("Registration successful:", response.data);
+      setSuccessMessage("Registration successful! Welcome!");  // Set success message
       reset();
     } catch (error) {
       console.error("Error during registration:", error);
       setError("root", { message: error.response?.data?.message || "Failed to register. Please try again." });
+      setSuccessMessage("");  // Reset success message in case of error
     }
   };
 
@@ -90,6 +95,7 @@ const RegisterForm = () => {
       {errors.root && (
         <FormErrorMessage>{errors.root.message}</FormErrorMessage>
       )}
+      {successMessage && <p className="success-message">{successMessage}</p>} {/* Display success message */}
     </form>
   );
 };

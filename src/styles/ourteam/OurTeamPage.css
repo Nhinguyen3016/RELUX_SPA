@@ -52,7 +52,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 50px;
-  padding: 100px 20px;
+  padding: 50px 20px;
   margin: 0 auto;
   width: 100%;
   max-width: 1200px;
@@ -67,6 +67,7 @@ body {
   height: 300px;
   border-radius: 50%;
   object-fit: cover;
+  margin-top:50px;
 }
 
 h2 {

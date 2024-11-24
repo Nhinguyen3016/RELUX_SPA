@@ -38,16 +38,14 @@ const ServiceForm = ({ onSubmit }) => {
         while (moreEmployees) {
           const employeeRes = await axios.get(`${API_HOST}/v1/employees?page=${page}&limit=10`);
           const employeesData = employeeRes.data.data || [];
-
           allEmployees = [...allEmployees, ...employeesData];
           moreEmployees = employeesData.length === 10;
           page++;
         }
 
         setAllEmployees(allEmployees);
-        
+
         const locationsData = allEmployees.flatMap(employee => employee.location ? [employee.location] : []);
-        
         const uniqueLocations = Array.from(new Set(locationsData.map(loc => loc.id)))
           .map(id => locationsData.find(loc => loc.id === id));
 
@@ -81,17 +79,23 @@ const ServiceForm = ({ onSubmit }) => {
 
   useEffect(() => {
     if (selectedEmployee) {
-      const employee = allEmployees.find(emp => emp.id === selectedEmployee);
+      const employeeId = parseInt(selectedEmployee, 10);
+      const employee = allEmployees.find(emp => emp.id === employeeId);
       if (employee && employee.location) {
-        setSelectedLocation(employee.location.id); // Automatically set the location when employee is selected
-        setFilteredLocations([employee.location]); // Filter locations based on employee's location
-        setFilteredEmployees([employee]); // Only show the selected employee
+        setFilteredLocations([employee.location]);
+        setFilteredEmployees([employee]);
+        if (employee.location.id !== selectedLocation) {
+          setSelectedLocation('');
+        }
+      } else {
+        setFilteredLocations([]);
+        setFilteredEmployees([]);
       }
     } else {
       setFilteredLocations(allLocations);
       setFilteredEmployees(allEmployees);
     }
-  }, [selectedEmployee, allEmployees, allLocations]);
+  }, [selectedEmployee, allEmployees, allLocations, selectedLocation]);
 
   useEffect(() => {
     if (selectedLocation) {
@@ -99,13 +103,6 @@ const ServiceForm = ({ onSubmit }) => {
         employee.location && employee.location.id === selectedLocation
       );
       setFilteredEmployees(employeesInLocation);
-      
-      // Optionally, if there are employees in the selected location, auto-select the first one
-      if (employeesInLocation.length > 0) {
-        setSelectedEmployee(employeesInLocation[0].id);
-      } else {
-        setSelectedEmployee('');
-      }
     } else {
       setFilteredEmployees(allEmployees);
     }
@@ -114,13 +111,12 @@ const ServiceForm = ({ onSubmit }) => {
   const handleEmployeeChange = (e) => {
     const employeeId = e.target.value;
     setSelectedEmployee(employeeId);
-    setSelectedLocation(''); // Reset location when employee changes
+    localStorage.setItem('selectedEmployeeId', employeeId);
   };
 
   const handleLocationChange = (e) => {
-    const locationId = e.target.value;
+    const locationId = parseInt(e.target.value, 10);
     setSelectedLocation(locationId);
-    setSelectedEmployee(''); // Reset employee when location changes
   };
 
   const handleSubmit = (e) => {
@@ -128,7 +124,7 @@ const ServiceForm = ({ onSubmit }) => {
     const formData = {
       serviceCategory: e.target.serviceCategory.value,
       service: e.target.service.value,
-      location: e.target.location.value,
+      location: selectedLocation,
       employee: e.target.employee.value,
     };
 
@@ -137,7 +133,6 @@ const ServiceForm = ({ onSubmit }) => {
 
   return (
     <form className="service-form" onSubmit={handleSubmit}>
-      {/* Service Category */}
       <label htmlFor="serviceCategory">Service Category</label>
       <select
         id="serviceCategory"
@@ -154,7 +149,6 @@ const ServiceForm = ({ onSubmit }) => {
         ))}
       </select>
 
-      {/* Services */}
       <label htmlFor="service">Service</label>
       <select id="service" name="service" required>
         <option value="">- Select Service -</option>
@@ -165,11 +159,10 @@ const ServiceForm = ({ onSubmit }) => {
         ))}
       </select>
 
-      {/* Employees */}
       <label htmlFor="employee">Employee</label>
-      <select
-        id="employee"
-        name="employee"
+      <select 
+        id="employee" 
+        name="employee" 
         required
         value={selectedEmployee}
         onChange={handleEmployeeChange}
@@ -182,11 +175,10 @@ const ServiceForm = ({ onSubmit }) => {
         ))}
       </select>
 
-      {/* Locations */}
       <label htmlFor="location">Location</label>
-      <select
-        id="location"
-        name="location"
+      <select 
+        id="location" 
+        name="location" 
         required
         value={selectedLocation}
         onChange={handleLocationChange}

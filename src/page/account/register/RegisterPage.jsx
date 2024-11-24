@@ -7,7 +7,7 @@ const RegisterPage = () => {
     <div className="form_container">
       <h2 className="form-heading">Sign Up</h2>
       <RegisterForm />
-      <p className="form-link">Already have an account? <Link to="/login">Sign in now</Link></p>
+      <p className="form-link">Already have an account? <Link to="/account">Sign in now</Link></p>
     </div>
   );
 }

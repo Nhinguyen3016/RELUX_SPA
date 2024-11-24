@@ -2,8 +2,9 @@
     background: #F3F3EF;
     padding: 24px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border: 10px solid #CEB2B5;
-    width:500px;
+    
+    width: 400px;
+    height: 650px;
 }
 
 .calendar-header {

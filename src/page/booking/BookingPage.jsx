@@ -11,11 +11,6 @@ const BookingPage = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedTime, setSelectedTime] = useState(null);
 
-    const timeSlots = [
-        "8:00 am", "8:30 am", "9:00 am", "9:30 am",
-        "10:00 am", "10:30 am", "11:00 am", "11:30 am", "12:00 pm"
-    ];
-
     const handleNext = () => {
         // Handle next button click
         console.log('Selected Date:', selectedDate);
@@ -41,7 +36,6 @@ const BookingPage = () => {
                     setSelectedDate={setSelectedDate}
                     selectedTime={selectedTime}
                     setSelectedTime={setSelectedTime}
-                    timeSlots={timeSlots}
                     onNext={handleNext}
                 />
 
