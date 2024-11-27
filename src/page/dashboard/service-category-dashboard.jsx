@@ -90,30 +90,6 @@ const ServiceMenu = () => {
       alert(error.response?.data?.message || 'Failed to fetch services');
     }
   };
-
-  const createService = async () => {
-    try {
-      const response = await axios.post(`${API_BASE_URL}/service-categories`, {
-        name: formData.name,
-        descriptionShort: formData.descriptionShort,
-        typeService: formData.typeService,
-      },{
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      if (response.status === 201) {
-        await fetchServices();
-        handleCloseForm();
-        alert('Service created successfully!');
-      }
-    } catch (error) {
-      console.error('Error creating service:', error);
-      alert(error.response?.data?.message || 'Failed to create service');
-    }
-  };
-
   const updateService = async () => {
     try {
       console.log('Updating service with data:', formData);
@@ -138,27 +114,6 @@ const ServiceMenu = () => {
       alert(error.response?.data?.message || 'Failed to update service');
     }
   };
-
-  const deleteService = async (serviceId) => {
-    if (!window.confirm('Are you sure you want to delete this service?')) {
-      return;
-    }
-    try {
-      const response = await axios.delete(`${API_BASE_URL}/service-categories/${serviceId}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      if (response.status === 200) {
-        await fetchServices();
-        alert('Service deleted successfully!');
-      }
-    } catch (error) {
-      console.error('Error deleting service:', error);
-      alert(error.response?.data?.message || 'Failed to delete service');
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (showEditForm) {
@@ -186,20 +141,10 @@ const ServiceMenu = () => {
     setShowEditForm(false);
   };
 
-  // const handleAddClick = () => {
-  //   setFormData({
-  //     categoryID: null,
-  //     name: '',
-  //     descriptionShort: '',
-  //     typeService: '',
-  //   });
-  //   setShowAddForm(true);
-  // };
-
   useEffect(() => {
     localStorage.setItem(
       'token',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJxdW9jdmlldCIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTczMTM0MTUzMiwiZXhwIjoxNzMxOTQ2MzMyfQ.aceQSJj6KOxbQBXPenVx8giF2Ykoc3nQdmdyeGG69-A'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWV0Iiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3MzIxNzM0ODQsImV4cCI6MTczMjc3ODI4NH0.Vo8KwbEqAYzAVyGw0uaUustPX_shAZ6dHdVL_-wPPJM'
     );
     fetchServices();
   }, []);

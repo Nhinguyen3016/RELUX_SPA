@@ -3,10 +3,10 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../../styles/dashboard/Sidebar-dashboard.css';
 import logo from '../../images/Logo.png';
-import dashboardIcon from '../../images/dashboard.png';
-import bookingIcon from '../../images/booking.png';
-import servicesIcon from '../../images/Service.png';
-import feekbackIcon from '../../images/feekback.png';
+import dashboardIcon from '../../image/dashboard.png';
+import bookingIcon from '../../image/booking.png';
+import servicesIcon from '../../image/Service.png';
+import feekbackIcon from '../../image/feekback.png';
 import staffIcon from '../../image/staff.png';
 
 
@@ -47,7 +47,7 @@ const Sidebar = () => {
           </li>
           <li className={(pathName=== '/staff')?'active' :''}>
             <Link to="/staff">
-              <img src={feekbackIcon} alt="icon staff" className="icon" />
+              <img src={staffIcon} alt="icon staff" className="icon" />
               Staff
             </Link>
           </li>

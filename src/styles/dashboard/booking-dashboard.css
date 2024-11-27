@@ -84,9 +84,15 @@ body {
     padding: 15px;
     display: flex; 
     flex-direction: column; 
+    transition: all 0.3s ease;
 }
 
- 
+.appointment-card:hover{
+    background-color: #cfe0f0ea; 
+    border-color: #000000; 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+    transform: translateY(-3px);
+}
 .appointment-card h4,
 .appointment-card p  {
     margin: 5px 0;

@@ -106,7 +106,7 @@
 }
 
 .service-card1 {
-  width: 160px;
+  width: 200px;
   height: auto;
   min-width: 180px;
   margin: 0 auto;
@@ -118,6 +118,13 @@
   flex-direction: column;
   justify-content: space-between;
   background-color: #f8f8f8;
+  transition: all 0.3s ease;
+}
+.service-card1:hover{
+  background-color: #cfe0f0ea; 
+  border-color: #000000; 
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+  transform: translateY(-3px);
 }
 
 .service-icon {

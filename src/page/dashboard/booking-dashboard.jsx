@@ -2,98 +2,50 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../styles/dashboard/booking-dashboard.css';
 
+const API_BASE_URL = 'http://localhost:3003/dashboard/booking';
+
 const BookingStatistics = () => {
-    const appointments = [
-        {
-            client: 'Emily Johnson',
-            service: 'Haircut',
-            date: 'October 15, 2023',
-            time: '2:00 PM',
-        },
-        {
-            client: 'Michael Brown',
-            service: 'Massage',
-            date: 'October 16, 2023',
-            time: '3:30 PM',
-        },
-        {
-            client: 'Sarah Smith',
-            service: 'Facial Treatment',
-            date: 'October 17, 2023',
-            time: '1:00 PM',
-        },
-        {
-            client: 'John Doe',
-            service: 'Manicure',
-            date: 'October 18, 2023',
-            time: '4:00 PM',
-        },
-        {
-            client: 'Emily Johnson',
-            service: 'Haircut',
-            date: 'October 15, 2023',
-            time: '2:00 PM',
-        },
-        {
-            client: 'Michael Brown',
-            service: 'Massage',
-            date: 'October 16, 2023',
-            time: '3:30 PM',
-        },
-        {
-            client: 'Sarah Smith',
-            service: 'Facial Treatment',
-            date: 'October 17, 2023',
-            time: '1:00 PM',
-        },
-        {
-            client: 'John Doe',
-            service: 'Manicure',
-            date: 'October 18, 2023',
-            time: '4:00 PM',
-        },
-        {
-            client: 'Emily Johnson',
-            service: 'Haircut',
-            date: 'October 15, 2023',
-            time: '2:00 PM',
-        },
-        {
-            client: 'Michael Brown',
-            service: 'Massage',
-            date: 'October 16, 2023',
-            time: '3:30 PM',
-        },
-        {
-            client: 'Sarah Smith',
-            service: 'Facial Treatment',
-            date: 'October 17, 2023',
-            time: '1:00 PM',
-        },
-        {
-            client: 'John Doe',
-            service: 'Manicure',
-            date: 'October 18, 2023',
-            time: '4:00 PM',
-        },
-    ];
-    const [stactisBooking, setStactisBooking] = useState({
-        stactisBooking: []
-    });
+    const [statisticsBooking, setStatisticsBooking] = useState([]);
+    const [appointments, setAppointments] = useState([]);
+
+    const fetchStactisBooking = async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/count-booking`);
+            console.log('Full API Response:', response);
+            console.log('Response data:', response.data);
+            console.log('Service Quantities:', response.data.serviceQuantities);
+            
+            // Kiểm tra 2 điều kiện:
+            // 1. response.data tồn tại
+            // 2. response.data.serviceQuantities là một mảng
+            if (response.data && Array.isArray(response.data.serviceQuantities)) {
+                // Nếu dữ liệu hợp lệ, cập nhật state với mảng serviceQuantities
+                setStatisticsBooking(response.data.serviceQuantities);
+            } else {
+                console.error('Invalid data format received:', response.data);
+                setStatisticsBooking([]); // Set empty array if data is invalid
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setStatisticsBooking([]); // Set empty array on error
+        }
+    };
+    const fetchAppointment = async () => {
+
+        try{
+            const response= await axios.get(`${API_BASE_URL}/servicesBooking`);
+            setAppointments(response.data.serviceBooking);
+
+        }catch (error) {
+            console.error('Error fetching data:', error);
+            setAppointments([]); // Set empty array on error
+        }
+    }
+
 
     useEffect(() => {
-        const fetchStactisBooking = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/dashboard/statis-booking');
-                console.log('API Response:', response.data);
-                const data = response.data.statisBooking || [];
-                setStactisBooking(data);
-            } catch (error) {
-                console.error('Error fetching data:', error);   	
-            }
-        };
-    
         fetchStactisBooking();
+        fetchAppointment();
     }, []);
     
     return (
@@ -101,29 +53,36 @@ const BookingStatistics = () => {
             <div className='card'>
             <h2 className='booking-title'>Static on booked services</h2>
             <ul className='list'>
-            {stactisBooking.length > 0 &&
-                stactisBooking.map((item, index) => (
-                    <li key={index}>
-                        <span>{item.Name}</span>
-                        <span>{item.Quantity} guests</span>
-                    </li>
-            ))}
+            {statisticsBooking && statisticsBooking.length > 0 ? (
+                    statisticsBooking.map((item, index) => (
+                        <li key={index}>
+                            <span>{item.ServiceName}</span>
+                            <span>{item.TotalBookings} guests</span>
+                        </li>
+                    ))
+                ) : (
+                    <li>No data available</li>
+                )}
             </ul>
         </div>
         <div className="appointment-container">
             <div class="card-a">
-                {appointments.map((appointment, index) => (
+                {appointments && appointments.length>0 ?(
+                    appointments.map((item, index) => (
                     <div className="appointment-card" key={index}>
-                        <h4>Client: {appointment.client}</h4>
-                        <p><span className="detail-label1">Service:</span>{appointment.service}</p>
-                        <p><span className="detail-label1">Date:</span> {appointment.date}</p>
-                        <p><span className="detail-label1">Time:</span> {appointment.time}</p>  
+                        <h4>Client: {item.CustomerName}</h4>
+                        <p><span className="detail-label1">Service:</span>{item.ServiceName}</p>
+                        <p><span className="detail-label1">Date:</span> {item.BookingDate}</p>
+                        <p><span className="detail-label1">Time:</span> {item.BookingTime}</p>  
                         {/* <div className="button-container">
                             <button className="button confirm">Confirm</button>
                             <button className="button cancel">Cancel</button>
                         </div> */}
                     </div>
-                ))}
+                ))
+                ) : (
+                    <li>No data available</li>
+                )}
             </div>
         </div>
         </div>

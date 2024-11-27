@@ -54,7 +54,14 @@
   align-items: center;
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  
-  flex: 1 1 auto;       
+  flex: 1 1 auto;   
+  transition: all 0.3s ease;    
+}
+.service-card-category:hover{
+  background-color: #cfe0f0ea; 
+  border-color: #000000; 
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+  transform: translateY(-3px);
 }
 
 .service-icon {

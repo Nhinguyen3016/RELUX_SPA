@@ -1,0 +1,267 @@
+/* Reset CSS đã có */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.staff-menu {
+  font-family: Arial, sans-serif;
+  padding: 0 20px 20px 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: auto;
+}
+
+/* Header cho Staff Menu */
+.staff-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background-color: #D1DBE8;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+
+.staff-menu-header .title {
+  font-size: 55px;
+  font-weight: bold;
+  color: black;
+  margin-left: 40px;
+}
+
+.button-header {
+  display: flex;
+  gap: 10px;
+  margin-right: 20px;
+}
+
+.button-header button {
+  width: 80px;
+  height: 40px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.button-header button:hover {
+  background-color: #0056b3;
+}
+
+/* Table của Staff */
+.staff-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  overflow: hidden;
+}
+
+.staff-table th,
+.staff-table td {
+  text-align: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.staff-table th {
+  background-color: #f5f5f5;
+  color: #333;
+  font-size: 25px;
+}
+
+.staff-table td {
+  color: #000000;
+}
+
+.staff-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.staff-table .day-of-week {
+  color: rgb(0, 0, 0);
+}
+
+.staff-table .name {
+  font-size: 20px;
+}
+
+.staff-table .actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.staff-table .actions button {
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.staff-table .actions button:hover {
+  background-color: #e0e0e0;
+}
+
+/* CSS cho Form Staff */
+.staff-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.staff-form-category {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.staff-form-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.close-button {
+  background-color: transparent;
+  color: #333;
+  border: none;
+  font-size: 24px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: red;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-actions button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.form-actions button:hover {
+  background-color: #0056b3;
+}
+
+.form-actions button[type="button"] {
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 8px 15px;
+}
+
+.form-actions button[type="button"]:hover {
+  background-color: #e0e0e0;
+}
+
+/* CSS riêng cho phần Select Days */
+.select-days-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.select-days-container label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.select-days-container label:hover {
+  color: #4CAF50;
+}
+
+.select-days-container input[type="checkbox"] {
+  accent-color: #007bff; /* Màu của checkbox khi được chọn */
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+.css-yk16xz-control {
+  margin-top: 4px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.css-1pahdxg-control {
+  border-color: #4a90e2;
+  box-shadow: none;
+}

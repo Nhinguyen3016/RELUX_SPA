@@ -139,7 +139,7 @@ const ServicePackage = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [formData, setFormData] = useState({
-    
+    id: null,
     name: '',
     price: 0,
     descriptionShort: '',
@@ -187,6 +187,7 @@ const ServicePackage = () => {
   
       // Giả sử phản hồi có cấu trúc { data: [...] }
       if (response.data && Array.isArray(response.data.data)) {
+        console.log("Danh sách dịch vụ từ API:", response.data);
         setServices(response.data.data); // Cập nhật state với mảng dịch vụ
       } else {
         console.error('Unexpected response structure:', response.data);
@@ -247,148 +248,15 @@ const ServicePackage = () => {
     }
   };
 
-  // const updateService = async () => {
-  //   const categoryId =Number(localStorage.getItem('selectedServiceId')) ; 
-  //   try {
-  //     const response = await axios.put(`${API_BASE_URL}/services/${formData.serviceId}`, {
-  //       name: formData.name,
-  //       price: Number(formData.price),
-  //       descriptionShort: formData.descriptionShort,
-  //       duration: Number(formData.duration),
-  //       imageIcon: formData.imageIcon,
-  //       imageDescription: formData.imageDescription,
-  //       categoryId: categoryId,
-  //       promotionId: Number(formData.promotionId),
-  //       description1: formData.description1,
-  //       description2: formData.description2,
-  //       imageMain: formData.imageMain,
-  //     },{
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Authorization': `Bearer ${localStorage.getItem('token')}`
-  //       }
-  //     });
-  //     if (response.status === 200) {
-  //       await fetchServices();
-  //       handleCloseForm();
-  //       alert('Service updated successfully!');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error updating service:', error);
-  //     alert(error.response?.data?.message || 'Failed to update service');
-  //   }
-  // };
-
-  //   if (!window.confirm('Are you sure you want to delete this service?')) {
-  //     return;
-  //   }
-  //   try {
-  //     const response = await axios.delete(`${API_BASE_URL}/services/${id}`, {
-  //       headers: {
-  //         'Authorization': `Bearer ${localStorage.getItem('token')}`
-  //       }
-  //     });
-  //     if (response.status === 200) {
-  //       await fetchServices();
-  //       alert('Service deleted successfully!');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error deleting service:', error);
-  //     alert(error.response?.data?.message || 'Failed to delete service');
-  //   }
-  // };
-  // const deleteService = async (id) => {
-  //   if (!window.confirm('Are you sure you want to delete this service?')) {
-  //     return;
-  //   }
-  //   try {
-  //     const response = await axios.delete(`${API_BASE_URL}/services/${id}`, {
-  //       headers: {
-  //         'Authorization': `Bearer ${localStorage.getItem('token')}`
-  //       }
-  //     });
-  //     if (response.status === 200) {
-  //       await fetchServices(); // Gọi lại hàm fetchServices để cập nhật danh sách
-  //       alert('Service deleted successfully!');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error deleting service:', error);
-  //     alert(error.response?.data?.message || 'Failed to delete service');
-  //   }
-  // };
-  // const updateService = async () => {
-  //   // Kiểm tra sự tồn tại của serviceId trước khi thực hiện yêu cầu
-  //   if (!formData.serviceId) {
-  //     alert("Service ID is missing. Please try again.");
-  //     console.log("formData.serviceId:", formData.serviceId); 
-  //     return;
-  //   }
-  
-  //   // Kiểm tra sự tồn tại của categoryId trong localStorage
-  //   const categoryId = Number(localStorage.getItem('selectedServiceId'));
-  //   if (isNaN(categoryId) || categoryId <= 0) {
-  //     alert("Invalid category ID. Please select a valid category.");
-  //     return;
-  //   }
-  
-  //   // Kiểm tra dữ liệu formData có đầy đủ không
-  //   if (!formData.name || !formData.price || !formData.descriptionShort || !formData.duration) {
-  //     alert("Please fill all required fields.");
-  //     return;
-  //   }
-  
-  //   try {
-  //     // Gửi PUT request để cập nhật dịch vụ
-  //     const response = await axios.put(`${API_BASE_URL}/services/${formData.serviceId}`,
-  //       {
-  //         name: formData.name,
-  //         price: Number(formData.price),
-  //         descriptionShort: formData.descriptionShort,
-  //         duration: Number(formData.duration),
-  //         imageIcon: formData.imageIcon,
-  //         imageDescription: formData.imageDescription,
-  //         categoryId: categoryId,
-  //         promotionId: Number(formData.promotionId),
-  //         description1: formData.description1,
-  //         description2: formData.description2,
-  //         imageMain: formData.imageMain
-  //       },
-  //       {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           'Authorization': `Bearer ${localStorage.getItem('token')}`
-  //         }
-  //       }
-  //     );
-  
-  //     // Kiểm tra xem phản hồi từ server có thành công hay không
-  //     if (response.status === 200) {
-  //       // Gọi lại hàm fetchServices để tải lại danh sách dịch vụ
-  //       await fetchServices();
-  //       handleCloseForm();
-  //       alert('Service updated successfully!');
-  //     } else {
-  //       alert('Failed to update service. Please try again.');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error updating service:', error);
-      
-  //     // Kiểm tra xem phản hồi lỗi có từ server hay không
-  //     if (error.response) {
-  //       alert(error.response.data.message || 'An error occurred while updating the service.');
-  //     } else {
-  //       alert('Failed to update service due to network error.');
-  //     }
-  //   }
-  // };
-
   const updateService = async () => {
     
-    if (!formData.serviceId) {
-      alert("Service ID is missing. Please try again.");
-      console.log("formData.serviceId:", formData.serviceId); 
-      return;
-    }
+    console.log("formData trước khi update:", formData);
+
+  if (!formData.id) {
+    alert("Service ID is missing. Please try again.");
+    console.error("Service ID không hợp lệ:", formData.id);
+    return;
+  }
     const categoryId = Number(localStorage.getItem('selectedServiceId'));
     console.log("categoryId from localStorage:", categoryId); 
   
@@ -403,7 +271,7 @@ const ServicePackage = () => {
     }
   
     try {
-      const response = await axios.put(`${API_BASE_URL}/services/${formData.serviceId}`, {
+      const response = await axios.patch(`${API_BASE_URL}/services/${formData.id}`, {
         name: formData.name,
         price: Number(formData.price),
         descriptionShort: formData.descriptionShort,
@@ -415,6 +283,7 @@ const ServicePackage = () => {
         description1: formData.description1,
         description2: formData.description2,
         imageMain: formData.imageMain
+        
       }, {
         headers: {
           'Content-Type': 'application/json',
@@ -422,8 +291,17 @@ const ServicePackage = () => {
         }
       });
       if (response.status === 200) {
-        console.log("Service updated:", response.data);
-        await fetchServices(); 
+        const selectedServiceId = localStorage.getItem('selectedServiceId');
+        if (selectedServiceId) {
+          const id = Number(selectedServiceId);
+          if (!isNaN(id) && id > 0) {
+            await fetchServices(id); // Gọi lại hàm fetchServices với ID hợp lệ
+          } else {
+            console.error('Invalid service ID after deletion:', selectedServiceId);
+          }
+        } else {
+          console.log('No service ID found in localStorage after deletion');
+        }
         handleCloseForm();
         alert('Service updated successfully!');
       } else {
@@ -433,14 +311,14 @@ const ServicePackage = () => {
       console.error('Error updating service:', error);
   
       if (error.response) {
+        console.error('Error response:', error.response);
         alert(error.response.data.message || 'An error occurred while updating the service.');
       } else {
         alert('Failed to update service due to network error.');
       }
     }
   };
-  
-  
+ 
   const deleteService = async (id) => {
     if (!window.confirm('Are you sure you want to delete this service?')) {
       return;
@@ -470,39 +348,42 @@ const ServicePackage = () => {
       alert(error.response?.data?.message || 'Failed to delete service');
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("formData trong handleSubmit:", formData);
-  
-
-    if (showEditForm && !formData.serviceId) {
+    
+    console.log("formData trong handleSubmit:", formData); // Kiểm tra xem formData có chứa serviceId không
+    
+    if (showEditForm && !formData.id) {
       alert("Mã dịch vụ bị thiếu. Vui lòng thử lại.");
-      console.error("Mã dịch vụ bị thiếu hoặc không xác định:", formData.serviceId);
-      return;
+      return; // Nếu serviceId thiếu thì không tiếp tục
     }
- 
+    
     if (showEditForm) {
-      await updateService();
+      await updateService(); // Gọi cập nhật
     } else {
-      await createService();
+      await createService(); // Gọi tạo mới
     }
   };
   
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+      id: prevFormData.id, // Giữ nguyên serviceId
     }));
   };
-
+  
   const handleEditClick = (service) => {
     console.log("Chỉnh sửa dịch vụ:", service); 
-    console.log("Service ID:", service.serviceId); 
+    console.log("Service ID:", service.id); 
   
     setFormData({
-      serviceId: service.serviceId || null,
+      ...formData,
+      id: service.id,
       name: service.name || '',
       price: service.price || 0,
       descriptionShort: service.descriptionShort || '',
@@ -515,14 +396,19 @@ const ServicePackage = () => {
       description2: service.description2 || '',
       imageMain: service.imageMain || ''
     });
-    setShowEditForm(true); 
+    console.log("Đối tượng dịch vụ để chỉnh sửa:", service);
+    setShowEditForm(true);
+     
   };
+  useEffect(() => {
+    console.log("formData đã thay đổi:", formData);
+  }, [formData]);
   
   
 
   const handleAddClick = () => {
     setFormData({
-      serviceId: null,
+    id: null,
     name: '',
     price: '',
     descriptionShort: '',
@@ -541,7 +427,7 @@ const ServicePackage = () => {
 
   const handleCloseForm = () => {
     setFormData({
-      serviceId: null,
+      id: null,
       name: '',
       price: '',
       descriptionShort: '',
@@ -556,7 +442,7 @@ const ServicePackage = () => {
   useEffect(() => {
     localStorage.setItem(
       'token',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJxdW9jdmlldCIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTczMTM0MTUzMiwiZXhwIjoxNzMxOTQ2MzMyfQ.aceQSJj6KOxbQBXPenVx8giF2Ykoc3nQdmdyeGG69-A'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWV0Iiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3MzIxNzM0ODQsImV4cCI6MTczMjc3ODI4NH0.Vo8KwbEqAYzAVyGw0uaUustPX_shAZ6dHdVL_-wPPJM'
     );
   }, []);
   return (
@@ -568,7 +454,7 @@ const ServicePackage = () => {
          {Array.isArray(services) && services.length > 0 ? (
            services.map((service) => (
           <div
-           key={service.serviceId} 
+           key={service.id} 
            className="service-card1"
            >
               <h3 className="service-title-category">{service.name}</h3>
