@@ -2,9 +2,8 @@
     background: #F3F3EF;
     padding: 24px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    
     width: 400px;
-    height: 650px;
+    height: 750px;
 }
 
 .calendar-header {
@@ -12,6 +11,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    margin-right:20px;
 }
 
 .calendar-header h3 {
@@ -30,10 +30,11 @@
 .time-slots {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 24px;
-    padding: 30px;
+    gap: 5px;
+
+    margin-bottom: 14px;
     justify-items: center;
+    margin-right: 15px;
 }
 
 .time-slot {
@@ -181,3 +182,27 @@
     cursor: not-allowed !important;
     pointer-events: none;
 }
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.back-btn, .next-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+.back-btn {
+    background-color: white;
+    height: 35px;
+    cursor: pointer;
+}
+.back-btn:hover {
+    background-color: #8b7979;
+  }
+
+

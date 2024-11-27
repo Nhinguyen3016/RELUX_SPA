@@ -14,14 +14,21 @@ const ServiceForm = ({ onSubmit }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
+      setIsLoading(true);
+      setError(null);
       try {
         const res = await axios.get(`${API_HOST}/v1/service-categories`);
         setCategories(res.data.data || []);
       } catch (error) {
         console.error('Error fetching categories:', error);
+        setError('Failed to fetch categories');
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -30,6 +37,8 @@ const ServiceForm = ({ onSubmit }) => {
 
   useEffect(() => {
     const fetchEmployees = async () => {
+      setIsLoading(true);
+      setError(null);
       try {
         let allEmployees = [];
         let page = 1;
@@ -53,6 +62,9 @@ const ServiceForm = ({ onSubmit }) => {
         setFilteredLocations(uniqueLocations);
       } catch (error) {
         console.error('Error fetching employees and locations:', error);
+        setError('Failed to fetch employees and locations');
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -66,11 +78,16 @@ const ServiceForm = ({ onSubmit }) => {
         return;
       }
 
+      setIsLoading(true);
+      setError(null);
       try {
         const res = await axios.get(`${API_HOST}/v1/services/category/${selectedCategory}`);
         setServices(res.data.data || []);
       } catch (error) {
         console.error('Error fetching services:', error);
+        setError('Failed to fetch services');
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -84,9 +101,7 @@ const ServiceForm = ({ onSubmit }) => {
       if (employee && employee.location) {
         setFilteredLocations([employee.location]);
         setFilteredEmployees([employee]);
-        if (employee.location.id !== selectedLocation) {
-          setSelectedLocation('');
-        }
+        setSelectedLocation(employee.location.id.toString());
       } else {
         setFilteredLocations([]);
         setFilteredEmployees([]);
@@ -95,41 +110,58 @@ const ServiceForm = ({ onSubmit }) => {
       setFilteredLocations(allLocations);
       setFilteredEmployees(allEmployees);
     }
-  }, [selectedEmployee, allEmployees, allLocations, selectedLocation]);
+  }, [selectedEmployee, allEmployees, allLocations]);
 
   useEffect(() => {
     if (selectedLocation) {
+      const locationId = parseInt(selectedLocation, 10);
       const employeesInLocation = allEmployees.filter(employee =>
-        employee.location && employee.location.id === selectedLocation
+        employee.location && employee.location.id === locationId
       );
       setFilteredEmployees(employeesInLocation);
+      
+      if (!employeesInLocation.some(emp => emp.id.toString() === selectedEmployee)) {
+        setSelectedEmployee("");
+      }
     } else {
       setFilteredEmployees(allEmployees);
     }
-  }, [selectedLocation, allEmployees]);
+  }, [selectedLocation, allEmployees, selectedEmployee]);
 
   const handleEmployeeChange = (e) => {
     const employeeId = e.target.value;
     setSelectedEmployee(employeeId);
-    localStorage.setItem('selectedEmployeeId', employeeId);
   };
 
   const handleLocationChange = (e) => {
-    const locationId = parseInt(e.target.value, 10);
+    const locationId = e.target.value;
     setSelectedLocation(locationId);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = {
-      serviceCategory: e.target.serviceCategory.value,
-      service: e.target.service.value,
-      location: selectedLocation,
-      employee: e.target.employee.value,
+      serviceCategory: parseInt(e.target.serviceCategory.value, 10),
+      service: parseInt(e.target.service.value, 10),
+      location: parseInt(selectedLocation, 10),
+      employee: parseInt(selectedEmployee, 10),
     };
 
+    // Store both employee ID and location ID in localStorage
+    localStorage.setItem('selectedEmployeeId', formData.employee.toString());
+    localStorage.setItem('selectedLocationId', formData.location.toString());
+    
+    console.log('Submitting form data:', formData);
     onSubmit(formData);
   };
+
+  if (isLoading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="error">{error}</div>;
+  }
 
   return (
     <form className="service-form" onSubmit={handleSubmit}>
@@ -150,7 +182,12 @@ const ServiceForm = ({ onSubmit }) => {
       </select>
 
       <label htmlFor="service">Service</label>
-      <select id="service" name="service" required>
+      <select 
+        id="service" 
+        name="service" 
+        required
+        disabled={!selectedCategory}
+      >
         <option value="">- Select Service -</option>
         {services.map((service) => (
           <option key={service.id} value={service.id}>

@@ -5,6 +5,7 @@ import getintouchIcon from '../../images/getintouch.svg';
 import servicesIcon from '../../images/service.svg';
 import hoursIcon from '../../images/hours.svg';
 import Spa from '../../images/spa.png';
+import FormWrapper from '../home/component/FormWrapper'; // Import FormWrapper
 import '../../styles/ourteam/DetailEmployee.css';
 
 const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
@@ -14,6 +15,11 @@ const EmployeeDetail = () => {
   const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showServiceForm, setShowServiceForm] = useState(false); // State to toggle ServiceForm
+  const [isServiceForm, setIsServiceForm] = useState(true); // To toggle between forms
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   useEffect(() => {
     const fetchEmployeeDetail = async () => {
@@ -41,6 +47,13 @@ const EmployeeDetail = () => {
   }
 
   const avatarUrl = employee.avatar;
+
+  const handleNext = (formData) => {
+    console.log("Form Data:", formData);
+    setIsServiceForm(false);
+    setSelectedEmployee(formData.employee);
+  };
+
   return (
     <section className="about-me-detailE">
       {/* Banner image at the top */}
@@ -116,12 +129,27 @@ const EmployeeDetail = () => {
           <button
             className="book-button"
             aria-label="Book an appointment"
-            onClick={() => alert('Redirect to booking page!')}
+            onClick={() => setShowServiceForm(true)} // Show the ServiceForm
           >
             Book an Appointment
           </button>
         </div>
       </div>
+
+      {/* Show FormWrapper instead of ServiceForm directly */}
+      {showServiceForm && (
+        <div className="service-form-overlay">
+          <FormWrapper
+            isServiceForm={isServiceForm}
+            handleNext={handleNext}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            selectedTime={selectedTime}
+            setSelectedTime={setSelectedTime}
+            selectedEmployee={selectedEmployee}
+          />
+        </div>
+      )}
     </section>
   );
 };

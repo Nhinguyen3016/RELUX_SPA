@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // Add useState here
+import React, { useState } from 'react'; 
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -33,7 +33,8 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const [success, setSuccess] = useState(null); // Added success state
+  const [success, setSuccess] = useState(null); 
+  const [errorMessage, setErrorMessage] = useState(null); // For displaying error message
 
   const onSubmit = async (data) => {
     try {
@@ -41,18 +42,33 @@ const LoginForm = () => {
 
       console.log("Login successful:", response.data);
 
-      // Store the token in localStorage
-      localStorage.setItem('authToken', response.data.token);
+      // Log the response to see if the token is present
+      if (response.data && response.data.data) {
+        const { accessToken, refreshToken } = response.data.data;
 
-      // Set the success message
-      setSuccess("You have logged in successfully!");
+        // Save tokens to localStorage
+        if (accessToken) {
+          localStorage.setItem('authToken', accessToken);
+          console.log("Access token saved:", accessToken);  // Log token for verification
+        }
 
-      // Optionally, you can also redirect the user to the dashboard or home page after login
-      reset();
+        if (refreshToken) {
+          localStorage.setItem('refreshToken', refreshToken);
+          console.log("Refresh token saved:", refreshToken);  // Log refresh token for verification
+        }
+
+        setSuccess("You have logged in successfully!");
+        setErrorMessage(null);  // Clear previous error message if any
+        reset();  // Reset form fields
+      } else {
+        setErrorMessage("Failed to retrieve token. Please try again.");
+        console.error("No token in the response:", response.data);  // Log to debug
+      }
     } catch (error) {
       console.error("Error during login:", error);
       setError("root", { message: error.response?.data?.message || "Failed to login. Please try again." });
-      setSuccess(null); // Reset success message if login fails
+      setSuccess(null);  // Clear success message if login fails
+      setErrorMessage(error.response?.data?.message || "An unexpected error occurred.");
     }
   };
 
@@ -73,10 +89,18 @@ const LoginForm = () => {
         )}
       </FormField>
       <Button type="submit">{isSubmitting ? "Loading..." : "Login"}</Button>
+      
+      {/* Show root error message */}
       {errors.root && (
         <FormErrorMessage>{errors.root.message}</FormErrorMessage>
       )}
-      {success && <p className="success-message">{success}</p>} {/* Success message */}
+
+      {/* Show error message if any */}
+      {errorMessage && <FormErrorMessage>{errorMessage}</FormErrorMessage>}
+
+      {/* Success message */}
+      {success && <p className="success-message">{success}</p>}
+
       <Link to="/forgot-password">Lost your password?</Link>
     </form>
   );

@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import ServiceCard from './component/ServiceCard';
 import '../../styles/giftcard/GiftCardPage.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const GiftCardsPage = () => {
   const [services, setServices] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9; // Number of services per page
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetching data from the API
@@ -44,13 +46,16 @@ const GiftCardsPage = () => {
       <div className="services-grid-gallery">
         {currentServices.map((service) => (
           <ServiceCard
-          key={service.id}
-          title={service.name}
-          price={service.price}
-          oldPrice={service.discountPercentage ? (service.price / (1 - service.discountPercentage / 100)).toFixed(2) : null}
-          image={service.imageMain}
-        />
-        
+            key={service.id}
+            title={service.name}
+            price={service.price}
+            oldPrice={service.discountPercentage ? (service.price / (1 - service.discountPercentage / 100)).toFixed(2) : null}
+            image={service.imageMain}
+            description1={service.description1}
+            description2={service.description2}
+            imageDescription={service.imageDescription}
+            duration={service.duration}
+          />
         ))}
       </div>
 

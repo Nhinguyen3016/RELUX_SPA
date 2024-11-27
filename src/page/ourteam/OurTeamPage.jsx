@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 import '../../styles/ourteam/OurTeamPage.css';
 import Spa from '../../images/spa.png';
 
@@ -11,22 +11,26 @@ const TeamPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 9; 
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 9;
 
   useEffect(() => {
     const fetchTeamMembers = async () => {
       try {
-        const response = await axios.get(`${API_HOST}/v1/employees`);
-        const employees = response.data.data.map(employee => ({
+        setLoading(true);
+        setError(null);
+        const employeeRes = await axios.get(`${API_HOST}/v1/employees?page=${currentPage}&limit=${itemsPerPage}`);
+        const employees = employeeRes.data.data.map(employee => ({
           id: employee.id,
           name: employee.name,
           role: employee.specialtyType,
           img: employee.avatar,
           description: employee.description,
           location: `${employee.location.locationName}, ${employee.location.address}`,
-          phone: employee.phone, 
+          phone: employee.phone,
         }));
         setTeamMembers(employees);
+        setTotalItems(employeeRes.data.total); // Lưu tổng số nhân viên vào state
         setLoading(false);
       } catch (err) {
         console.error('Error fetching team data:', err);
@@ -36,13 +40,13 @@ const TeamPage = () => {
     };
 
     fetchTeamMembers();
-  }, []);
+  }, [currentPage]);
 
-  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
-  const indexOfLastMember = currentPage * itemsPerPage;
-  const indexOfFirstMember = indexOfLastMember - itemsPerPage;
-  const currentMembers = teamMembers.slice(indexOfFirstMember, indexOfLastMember);
-  const totalPages = Math.ceil(teamMembers.length / itemsPerPage);
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   return (
     <div className="team-page">
@@ -57,32 +61,46 @@ const TeamPage = () => {
         <p className="error-message">{error}</p>
       ) : (
         <section className="team-members">
-          {currentMembers.map((member) => (
+          {teamMembers.map((member) => (
             <div className="team-member" key={member.id}>
               <img src={member.img} alt={member.name} className="member-photo" />
               <h2>
-                <Link to={`/team/${member.id}`}>{member.name}</Link> {/* Link to employee detail page */}
+                <Link to={`/team/${member.id}`}>{member.name}</Link>
               </h2>
               <p>{member.role}</p>
               <p>{member.location}</p>
-             
             </div>
           ))}
         </section>
       )}
 
       <section className="pagination">
-        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Prev</button>
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="pagination-button"
+        >
+          Prev
+        </button>
+
+        {/* Displaying page numbers */}
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index + 1}
             onClick={() => handlePageChange(index + 1)}
-            className={currentPage === index + 1 ? 'active' : ''}
+            className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
           >
             {index + 1}
           </button>
         ))}
-        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Next</button>
+
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="pagination-button"
+        >
+          Next
+        </button>
       </section>
     </div>
   );

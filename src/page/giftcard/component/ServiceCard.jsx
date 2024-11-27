@@ -2,11 +2,30 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../../styles/giftcard/component/ServiceCard.css';
 
-const ServiceCard = ({ title, price, oldPrice, image }) => {
+const ServiceCard = ({ 
+  title, 
+  price, 
+  oldPrice, 
+  image, 
+  description1, 
+  description2, 
+  imageDescription, 
+  duration 
+}) => {
   const navigate = useNavigate();
 
   const handleBooking = () => {
-    navigate('/booknow', { state: { serviceName: title } });
+    // Navigate to the booking page and pass the service details as state
+    navigate(`/booking/${title}`, {
+      state: {
+        name: title,
+        price: price,
+        description1: description1,
+        description2: description2,
+        imageDescription: imageDescription,
+        duration: duration,
+      }
+    });
   };
 
   return (
@@ -20,7 +39,10 @@ const ServiceCard = ({ title, price, oldPrice, image }) => {
         <div className="service-image-g">
           <img src={image} alt={title} />
         </div>
+
+       
       </div>
+
       <button className="book-button-g" onClick={handleBooking}>
         Book an appointment
       </button>

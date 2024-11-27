@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import "../../../styles/home/Home.css";
 import homeImage from "../../../images/homeImage.png";
 import helpIcon from "../../../images/help.png";
 import helpArrow from "../../../images/help-arrow.png";
 
-
-const Home = () => {
-  const [showBookingForm, setShowBookingForm] = useState(false); 
-
+const Home = ({ sectionRef }) => {
+  // Cuộn đến Section khi nhấn nút
   const handleBookAppointment = () => {
-    setShowBookingForm(true); 
+    if (sectionRef && sectionRef.current) {
+      // Scroll to the service form (inside the Section component)
+      const serviceFormElement = sectionRef.current.querySelector('.service-form');
+      if (serviceFormElement) {
+        serviceFormElement.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   };
 
   return (
@@ -32,15 +36,14 @@ const Home = () => {
             <p>(+84) 123456789</p>
           </div>
           <p className="description">
-            Younger face, elongated oval, smoothing nasolabial folds, chin lift. Younger and toned face after the first procedure.
+            Younger face, elongated oval, smoothing nasolabial folds, chin lift.
+            Younger and toned face after the first procedure.
           </p>
           <button className="appointment-btn" onClick={handleBookAppointment}>
             Book an appointment
           </button>
         </div>
       </div>
-
-    
 
       <div className="help-container">
         <div className="message">
