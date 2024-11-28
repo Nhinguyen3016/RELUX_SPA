@@ -145,7 +145,20 @@ body {
   align-items: center;
   padding: 10px;
 }
+.chatbot-modal {
+  position: fixed;
+  bottom: 2%; /* Cách cạnh dưới màn hình */
+  right: 2%; /* Cách cạnh trái màn hình */
+  width: auto; /* Đặt chiều rộng cố định cho modal */
+  max-height: auto; /* Giới hạn chiều cao */
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px; /* Bo góc cho modal */
+  padding: 15px;
+  z-index: 9999;
+  overflow-y: auto; /* Cuộn khi nội dung vượt quá chiều cao */
 
+}
 .message {
   background-color: white;
   border-radius: 6px;
@@ -168,6 +181,8 @@ body {
   width: 50px;
   height: 50px;
   margin-right: 0px;
+  cursor: pointer;
+
 }
 
 .help-arrow img {

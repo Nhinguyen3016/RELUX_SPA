@@ -3,8 +3,16 @@ import "../../../styles/home/Home.css";
 import homeImage from "../../../images/homeImage.png";
 import helpIcon from "../../../images/help.png";
 import helpArrow from "../../../images/help-arrow.png";
+import Chatbot from '../component/chatbot'
+import { useState } from "react";
 
 const Home = ({ sectionRef }) => {
+
+  const [showChatbot, setShowChatbot] = useState(false)
+
+  const toggleChatbot = () => {
+    setShowChatbot(!showChatbot);
+};
   // Cuộn đến Section khi nhấn nút
   const handleBookAppointment = () => {
     if (sectionRef && sectionRef.current) {
@@ -45,13 +53,14 @@ const Home = ({ sectionRef }) => {
         </div>
       </div>
 
-      <div className="help-container">
+      <div className="help-container" >
         <div className="message">
           <span>Hello, Can I help you?</span>
+          {showChatbot && (<div className="chatbot-modal"><Chatbot /></div>)}
         </div>
         <div className="icon-arrow-container">
           <div className="help-icon">
-            <img src={helpIcon} alt="Help Icon" />
+            <img src={helpIcon} alt="Help Icon" onClick={toggleChatbot} />
           </div>
           <div className="help-arrow">
             <img src={helpArrow} alt="Help Arrow" />
