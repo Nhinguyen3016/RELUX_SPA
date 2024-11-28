@@ -14,26 +14,32 @@ function Chatbot() {
     // Gửi tin nhắn chào mừng khi khởi động
     const welcomeMessage = {
       sender: 'bot',
-      text: 'Xin chào! Bạn muốn tôi hỗ trợ những gì?',
+      text: 'Xin chào! Chào mừng bạn đến với Relux Spa . Mình có thể giúp gì cho bạn hôm nay ? ',
     };
       const Consultation = {
         sender: 'bot',
-        text: 'Tư vấn khóa học',
+        text: '1. Tìm hiểu về dịch vụ ',
         clickable: true
       };
       const cost = {
         sender: 'bot',
-        text: 'Giá cả khóa học',
+        text: '2. Đặt lịch hẹn ',
         clickable: true
 
       };
       const recommendations = {
         sender: 'bot',
-        text: 'Đề xuất khóa học',
+        text: '3. Hỏi về ưu đãi',
         clickable: true
 
       };
-    setMessages([welcomeMessage,Consultation,cost,recommendations]);
+      const recommenend = {
+        sender: 'bot',
+        text: '4. Cần tư vấn khác',
+        clickable: true
+
+      };
+    setMessages([welcomeMessage,Consultation,cost,recommendations,recommenend]);
   }, []);
 
   const handleClickOption = (text) => {

@@ -1,22 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../../styles/home/Home.css";
 import homeImage from "../../../images/homeImage.png";
 import helpIcon from "../../../images/help.png";
 import helpArrow from "../../../images/help-arrow.png";
-import Chatbot from '../component/chatbot'
-import { useState } from "react";
+import Chatbot from '../component/chatbot';
 
 const Home = ({ sectionRef }) => {
-
-  const [showChatbot, setShowChatbot] = useState(false)
+  const [showChatbot, setShowChatbot] = useState(true); // Đặt giá trị ban đầu là true để chatbot luôn hiển thị
 
   const toggleChatbot = () => {
     setShowChatbot(!showChatbot);
-};
+  };
+
   // Cuộn đến Section khi nhấn nút
   const handleBookAppointment = () => {
     if (sectionRef && sectionRef.current) {
-      // Scroll to the service form (inside the Section component)
       const serviceFormElement = sectionRef.current.querySelector('.service-form');
       if (serviceFormElement) {
         serviceFormElement.scrollIntoView({ behavior: "smooth" });
@@ -53,7 +51,7 @@ const Home = ({ sectionRef }) => {
         </div>
       </div>
 
-      <div className="help-container" >
+      <div className="help-container">
         <div className="message">
           <span>Hello, Can I help you?</span>
           {showChatbot && (<div className="chatbot-modal"><Chatbot /></div>)}
