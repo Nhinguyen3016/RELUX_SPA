@@ -3,23 +3,15 @@ import "../../../styles/home/Home.css";
 import homeImage from "../../../images/homeImage.png";
 import helpIcon from "../../../images/help.png";
 import helpArrow from "../../../images/help-arrow.png";
-import Chatbot from '../component/chatbot';
 
 const Home = ({ sectionRef }) => {
   const [showChatbot, setShowChatbot] = useState(true); // Đặt giá trị ban đầu là true để chatbot luôn hiển thị
 
-  const toggleChatbot = () => {
-    setShowChatbot(!showChatbot);
-  };
+const Home = () => {
+  const [showBookingForm, setShowBookingForm] = useState(false); 
 
-  // Cuộn đến Section khi nhấn nút
   const handleBookAppointment = () => {
-    if (sectionRef && sectionRef.current) {
-      const serviceFormElement = sectionRef.current.querySelector('.service-form');
-      if (serviceFormElement) {
-        serviceFormElement.scrollIntoView({ behavior: "smooth" });
-      }
-    }
+    setShowBookingForm(true); 
   };
 
   return (
@@ -45,9 +37,7 @@ const Home = ({ sectionRef }) => {
             Younger face, elongated oval, smoothing nasolabial folds, chin lift.
             Younger and toned face after the first procedure.
           </p>
-          <button className="appointment-btn" onClick={handleBookAppointment}>
-            Book an appointment
-          </button>
+          <button className="appointment-btn" onClick={toggleShow}>Book an appointment</button>
         </div>
       </div>
 

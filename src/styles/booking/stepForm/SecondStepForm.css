@@ -1,0 +1,44 @@
+.sheet_form__calendar {
+  width: 100% !important;
+  border: none !important;
+}
+
+.sheet_form__time {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 18px 40px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.sheet_form__time_item {
+  width: 100%;
+  border: 1px solid #2d2d2d;
+  
+  border-radius: 4px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+  }
+
+  label {
+    width: 100%;
+    height: 100%;
+    padding: 10px 20px;
+    display: block;
+    cursor: pointer;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  input:checked + label {
+    background: #61133D;
+    color: white;
+  }
+}
