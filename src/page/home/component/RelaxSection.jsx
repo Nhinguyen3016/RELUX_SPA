@@ -16,12 +16,12 @@ import relax8 from '../../../images/relax8.jpg';
 const RelaxSection = () => {
   // Array of images to display in the slider
   const images = [
-    mainImage,
+    relax5,
     relax1,
     relax2,
     relax3,
     relax4,
-    relax5,
+    mainImage,
     relax6,
     relax7,
     relax8,

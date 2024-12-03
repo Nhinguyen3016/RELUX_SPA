@@ -20,6 +20,7 @@ const ServiceCard = ({
       state: {
         name: title,
         price: price,
+        oldPrice: oldPrice,
         description1: description1,
         description2: description2,
         imageDescription: imageDescription,

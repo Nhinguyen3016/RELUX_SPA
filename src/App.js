@@ -8,7 +8,6 @@ import GiftCardPage from './page/giftcard/GiftCardPage';
 //booking
 import BookingPage from './page/booking/BookingPage';
 import BookNowPage from './page/giftcard/BookNowPage';
-import FirstStep from './page/booking/components/FirstStep';
 import ThirdStep from './page/booking/components/ThirdStep';
 import FourStep from './page/booking/components/FourStep';
 import FiveStep from './page/booking/components/FiveStep';
@@ -32,6 +31,8 @@ import Facials from './page/services/component/Facials';
 import Massages from './page/services/component/Massages';  
 import SpaPrograms from './page/services/component/SpaPrograms';  
 
+//Profile
+import ProfileUser from './page/account/account/ProfileUser';
 function App() {
   return (
     <Router>
@@ -51,7 +52,6 @@ function App() {
             <Route path="/new-password" element={<NewPasswordPage />} />
             {/* Booking routes */}
             <Route path="/booking" element={<BookingPage />} />
-            <Route path="/firststep" element={<FirstStep />} />
             <Route path="/thirdstep" element={<ThirdStep />} />
             <Route path="/fourstep" element={<FourStep />} />
             <Route path="/fivestep" element={<FiveStep />} />
@@ -66,6 +66,9 @@ function App() {
             <Route path="/services/massages" element={<Massages />} />
             <Route path="/services/spa-programs" element={<SpaPrograms />} />
             <Route path="/booking/:programId" element={<BookingPage />} />
+
+            <Route path="/profile" element={<ProfileUser />} />
+
           </Routes>
         </MainLayout>
       </div>

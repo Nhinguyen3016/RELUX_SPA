@@ -144,6 +144,8 @@
   transition: background-color 0.2s;
   display: flex;
   align-items: flex-start;
+  width: 150px;
+  justify-content: center;
 }
 p.success-message-ct {
   font-size: 16px;
