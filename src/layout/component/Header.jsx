@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom'; 
 import '../../styles/mainlayout/Header.css';
 
 import logo from '../../images/Logo.png';
-import calendarIcon from '../../images/imageHeader.png';
+import calendarIcon from '../../images/avatar_pf.jpg';
 import smallIcon from '../../images/dropdown.png';
 
 const Header = () => {
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isPagesOpen, setIsPagesOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleIconClick = () => {
+    navigate('/profile');
+  };
 
   return (
     <header className="header">
@@ -60,7 +65,14 @@ const Header = () => {
         </ul>
       </nav>
       <div className="icon">
-        <img src={calendarIcon} alt="Calendar Icon" width="24" height="24" />
+        <img 
+          src={calendarIcon} 
+          alt="Calendar Icon" 
+          width="24" 
+          height="24" 
+          onClick={handleIconClick}
+          style={{ cursor: 'pointer' }}
+        />
       </div>
     </header>
   );
