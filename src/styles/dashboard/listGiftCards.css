@@ -1,0 +1,112 @@
+.gift-cards-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  font-family: Arial, sans-serif;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.gift-cards-header {
+  background-color: #D1DBE8;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.gift-cards-header h2 {
+  margin: 0;
+  font-size: 40px;
+  font-weight: bold;
+  color: #333;
+}
+
+.gift-cards-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.gift-cards-actions .filter-button,
+.gift-cards-actions .add-button {
+  background-color: white;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.gift-cards-actions button:hover {
+  background-color: #D1DBE8;
+}
+
+.gift-cards-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: white;
+}
+
+.gift-cards-table th,
+.gift-cards-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.gift-cards-table th {
+  background-color: #D1DBE8;
+  font-size: 20px;
+  color: #000000;
+  font-weight: bold;
+}
+
+.gift-cards-table tbody tr {
+  transition: background-color 0.2s;
+}
+
+.gift-cards-table tbody tr:hover {
+  background-color: #D1DBE8;
+}
+
+.red-text {
+  color: red;
+}
+
+.actions {
+  display: flex;
+  align-items: center; /* Căn giữa theo chiều ngang */
+  justify-content: center; /* Căn giữa theo chiều dọc */
+  gap: 10px; /* Khoảng cách giữa các nút */
+  height: 100%;
+}
+
+.action-button {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.action-button:hover {
+  background-color: #e0e0e0;
+}
+
+.action-button.delete-button:hover {
+  color: #D1DBE8;
+}
+
+.action-button.edit-button:hover {
+  color: #D1DBE8;
+}

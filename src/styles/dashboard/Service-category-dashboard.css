@@ -1,0 +1,225 @@
+.service-menu-category {
+  display: flex ;
+  justify-content: center; 
+  padding: 30px;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+}
+
+
+.service-menu-header-category {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.edit-button, .add-button {
+  width: 84px;
+  height: 40px;
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+}
+
+.service-title-category {
+  margin-bottom: 10px;
+  color: #000;
+}
+
+.service-cards-category {
+  display: flex; 
+  justify-content: center;   
+  gap: 40px;         
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.service-card-category {
+  height: 380px;
+  min-width: 180px;
+  max-width: 230px;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  background-color: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  
+  flex: 1 1 auto;   
+  transition: all 0.3s ease;    
+}
+.service-card-category:hover{
+  background-color: #cfe0f0ea; 
+  border-color: #000000; 
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+  transform: translateY(-3px);
+}
+
+.service-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.service-action-category {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.service-action-category button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  background-color: #4CAF50;
+  color: white;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.save-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.service-description,
+.service-typeService {
+  overflow-wrap: break-word;
+  overflow: hidden;
+  overflow-y: auto;
+  max-width: 100%;
+  max-height: 150px;
+  white-space: normal;
+  padding: 5px;
+}
+
+.detail-label {
+  font-weight: bold;
+}
+
+@media (max-width: 1200px) {
+  .service-cards-category {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .service-cards-category {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}
+
+.service-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.service-form-category {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+.service-form-category label {
+  font-size: 18px;
+  font-family: 'Urbanist', sans-serif;
+  color: #333;
+  margin-bottom: -10px;
+  margin-right: 0;
+  text-align: left;
+}
+
+.service-form-title {
+  text-align: center;
+  padding-bottom: 15px;
+}
+
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-action {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.form-action button {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form-action button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+.form-action button[type="button"] {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+}

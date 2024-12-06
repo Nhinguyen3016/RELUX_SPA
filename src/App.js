@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.css';
 import MainLayout from './layout/MainLayout';
+import MainLayoutDashboard from './layout/MainLayoutDashboard';
 import HomePage from './page/home/HomePage';
 import GalleryPage from './page/gallery/GalleryPage';
 import GiftCardPage from './page/giftcard/GiftCardPage';
@@ -31,14 +33,24 @@ import Facials from './page/services/component/Facials';
 import Massages from './page/services/component/Massages';  
 import SpaPrograms from './page/services/component/SpaPrograms';  
 
+//Dashboard
+import Dashboard from './page/dashboard/dashboard-dashboard.jsx';
+import Booking from './page/dashboard/booking-dashboard.jsx';
+import ServiceCategory from './page/dashboard/service-category-dashboard.jsx';
+import Service from './page/dashboard/service-dashboard.jsx';
+import Schedules from './page/dashboard/schedules-dashboard.jsx';
+import GiftCards from './page/dashboard/giftCards-dashboard.jsx';
+
+
 //Profile
 import ProfileUser from './page/account/account/ProfileUser';
 function App() {
   return (
     <Router>
       <div className="App">
-        <MainLayout>
-          <Routes>
+        <Routes>
+          {/* Main Routes */}
+          <Route element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/team-our" element={<TeamOurPage />} />
@@ -68,12 +80,22 @@ function App() {
             <Route path="/booking/:programId" element={<BookingPage />} />
 
             <Route path="/profile" element={<ProfileUser />} />
+          </Route>
 
-          </Routes>
-        </MainLayout>
+          {/* Dashboard Routes */}
+          <Route element={<MainLayoutDashboard />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/bookingdashboard" element={<Booking />} />
+            <Route path="/servicecategory" element={<ServiceCategory />} />
+            <Route path="/giftcards" element={<GiftCards />} />
+            <Route path="/schedules" element={<Schedules />} />
+            <Route path="/servicecategory/service" element={<Service />} />
+          </Route>
+        </Routes>
+            
       </div>
     </Router>
   );
-}
+};
 
 export default App;

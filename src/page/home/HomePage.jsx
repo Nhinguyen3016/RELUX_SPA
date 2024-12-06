@@ -4,7 +4,6 @@ import Section from './component/Section';
 import Services from './component/Services';
 import RelaxSection from './component/RelaxSection';
 import MeetOurTeam from './component/MeetOurTeam';
-
 const HomePage = () => {
   // Create a ref for the Section component
   const sectionRef = useRef(null);
