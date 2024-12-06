@@ -21,9 +21,9 @@ import SpaPrograms from './page/services/component/SpaPrograms.jsx';
 import Dashboard from './page/dashboard/dashboard-dashboard.jsx';
 import Booking from './page/dashboard/booking-dashboard.jsx';
 import ServiceCategory from './page/dashboard/service-category-dashboard.jsx';
-import Feedback from './page/dashboard/feedback-dashboard.jsx';
 import Service from './page/dashboard/service-dashboard.jsx';
-import Staff from './page/dashboard/staff-dashboard.jsx';
+import Schedules from './page/dashboard/schedules-dashboard.jsx';
+import GiftCards from './page/dashboard/giftCards-dashboard.jsx';
 
 
 
@@ -55,10 +55,9 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/bookingdashboard" element={<Booking />} />
             <Route path="/servicecategory" element={<ServiceCategory />} />
-            <Route path="/feedback" element={<Feedback />} />
-            <Route path="/staff" element={<Staff />} />
+            <Route path="/giftcards" element={<GiftCards />} />
+            <Route path="/schedules" element={<Schedules />} />
             <Route path="/servicecategory/service" element={<Service />} />
-
           </Route>
         </Routes>
       </div>

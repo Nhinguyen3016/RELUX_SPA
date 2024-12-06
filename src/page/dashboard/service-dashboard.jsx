@@ -442,7 +442,7 @@ const ServicePackage = () => {
   useEffect(() => {
     localStorage.setItem(
       'token',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWV0Iiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3MzIxNzM0ODQsImV4cCI6MTczMjc3ODI4NH0.Vo8KwbEqAYzAVyGw0uaUustPX_shAZ6dHdVL_-wPPJM'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWV0Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzMzMzAwMjUyLCJleHAiOjE3MzM5MDUwNTJ9.7_1lF0-Zlyw9H2Wiw_rWrFD6OPkIu1egTTPuHhifm0k'
     );
   }, []);
   return (

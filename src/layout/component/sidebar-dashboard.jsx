@@ -6,9 +6,10 @@ import logo from '../../images/Logo.png';
 import dashboardIcon from '../../image/dashboard.png';
 import bookingIcon from '../../image/booking.png';
 import servicesIcon from '../../image/Service.png';
-import feekbackIcon from '../../image/feekback.png';
-import staffIcon from '../../image/staff.png';
-
+import giftCards from '../../image/giftCards.png';
+import schedulesIcon from '../../image/schedules.png';
+// import staffIcon from '../../image/staff.png';
+// import feedbackIcon from '../../image/feedback.png';
 
 const Sidebar = () => {
   const pathName=useLocation().pathname;
@@ -39,16 +40,16 @@ const Sidebar = () => {
               Services
             </Link>
           </li>
-          <li className={(pathName=== '/feedback')?'active' :''}>
-            <Link to="/feedback">
-              <img src={feekbackIcon} alt="icon feekback" className="icon" />
-              Feedback
+          <li className={(pathName=== '/giftcards')?'active' :''}>
+            <Link to="/giftcards">
+              <img src={giftCards} alt="icon giftCards" className="icon" />
+              Gift Cards
             </Link>
           </li>
-          <li className={(pathName=== '/staff')?'active' :''}>
-            <Link to="/staff">
-              <img src={staffIcon} alt="icon staff" className="icon" />
-              Staff
+          <li className={(pathName=== '/Schedules')?'active' :''}>
+            <Link to="/Schedules">
+              <img src={schedulesIcon} alt="icon schedules" className="icon" />
+              Schedules
             </Link>
           </li>
         </ul>

@@ -27,7 +27,7 @@ const GiftCardsList = () => {
       <table className="gift-cards-table">
         <thead>
           <tr>
-            <th>Description</th>
+            <th>Services</th>
             <th>Discount</th>
             <th>Start Date</th>
             <th>End Date</th>
