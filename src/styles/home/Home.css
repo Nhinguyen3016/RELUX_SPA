@@ -1,4 +1,3 @@
-
 * {
   margin: 0;
   padding: 0;
@@ -35,42 +34,44 @@ body {
 }
 
 .home-text-left h1 {
-position: relative;
-top: -140px;
-left: 110px;
-font-size: 60px;
-font-weight: bold;
-line-height: 1.5;
-z-index: 2;
-color: #5c2b3c;
+  position: relative;
+  top: -120px;
+  left: 80px;
+  font-size: 60px;
+  font-weight: bold;
+  line-height: 1.5;
+  z-index: 2;
+  color: #5c2b3c;
 }
 
 .home-text-left h1 span:first-child {
-display: block;
-margin-left: 100px;
+  display: block;
+  margin-left: 100px;
 }
 
 .home-text-left h1 span:last-child {
-display: block;
+  display: block;
 }
 
 .home-image {
-position: relative;
-width: 60%;
-max-width: 300px;
-height: auto;
-margin: 0 auto;
-border-radius: 0%;
-overflow: hidden;
-transform: rotate(28.44deg);
+  position: relative;
+  width: 60%;
+  max-width: 300px;
+  height: auto;
+  margin: 0 auto;
+  transform: rotate(28.44deg);
+  border-radius: 50%;
+  overflow: hidden;
+  z-index: 1;
+  margin-left: -80px;
 }
 
 .home-image img {
-width: 80%;
-height: 100%;
-object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
-
 .home-text-right {
   flex: 1;
   z-index: 2;
@@ -78,6 +79,8 @@ object-fit: cover;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+  margin-left: 30px;
+
 }
 
 .contact-info {
@@ -127,22 +130,9 @@ object-fit: cover;
   background-color: #501a3a;
 }
 
-.home-image {
-  position: relative;
-  width: 350px;
-  height: 350px;
-  border-radius: 50%;
-  overflow: hidden;
-  z-index: 1;
-  margin-left: -80px;
-}
 
-.home-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
+
+
 
 .help-container {
   position: fixed;
@@ -153,7 +143,20 @@ object-fit: cover;
   align-items: center;
   padding: 10px;
 }
+.chatbot-modal {
+  position: fixed;
+  bottom: 2%; /* Cách cạnh dưới màn hình */
+  right: 2%; /* Cách cạnh trái màn hình */
+  width: auto; /* Đặt chiều rộng cố định cho modal */
+  max-height: auto; /* Giới hạn chiều cao */
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px; /* Bo góc cho modal */
+  padding: 15px;
+  z-index: 9999;
+  overflow-y: auto; /* Cuộn khi nội dung vượt quá chiều cao */
 
+}
 .message {
   background-color: white;
   border-radius: 6px;
@@ -176,6 +179,8 @@ object-fit: cover;
   width: 50px;
   height: 50px;
   margin-right: 0px;
+  cursor: pointer;
+
 }
 
 .help-arrow img {
@@ -185,4 +190,3 @@ object-fit: cover;
   position: relative;
   top: -32px;
 }
-

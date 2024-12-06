@@ -1,0 +1,125 @@
+.payment-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 60px 24px 24px 24px;
+    background-color: #fff;
+    min-height: 100vh;
+  }
+  
+  .payment-title {
+    font-size: 24px;
+    color: #5C2B3C;
+    font-weight: 600;
+    margin-bottom: 32px;
+  }
+  
+  .payment-table {
+    margin-bottom: 32px;
+  }
+  
+  .payment-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .payment-table tr {
+    border: 1px solid #e5e5e5;
+  }
+  
+  .payment-table td {
+    padding: 16px;
+    color: #333;
+  }
+  
+  .price-column {
+    text-align: center;
+  }
+  
+  .payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 32px 0;
+  }
+  
+  .payment-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .payment-option input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #5C2B3C;
+    cursor: pointer;
+  }
+  
+  .payment-option label {
+    color: #333;
+    cursor: pointer;
+  }
+  tbody {
+    text-align: left;
+}
+  .vnpay-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .vnpay-logo {
+    height: 24px;
+    width: auto;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 16px;
+    margin-top: 32px;
+  }
+  
+  .reserve-button,
+  .back-button {
+    flex: 1;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .reserve-button {
+    background-color: #8FA393;
+    color: white;
+    border: none;
+  }
+  
+  .reserve-button:hover {
+    background-color: #7A8C7E;
+  }
+  
+  .back-button {
+    background-color: white;
+    color: #333;
+    border: 1px solid #e5e5e5;
+  }
+  
+  .back-button:hover {
+    background-color: #f5f5f5;
+  }
+  
+  @media (max-width: 768px) {
+    .payment-container {
+      padding: 16px;
+    }
+    
+    .button-group {
+      flex-direction: column;
+    }
+    
+    .payment-title {
+      font-size: 20px;
+      margin-bottom: 24px;
+    }
+  }

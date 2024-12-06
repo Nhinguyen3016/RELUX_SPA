@@ -12,3 +12,10 @@
     margin-top: 5px;
     font-weight: 600;
   }
+  .success-message {
+    color: green;
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  

@@ -1,0 +1,125 @@
+.gift-cards-container-gallery {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  background: #8EA098;
+}
+
+.hero-section-gallery {
+  background-image: url('../../images/gall0.svg');
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.hero-section-gallery h1 {
+  font-size: 48px;
+  color: #000;
+  font-weight: normal;
+  padding: 0 50px;
+  text-align: center;
+}
+
+.services-grid-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 50px;
+  padding: 100px 200px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.service-card-gallery {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.service-card-gallery img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.service-card-gallery h3 {
+  margin-top: 20px;
+  font-size: 24px;
+  text-align: left;
+}
+
+.service-card-gallery .price {
+  font-size: 20px;
+  color: #444;
+  margin-top: 10px;
+}
+.price-tag-g {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.pagination-gallery {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.pagination-button-gallery {
+  padding: 10px 20px;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 16px;
+}
+
+.pagination-button-gallery:hover {
+  background-color: #f0dede;
+}
+
+.pagination-button-gallery.active-gallery {
+  background-color: #5d1a40;
+  color: white;
+}
+
+.pagination-button-gallery:disabled {
+  cursor: not-allowed;
+  background-color: #ccc;
+}
+
+/* Responsive: Adjust the layout for smaller screens */
+@media (max-width: 1024px) {
+  .services-grid-gallery {
+    padding: 50px 50px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hero-section-gallery h1 {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 768px) {
+  .services-grid-gallery {
+    padding: 20px 20px;
+    grid-template-columns: 1fr;
+  }
+
+  .hero-section-gallery h1 {
+    font-size: 28px;
+    padding: 0 20px;
+  }
+
+  .pagination-button-gallery {
+    font-size: 14px;
+  }
+}

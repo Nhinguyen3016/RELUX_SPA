@@ -6,8 +6,20 @@ import Label from "../../account/component/Label";
 import PasswordInput from "../../account/component/PasswordInput";
 import FormErrorMessage from "../../account/component/FormErrorMessage";
 import Button from "../../account/component/Button";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+
+const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
 
 const NewPasswordPage = () => {
+  const navigate = useNavigate();
+  const [error, setError] = useState(null);
+
+  // Get email and token from localStorage
+  const email = localStorage.getItem("email");
+  const token = localStorage.getItem("resetToken");
+
   const {
     register,
     handleSubmit,
@@ -22,34 +34,29 @@ const NewPasswordPage = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch('/api/reset-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          password: data.password,
-          confirmPassword: data.confirmPassword,
-        }),
+      const response = await axios.post(`${API_HOST}/v1/password/reset-password`, {
+        token,           // Include token in the request
+        newPassword: data.password,  // Send new password
+        email,           // Include email in the request
       });
-      
-      if (!response.ok) {
-        throw new Error("Failed to reset password. Please try again.");
-      }
 
-      const result = await response.json();
-      console.log("Password reset successful:", result);
-      // Optionally, navigate to login page or show success message
+      if (response.status === 200) {
+        console.log("Password reset successful:", response.data);
+        navigate('/change-success');
+      } else {
+        throw new Error("Password reset failed. Please try again.");
+      }
     } catch (error) {
       console.error("Error resetting password:", error);
-      // Optionally, display an error message to the user
+      setError("An error occurred. Please try again.");
     }
   };
 
   return (
     <div className="form_container">
-      <h2 className="form-heading">Forgot password?</h2>
+      <h2 className="form-heading">Forgot Password?</h2>
       <p className="form-description">Your new password must be different from the previously used password.</p>
+      {error && <p className="form-error">{error}</p>}
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <FormField>
           <Label htmlFor="password">New Password</Label>
@@ -59,8 +66,8 @@ const NewPasswordPage = () => {
           )}
         </FormField>
         <FormField>
-          <Label htmlFor="confirmPassword">Re-enter password</Label>
-          <PasswordInput register={register} name="confirmPassword" placeholder="Re-enter password" />
+          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <PasswordInput register={register} name="confirmPassword" placeholder="Confirm Password" />
           {errors.confirmPassword && (
             <FormErrorMessage>{errors.confirmPassword.message}</FormErrorMessage>
           )}
@@ -68,7 +75,7 @@ const NewPasswordPage = () => {
         <Button type="submit">{isSubmitting ? "Loading..." : "Reset Password"}</Button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default NewPasswordPage
+export default NewPasswordPage;

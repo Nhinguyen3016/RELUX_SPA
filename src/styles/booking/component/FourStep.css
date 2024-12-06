@@ -1,0 +1,140 @@
+.appointment-form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 60px 24px 24px 24px;
+    background-color: #fff;
+    min-height: 100vh;
+  }
+  
+  .form-title {
+    color: #5C2B3C;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 30px;
+  }
+  
+  .appointment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .form-group label {
+    color: #333333;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    padding: 12px;
+    border: 1px solid #E0E0E0;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #5C2B3C;
+  }
+  
+  .phone-input-container {
+    display: flex;
+    align-items: stretch;
+  }
+  
+  .country-code {
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    background-color: #F5F5F5;
+    border: 1px solid #E0E0E0;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+  }
+  
+  .flag-icon {
+    width: 20px;
+    height: 16px;
+    margin-right: 8px;
+  }
+  
+  .phone-input {
+    flex: 1;
+    border-radius: 0 4px 4px 0 !important;
+  }
+  
+  .error-message {
+    color: #DC2626;
+    font-size: 14px;
+    margin-top: 4px;
+  }
+  
+  textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+  }
+  
+  .back-button,
+  .next-button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .back-button {
+    background-color: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    color: #333333;
+  }
+  
+  .back-button:hover {
+    background-color: #F5F5F5;
+  }
+  
+  .next-button {
+    background-color: #5C2B3C;
+    color: #FFFFFF;
+  }
+  
+  .next-button:hover {
+    background-color: #4A2231;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .appointment-form-container {
+      padding: 16px;
+    }
+    
+    .button-group {
+      flex-direction: column;
+    }
+    
+    .form-title {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+  }

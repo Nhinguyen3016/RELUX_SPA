@@ -1,0 +1,35 @@
+.section-container-gc {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .hero-section-b-gc {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../../images/gall0.svg');
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .hero-section-b-gc h1 {
+    color: white;
+    font-size: 3rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+  
+  .form-giftcard-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    padding: 2rem;
+  }
+  
+ 

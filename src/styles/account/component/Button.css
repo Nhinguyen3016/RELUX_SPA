@@ -1,15 +1,17 @@
 .button {
-    border-radius: 8px;
-    background: #8EA097;
-    border: none;
-    color: white;
-    padding: 14px 80px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 20px;
-    font-weight: 600;
-    cursor: pointer;
+  border-radius: 8px;
+  background: #8EA097;
+  border: none;
+  color: white;
+  padding: 14px 80px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  height: 50px;
+  margin-top: 30px;
   }
   
   .button:focus {

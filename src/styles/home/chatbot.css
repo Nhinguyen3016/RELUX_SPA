@@ -1,0 +1,111 @@
+/* Container chính của chatbot */
+.chatbot-container {
+    width: 330px;
+    height: 480px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    /* float: right; */
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Phần hiển thị các tin nhắn */
+  .chatbot-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    word-wrap: break-word; /* Cho phép ngắt từ */
+    white-space: normal; /* Đảm bảo văn bản sẽ ngắt dòng */
+  }
+  
+  /* Tin nhắn người dùng */
+  .message.user {
+    align-self: flex-end;
+    background-color: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    max-width: 70%;
+    word-wrap: break-word; /* Cho phép ngắt từ */
+    white-space: normal; /* Đảm bảo văn bản sẽ ngắt dòng */
+  }
+  
+  /* Tin nhắn từ bot */
+  .message.bot {
+    align-self: flex-start;
+    background-color: #e9ecef;
+    color: #333;
+    padding: 8px 12px;
+    border-radius: 20px;
+    max-width: 70%;
+  }
+  
+  /* Phần nhập và gửi tin nhắn */
+  .chatbot-input {
+    border-radius: 0 0 5px 5px;
+    display: flex;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    background-color: white;
+  }
+  
+  .chatbot-input input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+    background-color: #f1f1f1;
+  }
+  
+  .chatbot-input button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .chatbot-input button:hover {
+    background-color: #0056b3;
+  }
+  
+  .link-servey {
+    text-decoration:none;
+  }
+
+  .link-servey:hover {
+    text-decoration:none;
+    color: #9c9c9c;
+  }
+
+  .courseChat {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .courseChat h1 {
+    font-size: 16px;
+    font-weight: normal !important;
+    color: #333;
+    margin:  0 !important;
+  }
+  .linkServey a {
+    font-size: 16px;
+    font-weight: normal !important;
+    color: #333;
+    margin:  0 !important;
+  }
+  .course-link{
+    text-decoration: none !important;
+  }
