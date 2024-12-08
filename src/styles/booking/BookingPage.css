@@ -13,9 +13,8 @@
     font-size: 32px;
     color: #5c2b3c;
     margin-left: 50px;
-    text-align: left;
-    margin-top: 70px;   
-    margin-top: 300px;
+    text-align: left;  
+    margin-top: 350px;
 }
 
 .grid-container {
@@ -88,9 +87,9 @@
 /* Image Styles */
 img.w-full.h-48.object-cover.rounded-lg {
     width: 1200px;
-    height: 300px;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    height: 250px;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 img.mt-5 {

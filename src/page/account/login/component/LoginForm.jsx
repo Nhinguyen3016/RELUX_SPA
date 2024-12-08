@@ -1,9 +1,10 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";  
 import FormField from "../../../account/component/FormField";
 import Label from "../../../account/component/Label";
 import Input from "../../../account/component/Input";
@@ -34,7 +35,8 @@ const LoginForm = () => {
   });
 
   const [success, setSuccess] = useState(null); 
-  const [errorMessage, setErrorMessage] = useState(null); // For displaying error message
+  const [errorMessage, setErrorMessage] = useState(null); 
+  const navigate = useNavigate(); 
 
   const onSubmit = async (data) => {
     try {
@@ -42,32 +44,49 @@ const LoginForm = () => {
 
       console.log("Login successful:", response.data);
 
-      // Log the response to see if the token is present
       if (response.data && response.data.data) {
         const { accessToken, refreshToken } = response.data.data;
 
         // Save tokens to localStorage
         if (accessToken) {
           localStorage.setItem('authToken', accessToken);
-          console.log("Access token saved:", accessToken);  // Log token for verification
+          console.log("Access token saved:", accessToken);
         }
 
         if (refreshToken) {
           localStorage.setItem('refreshToken', refreshToken);
-          console.log("Refresh token saved:", refreshToken);  // Log refresh token for verification
+          console.log("Refresh token saved:", refreshToken);
+        }
+
+        // Decode the token to get user role
+        const decodedToken = jwtDecode(accessToken); 
+        const userRole = decodedToken.role;
+
+        // Save user role to localStorage using correct key 'userRole'
+        if (userRole) {
+          localStorage.setItem('userRole', userRole);
+          console.log("User role saved:", userRole);
+        }
+
+        if (userRole === "USER") {
+          navigate("/");  
+        } else if (userRole === "ADMIN") {
+          navigate("/dashboard"); 
+        } else if (userRole === "MANAGER") {
+          navigate("/dashboard");  
         }
 
         setSuccess("You have logged in successfully!");
-        setErrorMessage(null);  // Clear previous error message if any
-        reset();  // Reset form fields
+        setErrorMessage(null);  
+        reset();  
       } else {
         setErrorMessage("Failed to retrieve token. Please try again.");
-        console.error("No token in the response:", response.data);  // Log to debug
+        console.error("No token in the response:", response.data);
       }
     } catch (error) {
       console.error("Error during login:", error);
       setError("root", { message: error.response?.data?.message || "Failed to login. Please try again." });
-      setSuccess(null);  // Clear success message if login fails
+      setSuccess(null);  
       setErrorMessage(error.response?.data?.message || "An unexpected error occurred.");
     }
   };

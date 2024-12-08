@@ -2,20 +2,22 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import profileImage from "../../../images/main_profile.jpg";
 import "../../../styles/account/account/ProfileUser.css";
-import avatarpf from "../../../images/avatar_pf.jpg";
-import { useNavigate } from 'react-router-dom'; // <-- Import useNavigate
+import defaultAvatar from "../../../images/avatar_pf.jpg"; 
+import { useNavigate } from "react-router-dom";
 
-const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
+const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:3000";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [userInfo, setUserInfo] = useState(null); // Initialize with null to indicate loading state
+  const [userInfo, setUserInfo] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
-  const navigate = useNavigate(); // <-- Declare navigate
+  const [loading, setLoading] = useState(true);
+  const [selectedAvatar, setSelectedAvatar] = useState(null); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem("authToken");
       if (!token) {
         setErrorMessage("Authentication token not found. Please login again.");
         return;
@@ -31,7 +33,7 @@ const Profile = () => {
         );
 
         if (response.data && response.data.data) {
-          setUserInfo(response.data.data); // Update user info
+          setUserInfo(response.data.data);
         } else {
           setErrorMessage("Failed to fetch user profile.");
         }
@@ -39,18 +41,25 @@ const Profile = () => {
         setErrorMessage(
           error.response?.data?.message || "An error occurred while fetching profile."
         );
+      } finally {
+        setLoading(false); 
       }
     };
 
     fetchUserProfile();
+
+    // Retrieve avatar from localStorage if available
+    const storedAvatar = localStorage.getItem("avatar");
+    if (storedAvatar) {
+      setSelectedAvatar(storedAvatar);
+    }
   }, []);
 
   const handleEditClick = () => setIsEditing(true);
-
   const handleCancelClick = () => setIsEditing(false);
 
   const handleUpdateClick = async () => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     if (!token) {
       setErrorMessage("Authentication token not found. Please login again.");
       return;
@@ -62,20 +71,18 @@ const Profile = () => {
     }
 
     try {
-      // API request to update the user profile
       const response = await axios.patch(
-        `${API_HOST}/v1/users/${userInfo.id}`, // Use the dynamic user ID here
+        `${API_HOST}/v1/users/${userInfo.id}`,
         userInfo,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
-      // Check if the response has a success message or status
       if (response.status === 200) {
-        setIsEditing(false); // Disable editing mode
-        setErrorMessage(null); // Clear any error messages
-        setUserInfo(prevState => ({ ...prevState, ...response.data.data })); // Merge the updated user info
+        setIsEditing(false);
+        setErrorMessage(null);
+        setUserInfo((prevState) => ({ ...prevState, ...response.data.data }));
       } else {
         setErrorMessage("Failed to update profile.");
       }
@@ -88,15 +95,56 @@ const Profile = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/login'); // <-- Redirect to the login page after logout
+    navigate("/login");
   };
 
-  if (!userInfo && !errorMessage) {
-    return <p>Loading profile...</p>; // Display loading state
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Preview selected avatar
+    const avatarUrl = URL.createObjectURL(file);
+    setSelectedAvatar(avatarUrl);
+
+    // Save avatar URL to local storage
+    localStorage.setItem("avatar", avatarUrl);
+
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      setErrorMessage("Authentication token not found. Please login again.");
+      return;
+    }
+
+    axios
+      .post(`${API_HOST}/v1/users/avatar`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        setUserInfo((prevState) => ({
+          ...prevState,
+          avatar: response.data.avatar,
+        }));
+        setErrorMessage(null);
+      })
+      .catch((error) => {
+        setErrorMessage(
+          error.response?.data?.message || "An error occurred while uploading avatar."
+        );
+      });
+  };
+
+  if (loading) {
+    return <p>Loading profile...</p>;
   }
 
   if (errorMessage) {
-    return <p className="error-message">{errorMessage}</p>; // Display error state
+    return <p className="error-message">{errorMessage}</p>;
   }
 
   return (
@@ -111,8 +159,25 @@ const Profile = () => {
         <div className="profile-container-pf">
           <div className="profile-content-pf">
             <div className="avatar-pf">
-              <img src={avatarpf} alt="Avatar" className="avatar-image-pf" />
-              <div className="camera-icon-pf">📷</div>
+              <img
+                src={selectedAvatar || (userInfo.avatar ? `${API_HOST}/v1/images/${userInfo.avatar}` : defaultAvatar)}
+                alt="Avatar"
+                className="avatar-image-pf"
+                onError={(e) => (e.target.src = defaultAvatar)}
+              />
+              <div
+                className="camera-icon-pf"
+                onClick={() => document.getElementById("avatar-input").click()}
+              >
+                📷
+              </div>
+              <input
+                type="file"
+                id="avatar-input"
+                style={{ display: "none" }}
+                accept="image/*"
+                onChange={handleAvatarChange}
+              />
               <p className="username-text-pf">{userInfo.username}</p>
               <p className="logout-text-pf" onClick={handleLogout}>
                 Logout
@@ -126,7 +191,9 @@ const Profile = () => {
                   className="input-pf"
                   value={userInfo.username || ""}
                   disabled={!isEditing}
-                  onChange={(e) => setUserInfo({ ...userInfo, username: e.target.value })}
+                  onChange={(e) =>
+                    setUserInfo({ ...userInfo, username: e.target.value })
+                  }
                 />
                 <label className="label-pf">Email</label>
                 <input
@@ -134,7 +201,9 @@ const Profile = () => {
                   className="input-pf"
                   value={userInfo.email || ""}
                   disabled={!isEditing}
-                  onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
+                  onChange={(e) =>
+                    setUserInfo({ ...userInfo, email: e.target.value })
+                  }
                 />
                 <label className="label-pf">Phone</label>
                 <input
@@ -142,7 +211,9 @@ const Profile = () => {
                   className="input-pf"
                   value={userInfo.phone || ""}
                   disabled={!isEditing}
-                  onChange={(e) => setUserInfo({ ...userInfo, phone: e.target.value })}
+                  onChange={(e) =>
+                    setUserInfo({ ...userInfo, phone: e.target.value })
+                  }
                 />
                 <label className="label-pf">Full Name</label>
                 <input
@@ -150,19 +221,33 @@ const Profile = () => {
                   className="input-pf"
                   value={userInfo.fullName || ""}
                   disabled={!isEditing}
-                  onChange={(e) => setUserInfo({ ...userInfo, fullName: e.target.value })}
+                  onChange={(e) =>
+                    setUserInfo({ ...userInfo, fullName: e.target.value })
+                  }
                 />
                 {isEditing ? (
                   <div className="button-group-pf">
-                    <button type="button" className="button-cancel-pf" onClick={handleCancelClick}>
+                    <button
+                      type="button"
+                      className="button-cancel-pf"
+                      onClick={handleCancelClick}
+                    >
                       Cancel
                     </button>
-                    <button type="button" className="button-pf" onClick={handleUpdateClick}>
+                    <button
+                      type="button"
+                      className="button-update-pf"
+                      onClick={handleUpdateClick}
+                    >
                       Update
                     </button>
                   </div>
                 ) : (
-                  <button type="button" className="button-pf" onClick={handleEditClick}>
+                  <button
+                    type="button"
+                    className="button-pf"
+                    onClick={handleEditClick}
+                  >
                     Edit
                   </button>
                 )}

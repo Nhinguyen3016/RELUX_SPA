@@ -45,18 +45,6 @@ const BookingCard = ({
         }
     };
 
-    const getWeekRange = () => {
-        const now = new Date();
-        const currentDay = now.getDay();
-        const monday = new Date(now);
-        monday.setDate(now.getDate() - currentDay + (currentDay === 0 ? -6 : 1));
-        monday.setHours(0, 0, 0, 0);
-        const sunday = new Date(monday);
-        sunday.setDate(monday.getDate() + 6);
-        sunday.setHours(23, 59, 59, 999);
-        return { monday, sunday };
-    };
-
     const getDayName = (date) => {
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         return days[date.getDay()];
@@ -130,8 +118,18 @@ const BookingCard = ({
         "8:30 pm","9:00 pm"
     ];
 
-    const { monday, sunday } = getWeekRange();
+    const getNext7Days = (startDate) => {
+        const dates = [];
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(startDate);
+            date.setDate(startDate.getDate() + i);
+            dates.push(date);
+        }
+        return dates;
+    };
+
     const availableTimeSlots = getAvailableTimeSlots();
+    const next7Days = getNext7Days(new Date());
 
     return (
         <div className="booking-card">
@@ -149,7 +147,7 @@ const BookingCard = ({
                     }}
                     inline
                     minDate={new Date()} // Disables past dates
-                    maxDate={sunday}
+                    maxDate={next7Days[next7Days.length - 1]} // Set maxDate to 7 days after the selected date
                     dayClassName={date => {
                         const dayName = getDayName(date);
                         return workSchedules.some(schedule => 

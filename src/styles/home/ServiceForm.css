@@ -1,4 +1,4 @@
-.service-form {
+.service-form-home {
     width: 100%;
     display: flex;
     justify-content: flex-start;
@@ -8,7 +8,7 @@
     padding: 30px;
   }
   
-  .service-form label {
+  .service-form-home label {
     font-size: 18px;
     font-family: 'Urbanist', sans-serif;
     color: #333;
@@ -17,7 +17,7 @@
     text-align: left;
   }
   
-  .service-form select {
+  .service-form-home select {
     padding: 10px;
     font-size: 16px;
     border-radius: 5px;
