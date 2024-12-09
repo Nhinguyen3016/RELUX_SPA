@@ -94,6 +94,7 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
+    // Xóa tất cả dữ liệu người dùng khi logout, bao gồm cả avatar
     localStorage.clear();
     navigate("/login");
   };
@@ -102,11 +103,11 @@ const Profile = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Preview selected avatar
+    // Hiển thị ảnh đại diện được chọn
     const avatarUrl = URL.createObjectURL(file);
     setSelectedAvatar(avatarUrl);
 
-    // Save avatar URL to local storage
+    // Lưu URL ảnh đại diện vào localStorage
     localStorage.setItem("avatar", avatarUrl);
 
     const formData = new FormData();
@@ -227,29 +228,11 @@ const Profile = () => {
                 />
                 {isEditing ? (
                   <div className="button-group-pf">
-                    <button
-                      type="button"
-                      className="button-cancel-pf"
-                      onClick={handleCancelClick}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      className="button-update-pf"
-                      onClick={handleUpdateClick}
-                    >
-                      Update
-                    </button>
+                    <button onClick={handleCancelClick}>Cancel</button>
+                    <button onClick={handleUpdateClick}>Update</button>
                   </div>
                 ) : (
-                  <button
-                    type="button"
-                    className="button-pf"
-                    onClick={handleEditClick}
-                  >
-                    Edit
-                  </button>
+                  <button onClick={handleEditClick}>Edit</button>
                 )}
               </form>
             </div>

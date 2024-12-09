@@ -138,6 +138,7 @@
     height: 60px;
     opacity: 1;
     border-radius: 50%;
+
   }
   
  
@@ -245,4 +246,5 @@
   width: 50px; 
   height: 45px; 
   opacity: 1; 
+  margin-top: -20px;
  }

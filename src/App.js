@@ -7,33 +7,34 @@ import HomePage from './page/home/HomePage';
 import GalleryPage from './page/gallery/GalleryPage';
 import GiftCardPage from './page/giftcard/GiftCardPage';
 
-//booking
+// Booking
 import BookingPage from './page/booking/BookingPage';
 import BookNowPage from './page/giftcard/BookNowPage';
 import ThirdStep from './page/booking/components/ThirdStep';
 import FourStep from './page/booking/components/FourStep';
 import FiveStep from './page/booking/components/FiveStep';
 
-//team our
+// Team Our
 import TeamOurPage from './page/ourteam/OurTeamPage'; 
 import DetailEmployee from './page/ourteam/DetailEmployee'; 
-//
+
+// Other pages
 import ContactPage from './page/contact/ContactPage';
-//Register and login
 import LoginPage from './page/account/login/LoginPage';
 import RegisterPage from './page/account/register/RegisterPage';
 import ForgotPasswordPage from './page/account/login/ForgotPasswordPage';
 import OtpPage from './page/account/login/OtpPage';
 import PasswordChanged from './page/account/login/PasswordChanged';
 import NewPasswordPage from './page/account/login/NewPasswordPage';
-//Services
+
+// Services
 import ServicesPage from './page/services/ServicesPage';  
 import BodyTreatments from './page/services/component/BodyTreatments'; 
 import Facials from './page/services/component/Facials';  
 import Massages from './page/services/component/Massages';  
 import SpaPrograms from './page/services/component/SpaPrograms';  
 
-//Dashboard
+// Dashboard
 import Dashboard from './page/dashboard/dashboard-dashboard.jsx';
 import Booking from './page/dashboard/booking-dashboard.jsx';
 import ServiceCategory from './page/dashboard/service-category-dashboard.jsx';
@@ -41,10 +42,10 @@ import Service from './page/dashboard/service-dashboard.jsx';
 import Schedules from './page/dashboard/schedules-dashboard.jsx';
 import GiftCards from './page/dashboard/giftCards-dashboard.jsx';
 
-//Profile
+// Profile
 import ProfileUser from './page/account/account/ProfileUser';
 
-//Delegate login permissions
+// Delegate login permissions
 import PrivateRoute from './components/PrivateRoute';  
 
 function App() {
@@ -65,11 +66,9 @@ function App() {
             <Route path="/otp" element={<OtpPage />} />
             <Route path="/change-success" element={<PasswordChanged />} />
             <Route path="/new-password" element={<NewPasswordPage />} />
+
             {/* Booking routes */}
             <Route path="/booking" element={<BookingPage />} />
-            <Route path="/thirdstep" element={<ThirdStep />} />
-            <Route path="/fourstep" element={<FourStep />} />
-            <Route path="/fivestep" element={<FiveStep />} />
             <Route path="/booknow" element={<BookNowPage />} />
             <Route path="/giftcard" element={<GiftCardPage />} />
 
@@ -83,6 +82,11 @@ function App() {
 
             <Route path="/profile" element={<ProfileUser />} />
           </Route>
+
+          {/* Booking Flow (Add FormWrapper components here) */}
+          <Route path="/thirdstep" element={<ThirdStep />} />
+          <Route path="/fourstep" element={<FourStep />} />
+          <Route path="/fivestep" element={<FiveStep />} />
 
           {/* Dashboard Routes */}
           <Route element={<MainLayoutDashboard />}>

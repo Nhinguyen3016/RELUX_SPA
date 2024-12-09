@@ -29,7 +29,11 @@ const AppointmentSummary = () => {
   };
 
   const calculateTotal = () => {
-    return appointments.reduce((sum, app) => sum + app.price, 0);
+    return appointments.reduce((sum, app) => {
+      const discount = app.discountPercentage || 0;
+      const discountedPrice = app.price - (app.price * (discount / 100));
+      return sum + discountedPrice;
+    }, 0);
   };
 
   return (
@@ -43,7 +47,7 @@ const AppointmentSummary = () => {
         appointments.map(appointment => (
           <div key={appointment.id} className="appointment-card-thirdstep">
             <h2 className="service-title-thirdstep">{appointment.service}</h2>
-            <p className="datetime-thirdstep">{appointment.date}, {appointment.time}</p>
+            <p className="datetime-thirdstep">{appointment.selectedDate}, {appointment.selectedTime}</p>
 
             <div className="details-section-thirdstep">
               <div className="detail-group-thirdstep">
@@ -58,8 +62,18 @@ const AppointmentSummary = () => {
                 </div>
 
                 <div className="detail-group-thirdstep">
-                  <h3>Price</h3>
+                  <h3>Original Price</h3>
                   <p>${appointment.price}</p>
+                </div>
+
+                <div className="detail-group-thirdstep">
+                  <h3>Discount</h3>
+                  <p>{appointment.discountPercentage ? `${appointment.discountPercentage}%` : 'No Discount'}</p>
+                </div>
+
+                <div className="detail-group-thirdstep">
+                  <h3>Discounted Price</h3>
+                  <p>${(appointment.price - (appointment.price * (appointment.discountPercentage || 0) / 100)).toFixed(2)}</p>
                 </div>
               </div>
 
@@ -77,7 +91,7 @@ const AppointmentSummary = () => {
       <div className="divider-thirdstep"></div>
 
       <div className="total-section-thirdstep">
-        <h3>Total : ${calculateTotal()}</h3>
+        <h3>Total : ${calculateTotal().toFixed(2)}</h3>
       </div>
 
       <div className="action-buttons-thirdstep">
