@@ -125,6 +125,7 @@
 }
 
 .gift-card-form-category {
+  position: relative;
   background-color: #fff;
   padding: 30px;
   border-radius: 8px;
@@ -154,7 +155,7 @@
   border: none;
   font-size: 24px;
   position: absolute;
-  top: 10px;
+  top: 5px;
   right: 10px;
   cursor: pointer;
 }
