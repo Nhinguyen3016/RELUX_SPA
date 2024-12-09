@@ -64,14 +64,14 @@
   transform: translateY(-3px);
 }
 
-.service-icon {
+/* .service-icon {
   width: 40px;
   height: 40px;
   margin-bottom: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
 .service-action-category {
   display: flex;
@@ -108,7 +108,7 @@
   margin-top: 8px;
 }
 
-.service-description,
+.service-description-dashboard,
 .service-typeService {
   overflow-wrap: break-word;
   overflow: hidden;
@@ -117,6 +117,9 @@
   max-height: 150px;
   white-space: normal;
   padding: 5px;
+  color: black;
+  font-size: 16px;
+  font-weight: normal;
 }
 
 .detail-label {
@@ -135,7 +138,7 @@
   }
 }
 
-.service-form-overlay {
+.service-form-overlay-dashboard {
   position: fixed;
   top: 0;
   left: 0;

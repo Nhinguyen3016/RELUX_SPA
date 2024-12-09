@@ -6,7 +6,7 @@ const API_BASE_URL = 'http://localhost:3003/v1';
 const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange }) => {
   return (
     <div className="service-form-overlays">
-      <div className="service-forms">
+      <div className="service-forms-dashboard">
         <h2 className="service-form-titles">{isEditing ? 'Edit Service' : 'Add Service'}</h2>
         <button className="close-button" onClick={onClose}>×</button>
         
@@ -461,7 +461,7 @@ const ServicePackage = () => {
               <div className="service-details">
               <p><span className="detail-label1">Duration:</span> {service.duration} mins</p>
               <p><span className="detail-label1">Price:</span> ${service.price}</p>
-              <p className="service-description"><span className="detail-label1">Description Short:</span> {service.descriptionShort}</p>
+              <p className="service-description-dashboard"><span className="detail-label1">Description Short:</span> {service.descriptionShort}</p>
             </div>
               <div className="service-actions">
               <button onClick={(e) => {

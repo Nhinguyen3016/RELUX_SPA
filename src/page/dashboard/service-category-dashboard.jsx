@@ -7,7 +7,7 @@ const API_BASE_URL = 'http://localhost:3003/v1';
 
 const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange }) => {
   return (
-    <div className="service-form-overlay">
+    <div className="service-form-overlay-dashboard">
       <div className="service-form-category">
         <h2 className="service-form-title">{isEditing ? 'Edit Service' : null}</h2>
         <button className="close-button" onClick={onClose}>×</button>
@@ -161,7 +161,7 @@ const ServiceMenu = () => {
                 onClick={() => { localStorage.setItem('selectedServiceId', service.id);}}
             >
               <h3 className="service-title-category">{service.name}</h3>
-              <p className="service-description">
+              <p className="service-description-dashboard">
                 <span className="detail-label">Description Short:</span> {service.descriptionShort || 'No description short available'}
               </p>
               <p className="service-typeService">

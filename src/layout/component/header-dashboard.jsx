@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import '../../styles/dashboard/Header-dashboard.css';
 const Header=()=>{
     return(
-        <header className="header">
+        <header className="header-dashboard">
             <Link to="/dashboard" className="header-link">
             <h1>Dashboard</h1>
             </Link>

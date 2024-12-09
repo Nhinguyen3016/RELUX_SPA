@@ -24,6 +24,7 @@
   background-color: #D1DBE8;
   margin-left: -20px;
   margin-right: -20px;
+  margin-bottom: 20px;
 }
 
 .schedules-menu-header .title {
@@ -131,6 +132,7 @@
 }
 
 .schedules-form-category {
+  position: absolute; 
   background-color: #fff;
   padding: 30px;
   border-radius: 8px;
@@ -146,13 +148,21 @@
   margin-bottom: 20px;
 }
 
-.close-button {
+.schedules-form-overlay .schedules-form-category .schedules-add-from {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 900px;
+  background-color: #ffffff;
+}
+
+.close-button-schedules {
   background-color: transparent;
   color: #333;
   border: none;
   font-size: 24px;
   position: absolute;
-  top: 10px;
+  top: 5px;
   right: 10px;
   cursor: pointer;
 }
