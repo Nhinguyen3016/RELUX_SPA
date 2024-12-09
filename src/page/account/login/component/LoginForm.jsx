@@ -12,7 +12,7 @@ import FormErrorMessage from "../../../account/component/FormErrorMessage";
 import PasswordInput from "../../../account/component/PasswordInput";
 import Button from "../../../account/component/Button";
 
-const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3003';
+const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
 
 const loginSchema = z.object({
   username: z.string().min(3).max(255),
