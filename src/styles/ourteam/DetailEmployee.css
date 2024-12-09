@@ -1,9 +1,10 @@
 .banner-image {
     width: 100%;
-    min-height: 350px;
+    min-height: 300px;
     object-fit: cover;
     display: block;
-    margin: 0;
+    top: 80px;
+   
 }
 
 
@@ -35,6 +36,7 @@ section.team-banner-detail {
     justify-content: center;
     padding: 40px 20px;
     background-color: #ffffff;
+   
 }
 
 .detail-container-detailE {
@@ -43,7 +45,7 @@ section.team-banner-detail {
     gap: 70px;
     align-items: flex-start;
     flex-wrap: wrap;
-    margin-top: 250px;
+    margin-top: 350px;
     margin-bottom: 50px;
 }
 

@@ -41,9 +41,12 @@ import Service from './page/dashboard/service-dashboard.jsx';
 import Schedules from './page/dashboard/schedules-dashboard.jsx';
 import GiftCards from './page/dashboard/giftCards-dashboard.jsx';
 
-
 //Profile
 import ProfileUser from './page/account/account/ProfileUser';
+
+//Delegate login permissions
+import PrivateRoute from './components/PrivateRoute';  
+
 function App() {
   return (
     <Router>
@@ -70,7 +73,6 @@ function App() {
             <Route path="/booknow" element={<BookNowPage />} />
             <Route path="/giftcard" element={<GiftCardPage />} />
 
-
             {/* Services routes */}
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/services/body-treatments" element={<BodyTreatments />} />
@@ -84,15 +86,56 @@ function App() {
 
           {/* Dashboard Routes */}
           <Route element={<MainLayoutDashboard />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/bookingdashboard" element={<Booking />} />
-            <Route path="/servicecategory" element={<ServiceCategory />} />
-            <Route path="/giftcards" element={<GiftCards />} />
-            <Route path="/schedules" element={<Schedules />} />
-            <Route path="/servicecategory/service" element={<Service />} />
+            <Route 
+              path="/dashboard" 
+              element={
+                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route 
+              path="/bookingdashboard" 
+              element={
+                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                  <Booking />
+                </PrivateRoute>
+              }
+            />
+            <Route 
+              path="/servicecategory" 
+              element={
+                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                  <ServiceCategory />
+                </PrivateRoute>
+              }
+            />
+            <Route 
+              path="/giftcards" 
+              element={
+                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                  <GiftCards />
+                </PrivateRoute>
+              }
+            />
+            <Route 
+              path="/schedules" 
+              element={
+                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                  <Schedules />
+                </PrivateRoute>
+              }
+            />
+            <Route 
+              path="/servicecategory/service" 
+              element={
+                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                  <Service />
+                </PrivateRoute>
+              }
+            />
           </Route>
         </Routes>
-            
       </div>
     </Router>
   );

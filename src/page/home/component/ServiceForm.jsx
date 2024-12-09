@@ -164,7 +164,7 @@ const ServiceForm = ({ onSubmit }) => {
   }
 
   return (
-    <form className="service-form" onSubmit={handleSubmit}>
+    <form className="service-form-home" onSubmit={handleSubmit}>
       <label htmlFor="serviceCategory">Service Category</label>
       <select
         id="serviceCategory"

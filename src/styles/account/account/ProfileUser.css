@@ -71,6 +71,7 @@ img.header-image-pf {
   margin-left: 50px;
   margin-right: 50px;
 }
+
 p.logout-text-pf {
   font-size: 16px;
   color: #47906c;
@@ -80,26 +81,16 @@ p.logout-text-pf {
   font-weight: bold;
   text-decoration: underline;
 }
+
 .avatar-pf {
   position: relative;
   width: 220px;
   height: 220px;
-
 }
 
 p.username-text-pf {
   font-weight: bold;
   font-size: 20px;
-}
-
-p.logout-text-pf {
-  font-size: 16px;
-  color: #47906c;
-  cursor: pointer;
-  margin-top: 10px;
-  text-align: center;
-  font-weight: bold;
-  text-decoration: underline;
 }
 
 .avatar-image-pf {
@@ -135,39 +126,29 @@ p.logout-text-pf {
 
 .form-section-pf {
   flex: 1;
-
-
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  max-width: 900px;
-  padding: 30px;
-  background-color: #ffffff;
-  margin-left: 30px;
-
-}
-
-form label {
+.label-pf {
   font-weight: 600;
   font-size: 14px;
   color: #555555;
-  margin-bottom: 5px;
+  margin-top: 25px;
+  margin-bottom: 10px;
   text-align: left;
+  display: block; 
 }
 
-form input {
+.input-pf {
   padding: 12px;
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 6px;
   outline: none;
   transition: border-color 0.3s;
+  width: 100%; /* Ensures inputs take up full width */
 }
 
-form input:focus {
+.input-pf:focus {
   border-color: #a3b49e;
   box-shadow: 0 0 4px rgba(163, 180, 158, 0.6);
 }
@@ -182,28 +163,53 @@ button.button-pf {
   cursor: pointer;
   transition: background-color 0.3s;
   width: 130px;
-  margin-top: 30px;
+  margin-top: 50px;
+  text-align: center;
+  display: block;
+  margin-left: 0;}
+
+  button.button-pf:hover {
+    background-color: #5c2b3c;
+  }
+  button.button-cancel-pf {
+    width: 130px;
+    padding: 12px 24px;
+    font-size: 16px;
+    background-color: #5c2b3c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 50px;
+    margin-left: 0;
+    margin-right: 50px; 
+    text-align: center;
+    transition: background-color 0.3s;
+    display: inline-block;
 }
 
-button.button-cancel-pf {
-  padding: 12px 24px;
-  font-size: 14px;
-  background-color: #5c2b3c;
-  color: white;
-  border: none;
-  cursor: pointer;
-  margin-right: 50px;
-  transition: background-color 0.3s;
-}
-
-
-form button:hover {
-  background-color: #5c2b3c;
+button.button-update-pf {
+    width: 130px;
+    padding: 12px 24px;
+    font-size: 16px;
+    background-color: #a3b49e;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 60px;
+    margin-left: 0;
+    text-align: center;
+    transition: background-color 0.3s;
+    display: inline-block;
 }
 
 button.button-cancel-pf:hover {
-  background-color: #8da08a;
+    background-color: #8da08a; 
 }
+
+button.button-update-pf:hover {
+    background-color: #5c2b3c; 
+}
+
 
 .menu-pf {
   width: 200px;
@@ -233,3 +239,4 @@ button.button-cancel-pf:hover {
   background-color: #f0f7ed;
   color: #333333;
 }
+
