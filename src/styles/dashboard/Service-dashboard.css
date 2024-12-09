@@ -97,6 +97,7 @@
 .service-form-titles {
   text-align: center;
   padding-bottom: 15px;
+  color: black;
 }
 
 .service-small {
@@ -127,14 +128,14 @@
   transform: translateY(-3px);
 }
 
-.service-icon {
+/* .service-icon {
   width: 40px;
   height: 40px;
   margin-bottom: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
 @media (max-width: 1200px) {
   .service-small{
@@ -173,7 +174,7 @@
   color: white;
 }
 
-.service-form {
+.service-form-dashboard {
   background-color: white;
   padding: 2rem;
   border-radius: 8px;

@@ -20,8 +20,8 @@ const SchedulesForm = ({ isEditing, formData, onSubmit, onClose, handleInputChan
         <h2 className="schedules-form-title">
           {isEditing ? 'Edit schedules' : 'Add New schedules'}
         </h2>
-        <button className="close-button" onClick={onClose}>×</button>
-        <form onSubmit={onSubmit}>
+        <button className="close-button-schedules" onClick={onClose}>×</button>
+        <form onSubmit={onSubmit} className="schedules-add-from">
           <div className="form-group">
             <label>Employee</label>
             <Select
@@ -303,8 +303,8 @@ const SchedulesMenu = () => {
       startTime: '',
       endTime: ''
     });
-    setShowAddForm(true);  // Hiển thị form Add
-    setShowEditForm(false); // Đảm bảo form Edit đóng
+    setShowAddForm(true);  
+    setShowEditForm(false); 
   };
 
   const handleCloseForm = () => {
