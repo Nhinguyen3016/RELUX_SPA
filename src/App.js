@@ -84,9 +84,9 @@ function App() {
           </Route>
 
           {/* Booking Flow (Add FormWrapper components here) */}
-          <Route path="/thirdstep" element={<ThirdStep />} />
+          {/* <Route path="/thirdstep" element={<ThirdStep />} />
           <Route path="/fourstep" element={<FourStep />} />
-          <Route path="/fivestep" element={<FiveStep />} />
+          <Route path="/fivestep" element={<FiveStep />} /> */}
 
           {/* Dashboard Routes */}
           <Route element={<MainLayoutDashboard />}>

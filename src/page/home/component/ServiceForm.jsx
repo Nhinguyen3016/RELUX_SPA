@@ -151,6 +151,7 @@ const ServiceForm = ({ onSubmit }) => {
     const selectedService = services.find(service => service.id === formData.service);
     const price = selectedService ? selectedService.price : null;
     const promotionId = selectedService ? selectedService.promotionId : null;
+    const serviceName = selectedService ? selectedService.name : null;  // Store service name
 
     // Fetch promotion details if promotionId exists
     if (promotionId) {
@@ -164,6 +165,18 @@ const ServiceForm = ({ onSubmit }) => {
           if (price) localStorage.setItem('servicePrice', price);
           if (discountPercentage) localStorage.setItem('serviceDiscountPercentage', discountPercentage);
           if (promotionId) localStorage.setItem('promotionId', promotionId);  // Store promotionId
+          if (serviceName) localStorage.setItem('serviceName', serviceName);  // Store service name
+
+          // Store employee and location details in localStorage
+          const selectedEmployeeObj = allEmployees.find(emp => emp.id === formData.employee);
+          const selectedLocationObj = allLocations.find(loc => loc.id === formData.location);
+
+          if (selectedEmployeeObj) {
+            localStorage.setItem('employeeName', selectedEmployeeObj.name);  // Store employee name
+          }
+          if (selectedLocationObj) {
+            localStorage.setItem('locationAddress', selectedLocationObj.address);  // Store location address
+          }
 
           console.log('Submitting form data:', formData);
           onSubmit({ ...formData, discountPercentage });
@@ -175,6 +188,19 @@ const ServiceForm = ({ onSubmit }) => {
     } else {
       console.log('No promotion for this service');
       localStorage.setItem('serviceDiscountPercentage', 0);
+      localStorage.setItem('serviceName', serviceName);  // Store service name
+
+      // Store employee and location details in localStorage
+      const selectedEmployeeObj = allEmployees.find(emp => emp.id === formData.employee);
+      const selectedLocationObj = allLocations.find(loc => loc.id === formData.location);
+
+      if (selectedEmployeeObj) {
+        localStorage.setItem('employeeName', selectedEmployeeObj.name);  // Store employee name
+      }
+      if (selectedLocationObj) {
+        localStorage.setItem('locationAddress', selectedLocationObj.address);  // Store location address
+      }
+
       onSubmit(formData);
     }
   };

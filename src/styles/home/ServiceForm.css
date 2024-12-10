@@ -6,6 +6,7 @@
     gap: 15px;
     margin-bottom: 5px;
     padding: 30px;
+    min-height: 100%;
   }
   
   .service-form-home label {

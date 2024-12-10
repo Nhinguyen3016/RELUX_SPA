@@ -1,83 +1,117 @@
+// AppointmentSummary.js
 import React, { useState, useEffect } from 'react';
 import '../../../styles/booking/component/ThirdStep.css';
 
-const AppointmentSummary = () => {
+const AppointmentSummary = ({ onAddMore, onNext }) => {
+  // State to manage appointments
   const [appointments, setAppointments] = useState([]);
 
-  // Fetch appointments from localStorage on component mount
+  // Function to load appointments from local storage on component mount
   useEffect(() => {
-    const savedAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
-    console.log('Appointments fetched from localStorage:', savedAppointments); // Debugging
+    try {
+      // Extract the appointment information from individual keys
+      const appointment = {
+        selectedDate: localStorage.getItem('selectedDate'),
+        selectedTime: localStorage.getItem('selectedTime'),
+        locationAddress: localStorage.getItem('locationAddress'),
+        employeeName: localStorage.getItem('employeeName'),
+        serviceName: localStorage.getItem('serviceName'),
+        servicePrice: parseFloat(localStorage.getItem('servicePrice')) || 0,
+        serviceDiscountPercentage: parseFloat(localStorage.getItem('serviceDiscountPercentage')) || 0,
+        id: Date.now() // Generate a unique ID for this appointment
+      };
 
-    if (savedAppointments.length > 0) {
-      setAppointments(savedAppointments);
-    } else {
-      console.log('No appointments found in localStorage.');
+      // Check if all the required fields exist and are not null/undefined
+      const isCompleteData = Object.values(appointment).every(value => value !== null && value !== undefined);
+
+      if (isCompleteData) {
+        setAppointments([appointment]); // Save the appointment in the state as an array
+      } else {
+        console.warn('No appointment data found or data is incomplete.');
+      }
+    } catch (error) {
+      console.error('Error loading appointment data from local storage:', error);
     }
   }, []);
 
-  // Save appointments to localStorage whenever it changes
-  useEffect(() => {
-    if (appointments.length > 0) {
-      localStorage.setItem('appointments', JSON.stringify(appointments));
-    }
-  }, [appointments]);
+  // Static function to calculate the total price
+  const calculateTotal = () => {
+    const bookingCount = parseInt(localStorage.getItem('bookingCount'), 10) || 0;
 
+    return appointments.reduce((sum, app) => {
+      const discount = app.serviceDiscountPercentage || 0;
+      // If bookingCount >= 3, apply the discount, otherwise use the original price
+      const priceToCharge = bookingCount >= 3
+        ? app.servicePrice - (app.servicePrice * (discount / 100))
+        : app.servicePrice;
+
+      return sum + priceToCharge;
+    }, 0);
+  };
+
+  // Function to handle the removal of an appointment
   const handleRemoveAppointment = (id) => {
     const updatedAppointments = appointments.filter(app => app.id !== id);
     setAppointments(updatedAppointments);
-  };
 
-  const calculateTotal = () => {
-    return appointments.reduce((sum, app) => {
-      const discount = app.discountPercentage || 0;
-      const discountedPrice = app.price - (app.price * (discount / 100));
-      return sum + discountedPrice;
-    }, 0);
+    // Clear localStorage if no appointments remain
+    if (updatedAppointments.length === 0) {
+      localStorage.removeItem('selectedDate');
+      localStorage.removeItem('selectedTime');
+      localStorage.removeItem('locationAddress');
+      localStorage.removeItem('employeeName');
+      localStorage.removeItem('serviceName');
+      localStorage.removeItem('servicePrice');
+      localStorage.removeItem('serviceDiscountPercentage');
+    } else {
+      // Update localStorage with the first remaining appointment
+      const [firstAppointment] = updatedAppointments;
+      localStorage.setItem('selectedDate', firstAppointment.selectedDate);
+      localStorage.setItem('selectedTime', firstAppointment.selectedTime);
+      localStorage.setItem('locationAddress', firstAppointment.locationAddress);
+      localStorage.setItem('employeeName', firstAppointment.employeeName);
+      localStorage.setItem('serviceName', firstAppointment.serviceName);
+      localStorage.setItem('servicePrice', firstAppointment.servicePrice);
+      localStorage.setItem('serviceDiscountPercentage', firstAppointment.serviceDiscountPercentage);
+    }
   };
 
   return (
     <div className="appointment-summary-container-thirdstep">
       <h1 className="main-title-thirdstep">Make an Appointment</h1>
 
-      {/* Kiểm tra nếu appointments có dữ liệu */}
       {appointments.length === 0 ? (
-        <p>No appointments found. Please make a booking first.</p> // Nếu không có cuộc hẹn
+        <p>No appointments found. Please make a booking first.</p>
       ) : (
-        appointments.map(appointment => (
-          <div key={appointment.id} className="appointment-card-thirdstep">
-            <h2 className="service-title-thirdstep">{appointment.service}</h2>
-            <p className="datetime-thirdstep">{appointment.selectedDate}, {appointment.selectedTime}</p>
+        appointments.map((appointment, index) => (
+          <div key={index} className="appointment-card-thirdstep">
+            <h2 className="service-title-thirdstep">{appointment.serviceName}</h2>
+            <p className="datetime-thirdstep">{new Date(appointment.selectedDate).toLocaleDateString()} at {appointment.selectedTime}</p>
 
             <div className="details-section-thirdstep">
               <div className="detail-group-thirdstep">
                 <h3>Location</h3>
-                <p>{appointment.location}</p>
+                <p>Location Address: {appointment.locationAddress}</p>
               </div>
 
               <div className="info-row-thirdstep">
                 <div className="detail-group-thirdstep">
                   <h3>Employee</h3>
-                  <p>{appointment.employee}</p>
+                  <p>Employee Name: {appointment.employeeName}</p>
                 </div>
 
                 <div className="detail-group-thirdstep">
-                  <h3>Original Price</h3>
-                  <p>${appointment.price}</p>
-                </div>
-
-                <div className="detail-group-thirdstep">
-                  <h3>Discount</h3>
-                  <p>{appointment.discountPercentage ? `${appointment.discountPercentage}%` : 'No Discount'}</p>
-                </div>
-
-                <div className="detail-group-thirdstep">
-                  <h3>Discounted Price</h3>
-                  <p>${(appointment.price - (appointment.price * (appointment.discountPercentage || 0) / 100)).toFixed(2)}</p>
+                  <h3>Price</h3>
+                  <p>${(
+                    (parseInt(localStorage.getItem('bookingCount'), 10) >= 3
+                      ? appointment.servicePrice - (appointment.servicePrice * (appointment.serviceDiscountPercentage || 0) / 100)
+                      : appointment.servicePrice
+                    )
+                  ).toFixed(2)}</p>
                 </div>
               </div>
 
-              <button 
+              <button
                 className="remove-button-thirdstep"
                 onClick={() => handleRemoveAppointment(appointment.id)}
               >
@@ -91,12 +125,12 @@ const AppointmentSummary = () => {
       <div className="divider-thirdstep"></div>
 
       <div className="total-section-thirdstep">
-        <h3>Total : ${calculateTotal().toFixed(2)}</h3>
+        <h3>Total: ${calculateTotal().toFixed(2)}</h3>
       </div>
 
       <div className="action-buttons-thirdstep">
-        <button className="add-more-button-thirdstep">Add More</button>
-        <button className="next-button-thirdstep">Next</button>
+        <button className="add-more-button-thirdstep" onClick={onAddMore}>Add More</button>
+        <button className="next-button-thirdstep" onClick={onNext}>Next</button>
       </div>
     </div>
   );
