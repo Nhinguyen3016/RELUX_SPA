@@ -74,16 +74,6 @@
   z-index: 1000;
 }
 
-.service-forms {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 500px;
-  max-height: 80vh;
-  overflow-y: auto;
-  position: relative;
-}
 
 .service-forms label {
   font-size: 18px;
@@ -174,18 +164,21 @@
   color: white;
 }
 
-.service-form-dashboard {
+.service-forms-dashboard {
   background-color: white;
   padding: 2rem;
-  border-radius: 8px;
+  border-radius: 10px;
   width: 90%;
-  max-width: 500px;
+  max-height: 90vh;
+  max-width: 450px;
+  overflow-y: auto;
   position: relative;
 }
 
 .service-form-title {
   text-align: center;
   padding-bottom: 15px;
+  color: black;
 }
 
 .close-button {

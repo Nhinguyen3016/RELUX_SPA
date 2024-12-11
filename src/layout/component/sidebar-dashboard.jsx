@@ -8,12 +8,13 @@ import bookingIcon from '../../image/booking.png';
 import servicesIcon from '../../image/Service.png';
 import giftCards from '../../image/giftCards.png';
 import schedulesIcon from '../../image/schedules.png';
+import accountListIcon from '../../image/accountList.png';
 // import staffIcon from '../../image/staff.png';
 // import feedbackIcon from '../../image/feedback.png';
 
 const Sidebar = () => {
   const pathName=useLocation().pathname;
-  console.log(pathName);
+  const userRole = localStorage.getItem('userRole');
   return (
     <div className="sidebar">
       <Link to="/dashboard" className="logo-sidebar">
@@ -52,6 +53,14 @@ const Sidebar = () => {
               Schedules
             </Link>
           </li>
+          {userRole === "ADMIN" &&(
+            <li className={(pathName=== '/accountlist')?'active' :''}>
+            <Link to="/accountlist">
+              <img src={accountListIcon} alt="icon account" className="icon" />
+              Schedules
+            </Link>
+          </li>
+          ) }
         </ul>
       </nav>
     </div>

@@ -40,6 +40,7 @@ import ServiceCategory from './page/dashboard/service-category-dashboard.jsx';
 import Service from './page/dashboard/service-dashboard.jsx';
 import Schedules from './page/dashboard/schedules-dashboard.jsx';
 import GiftCards from './page/dashboard/giftCards-dashboard.jsx';
+import AccountList from './page/dashboard/accountList.jsx';
 
 //Profile
 import ProfileUser from './page/account/account/ProfileUser';
@@ -131,6 +132,15 @@ function App() {
               element={
                 <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
                   <Service />
+                </PrivateRoute>
+              }
+            />
+
+            <Route 
+              path="/accountlist" 
+              element={
+                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                  <AccountList />
                 </PrivateRoute>
               }
             />

@@ -114,7 +114,7 @@ const SchedulesMenu = () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/schedules`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
         },
       });
       
@@ -139,9 +139,9 @@ const SchedulesMenu = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/employees`, {
+      const response = await axios.get(`${API_BASE_URL}/schedules/employees`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
         },
       });
       setEmployees(response.data.employees);
@@ -171,7 +171,7 @@ const SchedulesMenu = () => {
             { schedules },  // Gửi mảng schedules
             {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`,
                 },
             }
         );
@@ -200,7 +200,7 @@ const SchedulesMenu = () => {
             },
             {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
                     'Content-Type': 'application/json'
                 }
             }
@@ -222,7 +222,7 @@ const SchedulesMenu = () => {
         const response = await axios.delete(`${API_BASE_URL}/schedules/${workScheduleID}`,
             {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`,
                 },
             }
         );
@@ -324,10 +324,6 @@ const SchedulesMenu = () => {
   useEffect(() => {
     fetchEmployees();
     fetchStaff();
-    localStorage.setItem(
-      'token',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWV0Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzMzMzAwMjUyLCJleHAiOjE3MzM5MDUwNTJ9.7_1lF0-Zlyw9H2Wiw_rWrFD6OPkIu1egTTPuHhifm0k'
-    );
   }, []);
   return (
     <div className="schedules-menu">
@@ -358,8 +354,8 @@ const SchedulesMenu = () => {
                   <td>{item.StartTime || 'N/A'}</td>
                   <td>{item.EndTime || 'N/A'}</td>
                   <td className="actions">
-                    <button onClick={() => handleEditClick(item)}>✏️</button>
-                    <button onClick={() => deleteStaffSchedule(item.WorkScheduleID)}>🗑️</button>
+                    <button className="action-button-dashboard edit-button-dashboard" onClick={() => handleEditClick(item)}>✏️</button>
+                    <button className="action-button-dashboard delete-button-dashboard" onClick={() => deleteStaffSchedule(item.WorkScheduleID)}>🗑️</button>
                   </td>
                 </tr>
               );

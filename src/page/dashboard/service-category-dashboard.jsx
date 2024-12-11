@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import '../../styles/dashboard/Service-category-dashboard.css';
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3003/v1';
+const API_BASE_URL = 'http://localhost:3003/dashboard';
 
 const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange }) => {
   return (
@@ -68,19 +68,11 @@ const ServiceMenu = () => {
     typeService: '',
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value  
-    }));
-  };
-
   const fetchServices = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/service-categories`, {
+      const response = await axios.get(`${API_BASE_URL}/servicecategory`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
         }
       });
       console.log(response.data.data);
@@ -90,19 +82,56 @@ const ServiceMenu = () => {
       alert(error.response?.data?.message || 'Failed to fetch services');
     }
   };
+
+  //   try {
+  //     console.log('Updating service with data:', formData);
+
+  //     if (isNaN(formData.categoryID)) {
+  //       alert('Invalid category ID');
+  //       return;
+  //     }
+
+  //     const response = await axios.put(`${API_BASE_URL}/servicecategory/${formData.categoryID}`, {
+  //       name: formData.name,
+  //       descriptionShort: formData.descriptionShort,
+  //       typeService: formData.typeService,
+  //     },{
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+  //       }
+  //     });
+  //     if (response.status === 200) {
+  //       await fetchServices();
+  //       handleCloseForm();
+  //       alert('Service updated successfully!');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error updating service:', error);
+  //     console.error('Response data:', error.response?.data);
+  //     alert(error.response?.data?.message || 'Failed to update service');
+  //   }
+  // };
   const updateService = async () => {
     try {
-      console.log('Updating service with data:', formData);
-      const response = await axios.put(`${API_BASE_URL}/service-categories/${formData.id}`, {
+        console.log('Updating service with data:', formData);
+
+      if (isNaN(formData.categoryID)) {
+        alert('Invalid category ID');
+        return;
+      }
+  
+      const response = await axios.put(`${API_BASE_URL}/servicecategory/${formData.categoryID}`, {
         name: formData.name,
         descriptionShort: formData.descriptionShort,
         typeService: formData.typeService,
       },{
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
         }
       });
+  
       if (response.status === 200) {
         await fetchServices();
         handleCloseForm();
@@ -114,6 +143,16 @@ const ServiceMenu = () => {
       alert(error.response?.data?.message || 'Failed to update service');
     }
   };
+  
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value  
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (showEditForm) {
@@ -123,13 +162,14 @@ const ServiceMenu = () => {
 
   const handleEditClick = (service) => {
     setFormData({
-      id: service.id,
-      name: service.name,
-      descriptionShort: service.descriptionShort,
-      typeService: service.typeService,
+      categoryID: service.CategoryID, 
+      name: service.Name,
+      descriptionShort: service.DescriptionShort,
+      typeService: service.TypeService,
     });
     setShowEditForm(true);
   };
+  
 
   const handleCloseForm = () => {
     setFormData({
@@ -142,10 +182,6 @@ const ServiceMenu = () => {
   };
 
   useEffect(() => {
-    localStorage.setItem(
-      'token',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWV0Iiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3MzIxNzM0ODQsImV4cCI6MTczMjc3ODI4NH0.Vo8KwbEqAYzAVyGw0uaUustPX_shAZ6dHdVL_-wPPJM'
-    );
     fetchServices();
   }, []);
 
@@ -158,14 +194,14 @@ const ServiceMenu = () => {
                 to={`/servicecategory/service`}
                 key={service.categoryID}
                 className="service-card-category"
-                onClick={() => { localStorage.setItem('selectedServiceId', service.id);}}
+                onClick={() => { localStorage.setItem('selectedServiceId', service.CategoryID);}}
             >
-              <h3 className="service-title-category">{service.name}</h3>
+              <h3 className="service-title-category">{service.Name}</h3>
               <p className="service-description-dashboard">
-                <span className="detail-label">Description Short:</span> {service.descriptionShort || 'No description short available'}
+                <span className="detail-label">Description Short:</span> {service.DescriptionShort || 'No description short available'}
               </p>
               <p className="service-typeService">
-                <span className="detail-label">TypeService:</span> {service.typeService || 'No typeService available'}
+                <span className="detail-label">TypeService:</span> {service.TypeService || 'No typeService available'}
               </p>
               <div className="service-action-category">
                 <button onClick={(e) => {
