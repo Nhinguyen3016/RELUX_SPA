@@ -1,26 +1,19 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import '../../styles/dashboard/chart.css'
+import axios from 'axios';
+import '../../styles/dashboard/chart.css';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const BookingChart = () => {
-    const chartRef = useRef(null);
+const API_BASE_URL = 'http://localhost:3003/dashboard';
 
-    const data = {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        datasets: [
-            {
-                label: 'Booking',
-                data: [50, 200, 150, 100, 200, 80, 120, 90, 160, 250, 180, 70],
-                backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                borderRadius: 30,
-            }
-        ],
-    };
+const BookingChart = () => {
+    const [selectedYear, setSelectedYear] = useState(2024);
+    const [bookingData, setBookingData] = useState([]);
+    const [revenueData, setRevenueData] = useState([]);
+
+    const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
     const options = {
         responsive: true,
@@ -31,9 +24,9 @@ const BookingChart = () => {
             },
             title: {
                 display: true,
-                text: 'Booking Overall Customer', 
+                text: 'Statistics',
                 font: {
-                    size: 24,
+                    size: 18,
                     family: 'Arial, sans-serif', 
                     weight: 'bold',
                 },
@@ -51,27 +44,100 @@ const BookingChart = () => {
                     stepSize: 50,
                 },
             },
+            x: {
+                position: 'bottom',
+                ticks: {
+                    padding: 10,
+                },
+            },
         },
     };
 
-    useEffect(() => {
-        const handleResize = () => {
-            if (chartRef.current) {
-                chartRef.current.chartInstance.resize();
-            }
-        };
-        
-        window.addEventListener('resize', handleResize);
-        
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
+    const fetchData = async (year) => {
+        try {
+            const bookingData = [];
+            const revenueData = [];
 
+            for (let month = 1; month <= 12; month++) {
+                const response = await axios.get(`${API_BASE_URL}/chart/booking`, {
+                    params: { month, year }
+                });
+                const bookingCount = response.data.count || 0;
+                bookingData.push(bookingCount);
+            }
+
+            for (let month = 1; month <= 12; month++) {
+                const response = await axios.get(`${API_BASE_URL}/chart/revenue`, {
+                    params: { month, year }
+                });
+                const revenue = response.data.revenue || 0;
+                revenueData.push(revenue);
+            }
+
+            setBookingData(bookingData);
+            setRevenueData(revenueData);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchData(selectedYear);
+    }, [selectedYear]);
+
+    const bookingChartData = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Booking',
+                data: bookingData,
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                borderRadius: 30,
+            }
+        ],
+    };
+
+    const revenueChartData = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Revenue',
+                data: revenueData,
+                backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1,
+                borderRadius: 30,
+            }
+        ],
+    };
+
+    const handleYearChange = (event) => {
+        setSelectedYear(event.target.value);
+    };
 
     return (
         <div className="chart-container">
-            <Bar data={data} options={options} />
+            <div className="year-selector">
+                <label htmlFor="year">Year: </label>
+                <select id="year" value={selectedYear} onChange={handleYearChange}>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
+                </select>
+            </div>
+
+            <div className="chart">
+                <h3>Bookings in {selectedYear}</h3>
+                <Bar data={bookingChartData} options={options} />
+            </div>
+
+            <div className="chart">
+                <h3>Revenue in {selectedYear}</h3>
+                <Bar data={revenueChartData} options={options} />
+            </div>
         </div>
     );
 };

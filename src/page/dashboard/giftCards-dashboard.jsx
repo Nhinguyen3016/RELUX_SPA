@@ -305,9 +305,6 @@ const GiftCardsList = () => {
       <header className="gift-cards-header">
         <h2>List Gift Cards</h2>
         <div className="gift-cards-actions">
-          <button className="filter-button">
-            <i className="icon-filter"></i> Filter
-          </button>
           <button className="add-button" onClick={handleAddClick}> + Add</button>
         </div>
       </header>

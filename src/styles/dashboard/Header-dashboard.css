@@ -13,6 +13,13 @@
     background-color: rgb(255, 255, 255);
     padding: 0 20px;
   }
+.hello-dashboard{
+  margin-left: 280px;
+  color: black;
+}
+.fullName{
+  font-size: 25px;
+}
 .header-link{
     font-weight: bold;
     color: rgb(0, 0, 0);

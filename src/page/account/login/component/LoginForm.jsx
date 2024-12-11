@@ -12,7 +12,7 @@ import FormErrorMessage from "../../../account/component/FormErrorMessage";
 import PasswordInput from "../../../account/component/PasswordInput";
 import Button from "../../../account/component/Button";
 
-const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
+const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3003';
 
 const loginSchema = z.object({
   username: z.string().min(3).max(255),
@@ -44,8 +44,14 @@ const LoginForm = () => {
 
       console.log("Login successful:", response.data);
 
+      // Save user input to localStorage
+      localStorage.setItem('Username', data.username);
+
       if (response.data && response.data.data) {
-        const { accessToken, refreshToken } = response.data.data;
+        const { accessToken, refreshToken, username } = response.data.data;
+
+        // Log the username to check its value
+        console.log("Username from response:", username);
 
         // Save tokens to localStorage
         if (accessToken) {
@@ -57,7 +63,6 @@ const LoginForm = () => {
           localStorage.setItem('refreshToken', refreshToken);
           console.log("Refresh token saved:", refreshToken);
         }
-
         // Decode the token to get user role
         const decodedToken = jwtDecode(accessToken); 
         const userRole = decodedToken.role;
@@ -95,7 +100,7 @@ const LoginForm = () => {
     <form className="login_form" onSubmit={handleSubmit(onSubmit)}>
       <FormField>
         <Label htmlFor="username">Username</Label>
-        <Input register={register} name="username" placeholder=" " />
+        <Input register={register} name="username" placeholder="Your username" />
         {errors.username && (
           <FormErrorMessage>{errors.username.message}</FormErrorMessage>
         )}
