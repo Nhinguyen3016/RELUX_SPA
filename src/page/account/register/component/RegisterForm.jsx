@@ -10,7 +10,7 @@ import PasswordInput from "../../../account/component/PasswordInput";
 import Button from "../../../account/component/Button";
 import { useState } from "react";  // Import useState
 
-const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3003';
+const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
 
 const registerSchema = z.object({
   username: z.string().min(3).max(255),
