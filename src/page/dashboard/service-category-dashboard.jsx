@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../../styles/dashboard/Service-category-dashboard.css';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 
 const API_BASE_URL = 'http://localhost:3003/dashboard';
 
@@ -67,6 +68,8 @@ const ServiceMenu = () => {
     descriptionShort: '',
     typeService: '',
   });
+
+  const {enqueueSnackbar}= useSnackbar();
 
   const fetchServices = async () => {
     try {
@@ -135,12 +138,12 @@ const ServiceMenu = () => {
       if (response.status === 200) {
         await fetchServices();
         handleCloseForm();
-        alert('Service updated successfully!');
+        enqueueSnackbar("Service updated successfully!", {variant: 'success'})
       }
     } catch (error) {
       console.error('Error updating service:', error);
       console.error('Response data:', error.response?.data);
-      alert(error.response?.data?.message || 'Failed to update service');
+      enqueueSnackbar("Failed to update service", {variant: 'error'})
     }
   };
   

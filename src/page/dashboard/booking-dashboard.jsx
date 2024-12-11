@@ -11,23 +11,16 @@ const BookingStatistics = () => {
     const fetchStactisBooking = async () => {
         try {
             const response = await axios.get(`${API_BASE_URL}/count-booking`);
-            console.log('Full API Response:', response);
-            console.log('Response data:', response.data);
-            console.log('Service Quantities:', response.data.serviceQuantities);
             
-            // Kiểm tra 2 điều kiện:
-            // 1. response.data tồn tại
-            // 2. response.data.serviceQuantities là một mảng
             if (response.data && Array.isArray(response.data.serviceQuantities)) {
-                // Nếu dữ liệu hợp lệ, cập nhật state với mảng serviceQuantities
                 setStatisticsBooking(response.data.serviceQuantities);
             } else {
                 console.error('Invalid data format received:', response.data);
-                setStatisticsBooking([]); // Set empty array if data is invalid
+                setStatisticsBooking([]);
             }
         } catch (error) {
             console.error('Error fetching data:', error);
-            setStatisticsBooking([]); // Set empty array on error
+            setStatisticsBooking([]);
         }
     };
     const fetchAppointment = async () => {
@@ -38,7 +31,7 @@ const BookingStatistics = () => {
 
         }catch (error) {
             console.error('Error fetching data:', error);
-            setAppointments([]); // Set empty array on error
+            setAppointments([]);
         }
     }
 

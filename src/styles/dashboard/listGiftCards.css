@@ -42,7 +42,8 @@
 }
 
 .gift-cards-actions button:hover {
-  background-color: #D1DBE8;
+  background-color: #6193d4;
+  color: white;
 }
 
 .gift-cards-table {
