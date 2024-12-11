@@ -1,0 +1,127 @@
+.account-list-container {
+    padding: 20px;
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  .account-list-header {
+    background-color: #D1DBE8;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .account-list-header h2 {
+    margin: 0;
+    font-size: 40px;
+    font-weight: bold;
+    color: #000000;
+  }
+  .account-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: white;
+  }
+  
+  .account-list-table th,
+  .account-list-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .account-list-table th {
+    background-color: #D1DBE8;
+    font-size: 20px;
+    color: #000000;
+    font-weight: bold;
+  }
+  
+  .account-list-table tbody tr {
+    transition: background-color 0.2s;
+  }
+  
+  .account-list-table tbody tr:hover {
+    background-color: #D1DBE8;
+  }
+
+  /* Styles for the Role ID Form */
+
+  .role-id-form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Nền mờ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Đảm bảo modal nằm trên các phần tử khác */
+  }
+
+  .role-id-form-category {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 400px; /* Chiều rộng của modal */
+  }
+
+  .role-id-form-title {
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+    color: black;
+  }
+
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng chiều rộng */
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .form-actions button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+  }
+
+  .form-actions button[type="submit"] {
+    background-color: #4CAF50; /* Màu xanh cho nút cập nhật */
+    color: white;
+  }
+
+  .form-actions button[type="button"] {
+    background-color: #f44336; /* Màu đỏ cho nút hủy */
+    color: white;
+  }
+
+  .form-actions button:hover {
+    opacity: 0.9; /* Hiệu ứng khi di chuột qua nút */
+  }
