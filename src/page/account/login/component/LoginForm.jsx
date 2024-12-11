@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";  
+import { jwtDecode } from "jwt-decode"; 
 import FormField from "../../../account/component/FormField";
 import Label from "../../../account/component/Label";
 import Input from "../../../account/component/Input";
@@ -40,6 +40,7 @@ const LoginForm = () => {
 
   const onSubmit = async (data) => {
     try {
+      // Bước 1: Gửi yêu cầu đăng nhập
       const response = await axios.post(`${API_HOST}/v1/login`, data);
 
       console.log("Login successful:", response.data);
@@ -47,43 +48,72 @@ const LoginForm = () => {
       // Save user input to localStorage
       localStorage.setItem('Username', data.username);
 
+
       if (response.data && response.data.data) {
         const { accessToken, refreshToken, username } = response.data.data;
 
         // Log the username to check its value
         console.log("Username from response:", username);
 
-        // Save tokens to localStorage
+        // Lưu accessToken và refreshToken vào localStorage
         if (accessToken) {
           localStorage.setItem('authToken', accessToken);
-          console.log("Access token saved:", accessToken);
         }
-
         if (refreshToken) {
           localStorage.setItem('refreshToken', refreshToken);
-          console.log("Refresh token saved:", refreshToken);
         }
-        // Decode the token to get user role
+
+        // Giải mã token để lấy role người dùng
+
         const decodedToken = jwtDecode(accessToken); 
         const userRole = decodedToken.role;
 
-        // Save user role to localStorage using correct key 'userRole'
         if (userRole) {
           localStorage.setItem('userRole', userRole);
-          console.log("User role saved:", userRole);
         }
 
+        // Xác định điều hướng người dùng theo vai trò
         if (userRole === "USER") {
           navigate("/");  
-        } else if (userRole === "ADMIN") {
+        } else if (userRole === "ADMIN" || userRole === "MANAGER") {
           navigate("/dashboard"); 
-        } else if (userRole === "MANAGER") {
-          navigate("/dashboard");  
         }
 
         setSuccess("You have logged in successfully!");
         setErrorMessage(null);  
         reset();  
+
+        // Bước 2: Gọi API /v1/profile để lấy thông tin bookingCount
+        const token = localStorage.getItem('authToken'); 
+        if (!token) {
+          setErrorMessage("Authentication token not found. Please login again.");
+          return;
+        }
+
+        try {
+          const profileResponse = await axios.post(
+            `${API_HOST}/v1/profile`, 
+            {}, 
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+
+          if (profileResponse.data && profileResponse.data.data) {
+            const { bookingCount } = profileResponse.data.data;
+
+            // Lưu giá trị bookingCount vào localStorage
+            if (bookingCount !== undefined) {
+              localStorage.setItem('bookingCount', bookingCount);
+              console.log("Booking count saved:", bookingCount);
+            }
+          } else {
+            console.error("No booking count in the response:", profileResponse.data);
+          }
+        } catch (error) {
+          console.error("Error while fetching booking count:", error);
+          setErrorMessage(
+            error.response?.data?.message || "Failed to fetch profile. Please try again."
+          );
+        }
       } else {
         setErrorMessage("Failed to retrieve token. Please try again.");
         console.error("No token in the response:", response.data);
@@ -114,15 +144,12 @@ const LoginForm = () => {
       </FormField>
       <Button type="submit">{isSubmitting ? "Loading..." : "Login"}</Button>
       
-      {/* Show root error message */}
       {errors.root && (
         <FormErrorMessage>{errors.root.message}</FormErrorMessage>
       )}
 
-      {/* Show error message if any */}
       {errorMessage && <FormErrorMessage>{errorMessage}</FormErrorMessage>}
 
-      {/* Success message */}
       {success && <p className="success-message">{success}</p>}
 
       <Link to="/forgot-password">Lost your password?</Link>

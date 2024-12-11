@@ -10,24 +10,50 @@ const BookingCard = ({
     selectedTime, 
     setSelectedTime,
     onNext,
-    onBack,  // Adding onBack prop to handle back action
-    selectedEmployee 
+    onBack
 }) => {
     const [workSchedules, setWorkSchedules] = useState([]);
     const [fetchError, setFetchError] = useState(null);
+    const [selectedEmployee, setSelectedEmployee] = useState(null); // Local state for selected employee
     const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
 
     useEffect(() => {
-        console.log('Selected Employee ID:', selectedEmployee);
-        if (selectedEmployee) {
-            fetchWorkSchedules();
+        // Retrieve selectedEmployee from localStorage
+        const employeeId = localStorage.getItem('selectedEmployeeId');
+        if (employeeId) {
+            setSelectedEmployee(employeeId);
+            console.log('Selected Employee ID from localStorage:', employeeId);
+            fetchWorkSchedules(employeeId);
+        } else {
+            console.log('No employee selected in localStorage');
         }
-    }, [selectedEmployee]);
 
-    const fetchWorkSchedules = async () => {
+        // Retrieve previously selected date and time from localStorage
+        const storedDate = localStorage.getItem('selectedDate');
+        const storedTime = localStorage.getItem('selectedTime');
+        
+        if (storedDate) {
+            setSelectedDate(new Date(storedDate));
+        }
+        if (storedTime) {
+            setSelectedTime(storedTime);
+        }
+    }, []);
+
+    useEffect(() => {
+        // Save selected date and time to localStorage whenever they change
+        if (selectedDate) {
+            localStorage.setItem('selectedDate', selectedDate.toISOString());
+        }
+        if (selectedTime) {
+            localStorage.setItem('selectedTime', selectedTime);
+        }
+    }, [selectedDate, selectedTime]);
+
+    const fetchWorkSchedules = async (employeeId) => {
         try {
             const token = localStorage.getItem('authToken');
-            const apiUrl = `${API_HOST}/v1/employees/${selectedEmployee}/work-schedules`;
+            const apiUrl = `${API_HOST}/v1/employees/${employeeId}/work-schedules`;
 
             const response = await axios.get(apiUrl, {
                 headers: {
@@ -144,6 +170,7 @@ const BookingCard = ({
                     onChange={date => {
                         setSelectedDate(date);
                         setSelectedTime(null);
+                        localStorage.removeItem('selectedTime'); // Clear time selection if date is changed
                     }}
                     inline
                     minDate={new Date()} // Disables past dates

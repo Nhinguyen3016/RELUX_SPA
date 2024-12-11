@@ -1,9 +1,9 @@
 .payment-container {
-    max-width: 500px;
+    width: 400px;
     margin: 0 auto;
     padding: 60px 24px 24px 24px;
     background-color: #fff;
-    min-height: 100vh;
+    min-height: 100%;
   }
   
   .payment-title {

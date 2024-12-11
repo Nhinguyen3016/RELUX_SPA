@@ -3,31 +3,32 @@
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
+    min-height: 100%;
 }
   
 .main-title-thirdstep {
     color: #5c2b3c;
     font-size: 28px;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
   
 .appointment-card-thirdstep {
     background-color: #fff;
     padding: 20px;
-    margin-bottom: 20px;
     border-radius: 8px;
     text-align: left;
 }
   
 .service-title-thirdstep {
     color: #5c2b3c;
-    font-size: 24px;
+    font-size: 18px;
     margin-bottom: 10px;
 }
   
 .datetime-thirdstep {
     color: #666;
-    font-size: 18px;
+    font-size: 16px;
     margin-bottom: 20px;
 }
   
@@ -39,7 +40,7 @@
   
 .detail-group-thirdstep h3 {
     color: #5c2b3c;
-    font-size: 16px;
+    font-size: 18px;
     margin-bottom: 5px;
 }
   
@@ -59,11 +60,13 @@
     color: white;
     border: none;
     padding: 10px 20px;
-    width: 100%;
+    width: 60%;
     border-radius: 4px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.2s;
+    margin: 0 auto;
+    display: block; 
 }
   
 .remove-button-thirdstep:hover {
@@ -73,7 +76,7 @@
 .divider-thirdstep {
     height: 1px;
     background-color: #bab5b6;
-    margin: 20px 0;
+    margin-bottom: 10px ;
 }
   
 .total-section-thirdstep {

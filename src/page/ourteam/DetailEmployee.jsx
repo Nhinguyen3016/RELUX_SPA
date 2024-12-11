@@ -54,6 +54,10 @@ const EmployeeDetail = () => {
     setSelectedEmployee(formData.employee);
   };
 
+  const handleCloseForm = () => {
+    setShowServiceForm(false);
+  };
+
   return (
     <section className="about-me-detailE">
       {/* Banner image at the top */}
@@ -136,9 +140,12 @@ const EmployeeDetail = () => {
         </div>
       </div>
 
-      {/* Show FormWrapper instead of ServiceForm directly */}
+      {/* Show FormWrapper with close button */}
       {showServiceForm && (
         <div className="service-form-overlay">
+          <div className="form-close-button" onClick={handleCloseForm}>
+            ✕
+          </div>
           <FormWrapper
             isServiceForm={isServiceForm}
             handleNext={handleNext}
