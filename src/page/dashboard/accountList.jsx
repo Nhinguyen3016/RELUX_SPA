@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import '../../styles/dashboard/accountList-dashboard.css';
 import axios from 'axios';
 import Select from 'react-select';
+import { useSnackbar } from 'notistack';
+import '../../styles/dashboard/accountList-dashboard.css';
 
 const API_BASE_URL = 'http://localhost:3003/dashboard';
 
@@ -55,6 +56,8 @@ const AccountList = () => {
         roleName: '',
     });
 
+    const {enqueueSnackbar}= useSnackbar();
+
     const fetchAccountList = async () => {
         try {
             const response = await axios.get(`${API_BASE_URL}/accountlist`, {
@@ -94,13 +97,13 @@ const AccountList = () => {
             
 
             if (response.status === 200) {
-                alert('Role updated successfully!');
+                enqueueSnackbar("Role updated successfully!", {variant: 'success'})
                 fetchAccountList();
                 setShowEditForm(false);
             }
         } catch (error) {
             console.error('Error updating user role:', error);
-            alert('Failed to update user role');
+            enqueueSnackbar("Failed to update user role", {variant: 'error'})
         }
     };
     
@@ -128,6 +131,7 @@ const AccountList = () => {
         if (userID && roleName) {
             updateUserRole(userID, roleName); 
         }
+        
     };
     
 

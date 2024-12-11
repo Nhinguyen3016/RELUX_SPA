@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import '../../styles/dashboard/listGiftCards.css';
 import axios from 'axios';
 import Select from 'react-select';
+import { useSnackbar } from 'notistack';
+import '../../styles/dashboard/listGiftCards.css';
+import DeletePopupConfirm from './deletePopupConfirm';
 
 
 const API_BASE_URL = 'http://localhost:3003/dashboard';
@@ -9,7 +11,6 @@ const API_BASE_URL = 'http://localhost:3003/dashboard';
 const GiftCardsForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, services }) => {
   console.log('Form Data in SchedulesForm:', formData);
   
-  // Tạo danh sách các tùy chọn cho react-select
   const servicesOptions = services.map(service => ({
     value: service.Name,
     label: service.Name
@@ -95,6 +96,8 @@ const GiftCardsForm = ({ isEditing, formData, onSubmit, onClose, handleInputChan
 const GiftCardsList = () => {
   const [giftCards, setGiftCards] = useState([]);
   const [services, setServices] = useState([]);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false); 
+  const [selectedPromotionID, setSelectedPromotionID] = useState(null);
   const [showEditForm, setShowEditForm] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -105,6 +108,8 @@ const GiftCardsList = () => {
     startDate: '',
     endDate: ''
   });
+
+  const {enqueueSnackbar}= useSnackbar();
 
   const fetchServices = async () =>{
     try {
@@ -152,11 +157,11 @@ const GiftCardsList = () => {
       if (response.status === 201) {
         await fetchGiftCards();
         handleCloseForm();
-        alert('Gift card created successfully!');
+        enqueueSnackbar("Gift card created successfully!", {variant: 'success'})
       }
     } catch (error) {
       console.error('Error creating gift card:', error);
-      alert(error.response?.data?.message || 'Failed to create gift card');
+      enqueueSnackbar("Failed to create gift card", {variant: 'error'})
     }
   };
 
@@ -193,17 +198,17 @@ const GiftCardsList = () => {
         },
       });
 
-      // Kiểm tra nếu phản hồi thành công
+
       if (response.status === 200 && response.data.success) {
-        await fetchGiftCards(); // Cập nhật lại danh sách gift cards
-        handleCloseForm(); // Đóng form
-        alert('Gift card updated successfully!');
+        await fetchGiftCards(); 
+        handleCloseForm(); 
+        enqueueSnackbar("Gift card updated successfully!", {variant: 'success'})
       } else {
         throw new Error(response.data.message || 'Unknown error occurred');
       }
     } catch (error) {
       console.error('Error updating gift card:', error.response?.data || error.message || error);
-      alert(error.response?.data?.message || 'Failed to update gift card');
+      enqueueSnackbar("Failed to update gift card", {variant: 'error'})
     }
   };
 
@@ -219,11 +224,13 @@ const GiftCardsList = () => {
       });
       if (response.status === 200) {
         await fetchGiftCards();
-        alert('GiftCards schedule deleted successfully!');
+        enqueueSnackbar("Gift card deleted successfully!", {variant: 'success'});
+        setIsDeletePopupOpen(false);
       }
     } catch (error) {
       console.error('Error deleting giftCards:', error);
       alert(error.response?.data?.message || 'Failed to delete giftCards');
+      enqueueSnackbar("Failed to delete gift cards", {variant: 'error'})
     }
   };
   const handleInputChange = (event) => {
@@ -280,6 +287,20 @@ const GiftCardsList = () => {
     setShowAddForm(true);  
     setShowEditForm(false); 
   };
+  const handleDeleteClick = (promotionID) => {
+    setSelectedPromotionID(promotionID); 
+    setIsDeletePopupOpen(true); 
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedPromotionID) {
+      deleteGiftCards(selectedPromotionID);
+    }
+  };
+  const handleClosePopup = () => {
+    setIsDeletePopupOpen(false);
+    setSelectedPromotionID(null);
+  };
 
   const handleCloseForm = () => {
     setFormData({
@@ -330,7 +351,7 @@ const GiftCardsList = () => {
               <td className="text">{item.EndDate || 'N/A'}</td>
               <td className="actions">
                 <button className="action-button-dashboard edit-button-dashboard" onClick={() => handleEditClick(item)}>✏️</button>
-                <button className="action-button-dashboard delete-button-dashboard" onClick={() => deleteGiftCards(item.PromotionID, index)}>🗑️</button>
+                <button className="action-button-dashboard delete-button-dashboard" onClick={() => handleDeleteClick(item.PromotionID, index)}>🗑️</button>
               </td>
             </tr>
           ))
@@ -352,6 +373,11 @@ const GiftCardsList = () => {
           services={services}
         />
       )}
+      <DeletePopupConfirm
+        isOpen={isDeletePopupOpen}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleClosePopup}
+      />
     </div>
   );
 };

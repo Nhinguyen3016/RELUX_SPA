@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { SnackbarProvider } from 'notistack';
 import './App.css';
 import MainLayout from './layout/MainLayout';
 import MainLayoutDashboard from './layout/MainLayoutDashboard';
@@ -51,102 +52,104 @@ import PrivateRoute from './components/PrivateRoute';
 function App() {
   return (
     <Router>
-      <div className="App">
-        <Routes>
-          {/* Main Routes */}
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/gallery" element={<GalleryPage />} />
-            <Route path="/team-our" element={<TeamOurPage />} />
-            <Route path="/team/:id" element={<DetailEmployee />} />
-            <Route path="/account" element={<LoginPage />} />
-            <Route path="/contacts" element={<ContactPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            <Route path="/otp" element={<OtpPage />} />
-            <Route path="/change-success" element={<PasswordChanged />} />
-            <Route path="/new-password" element={<NewPasswordPage />} />
-            {/* Booking routes */}
-            <Route path="/booking" element={<BookingPage />} />
-            <Route path="/thirdstep" element={<ThirdStep />} />
-            <Route path="/fourstep" element={<FourStep />} />
-            <Route path="/fivestep" element={<FiveStep />} />
-            <Route path="/booknow" element={<BookNowPage />} />
-            <Route path="/giftcard" element={<GiftCardPage />} />
+      <SnackbarProvider anchorOrigin={{vertical: 'top', horizontal: 'right'}}>
+        <div className="App">
+          <Routes>
+            {/* Main Routes */}
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/gallery" element={<GalleryPage />} />
+              <Route path="/team-our" element={<TeamOurPage />} />
+              <Route path="/team/:id" element={<DetailEmployee />} />
+              <Route path="/account" element={<LoginPage />} />
+              <Route path="/contacts" element={<ContactPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/otp" element={<OtpPage />} />
+              <Route path="/change-success" element={<PasswordChanged />} />
+              <Route path="/new-password" element={<NewPasswordPage />} />
+              {/* Booking routes */}
+              <Route path="/booking" element={<BookingPage />} />
+              <Route path="/thirdstep" element={<ThirdStep />} />
+              <Route path="/fourstep" element={<FourStep />} />
+              <Route path="/fivestep" element={<FiveStep />} />
+              <Route path="/booknow" element={<BookNowPage />} />
+              <Route path="/giftcard" element={<GiftCardPage />} />
 
-            {/* Services routes */}
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/services/body-treatments" element={<BodyTreatments />} />
-            <Route path="/services/facials" element={<Facials />} />
-            <Route path="/services/massages" element={<Massages />} />
-            <Route path="/services/spa-programs" element={<SpaPrograms />} />
-            <Route path="/booking/:programId" element={<BookingPage />} />
+              {/* Services routes */}
+              <Route path="/services" element={<ServicesPage />} />
+              <Route path="/services/body-treatments" element={<BodyTreatments />} />
+              <Route path="/services/facials" element={<Facials />} />
+              <Route path="/services/massages" element={<Massages />} />
+              <Route path="/services/spa-programs" element={<SpaPrograms />} />
+              <Route path="/booking/:programId" element={<BookingPage />} />
 
-            <Route path="/profile" element={<ProfileUser />} />
-          </Route>
+              <Route path="/profile" element={<ProfileUser />} />
+            </Route>
 
-          {/* Dashboard Routes */}
-          <Route element={<MainLayoutDashboard />}>
-            <Route 
-              path="/dashboard" 
-              element={
-                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
-            <Route 
-              path="/bookingdashboard" 
-              element={
-                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
-                  <Booking />
-                </PrivateRoute>
-              }
-            />
-            <Route 
-              path="/servicecategory" 
-              element={
-                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
-                  <ServiceCategory />
-                </PrivateRoute>
-              }
-            />
-            <Route 
-              path="/giftcards" 
-              element={
-                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
-                  <GiftCards />
-                </PrivateRoute>
-              }
-            />
-            <Route 
-              path="/schedules" 
-              element={
-                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
-                  <Schedules />
-                </PrivateRoute>
-              }
-            />
-            <Route 
-              path="/servicecategory/service" 
-              element={
-                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
-                  <Service />
-                </PrivateRoute>
-              }
-            />
+            {/* Dashboard Routes */}
+            <Route element={<MainLayoutDashboard />}>
+              <Route 
+                path="/dashboard" 
+                element={
+                  <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                    <Dashboard />
+                  </PrivateRoute>
+                }
+              />
+              <Route 
+                path="/bookingdashboard" 
+                element={
+                  <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                    <Booking />
+                  </PrivateRoute>
+                }
+              />
+              <Route 
+                path="/servicecategory" 
+                element={
+                  <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                    <ServiceCategory />
+                  </PrivateRoute>
+                }
+              />
+              <Route 
+                path="/giftcards" 
+                element={
+                  <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                    <GiftCards />
+                  </PrivateRoute>
+                }
+              />
+              <Route 
+                path="/schedules" 
+                element={
+                  <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                    <Schedules />
+                  </PrivateRoute>
+                }
+              />
+              <Route 
+                path="/servicecategory/service" 
+                element={
+                  <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                    <Service />
+                  </PrivateRoute>
+                }
+              />
 
-            <Route 
-              path="/accountlist" 
-              element={
-                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
-                  <AccountList />
-                </PrivateRoute>
-              }
-            />
-          </Route>
-        </Routes>
-      </div>
+              <Route 
+                path="/accountlist" 
+                element={
+                  <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                    <AccountList />
+                  </PrivateRoute>
+                }
+              />
+            </Route>
+          </Routes>
+        </div>
+      </SnackbarProvider>
     </Router>
   );
 };

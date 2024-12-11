@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/dashboard/Service-dashboard.css';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
+import DeletePopupConfirm from './deletePopupConfirm';
 
 const API_BASE_URL = 'http://localhost:3003/dashboard';
 
@@ -115,6 +117,8 @@ const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange
 
 const ServicePackage = () => {
   const [services, setServices] = useState([]);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+  const [selectedServiceID, setSelectedServiceID] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -129,6 +133,8 @@ const ServicePackage = () => {
     description2: '',
     imageMain: ''
   });
+
+  const {enqueueSnackbar}= useSnackbar();
 
   useEffect(() => {
     const selectedServiceId = localStorage.getItem('selectedServiceId');
@@ -220,16 +226,11 @@ const createService = async () => {
         console.log('No service ID found in localStorage after deletion');
       }
       handleCloseForm();
-      alert('Service created successfully!');
+      enqueueSnackbar("Service created successfully!", {variant: 'success'})
     }
   } catch (error) {
     console.error('Error creating service:', error);
-    if (error.response) {
-      console.error('Server response:', error.response.data);
-      alert(error.response.data.message || 'Failed to create service');
-    } else {
-      alert('Failed to create service');
-    }
+    enqueueSnackbar("Failed to create service", {variant: 'error'})
   }
 };
 
@@ -287,27 +288,17 @@ const updateService = async () => {
         console.log('No service ID found in localStorage after update');
       }
       handleCloseForm();
-      alert('Service updated successfully!');
+      enqueueSnackbar("Service updated successfully!", {variant: 'success'})
     } else {
-      alert('Failed to update service. Please try again.');
+      enqueueSnackbar("Failed to update service. Please try again.", {variant: 'error'})
     }
   } catch (error) {
     console.error('Error updating service:', error);
-
-    if (error.response) {
-      console.error('Error response:', error.response);
-      alert(error.response.data.message || 'An error occurred while updating the service.');
-    } else {
-      alert('Failed to update service due to network error.');
-    }
+    enqueueSnackbar("Failed to update service", {variant: 'error'})
   }
 };
 
 const deleteService = async (serviceID) => {
-  if (!window.confirm('Are you sure you want to delete this service? This action cannot be undone.')) {
-    return;
-  }
-  console.log("serviceID", serviceID);
 
   try {
     const response = await axios.delete(`${API_BASE_URL}/services/${serviceID}`, {
@@ -328,12 +319,12 @@ const deleteService = async (serviceID) => {
       } else {
         console.log('No service ID found in localStorage after deletion');
       }
-
-      alert('Service deleted successfully');
+      enqueueSnackbar("Service deleted successfully!", {variant: 'success'})
+      setIsDeletePopupOpen(false);
     }
   } catch (error) {
     console.error('Error deleting service:', error);
-    alert(error?.response?.data?.message || 'Failed to delete service');
+    enqueueSnackbar("Failed to delete service", {variant: 'error'})
   }
 };
 
@@ -341,11 +332,11 @@ const deleteService = async (serviceID) => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   
-  console.log("formData trong handleSubmit:", formData); // Kiểm tra xem formData có chứa serviceId không
+  console.log("formData trong handleSubmit:", formData); 
   
   if (showEditForm && !formData.id) {
     alert("Mã dịch vụ bị thiếu. Vui lòng thử lại.");
-    return; // Nếu serviceId thiếu thì không tiếp tục
+    return; 
   }
   
   if (showEditForm) {
@@ -404,6 +395,21 @@ const handleAddClick = () => {
   setShowEditForm(false);
 };
 
+const handleDeleteClick = (serviceID) => {
+  setSelectedServiceID(serviceID);
+  setIsDeletePopupOpen(true);
+};
+
+const handleConfirmDelete = () => {
+  if (selectedServiceID) {
+    deleteService(selectedServiceID);
+  }
+};
+const handleClosePopup = () => {
+  setIsDeletePopupOpen(false);
+  setSelectedServiceID(null);
+};
+
 const handleCloseForm = () => {
   setFormData({
     id: null,
@@ -445,7 +451,7 @@ const handleCloseForm = () => {
               }}>Edit</button>
               <button onClick={(e) => {
                 e.preventDefault();
-                deleteService(service.ServiceID);
+                handleDeleteClick(service.ServiceID);
               }}>Delete</button>
               </div>
           </div>
@@ -464,6 +470,11 @@ const handleCloseForm = () => {
           handleInputChange={handleInputChange}
         />
       )}
+      <DeletePopupConfirm
+        isOpen={isDeletePopupOpen}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleClosePopup}
+      />
     </div>
   );
   

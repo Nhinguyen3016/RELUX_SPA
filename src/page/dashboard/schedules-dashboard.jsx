@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import '../../styles/dashboard/schedules-dashboard.css';
 import axios from 'axios';
 import Select from 'react-select';
+import { useSnackbar } from 'notistack';
+import '../../styles/dashboard/schedules-dashboard.css';
+import DeletePopupConfirm from './deletePopupConfirm';
 
 const API_BASE_URL = 'http://localhost:3003/dashboard';
 
@@ -91,6 +93,8 @@ const SchedulesForm = ({ isEditing, formData, onSubmit, onClose, handleInputChan
 const SchedulesMenu = () => {
   const [schedules, setSchedules] = useState([]);
   const [employees, setEmployees] = useState([]);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false); 
+  const [selectedWorkScheduleID, setSelectedWorkScheduleID] = useState(null);
   const [showEditForm, setShowEditForm] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -100,6 +104,8 @@ const SchedulesMenu = () => {
     startTime: '',
     endTime: ''
   });
+
+  const {enqueueSnackbar}= useSnackbar();
 
   const formatDayOfWeek = (dayOfWeek) => {
     if (!dayOfWeek) return 'N/A';
@@ -153,11 +159,10 @@ const SchedulesMenu = () => {
 
 
 
-  const createStaff = async () => {
+  const createStaffSchedules = async () => {
     try {
         console.log('Creating schedules with days:', formData.daysOfWeek);
         
-        // Tạo một schedule object duy nhất với dayOfWeek là chuỗi các ngày
         const schedules = [{
             name: formData.name,
             dayOfWeek: formData.daysOfWeek.join(','),
@@ -179,15 +184,15 @@ const SchedulesMenu = () => {
         if (response.status === 201) {
             await fetchStaff();
             handleCloseForm();
-            alert('schedules created successfully!');
+            enqueueSnackbar("Schedules created successfully!", {variant: 'success'})
         }
     } catch (error) {
         console.error('Error creating schedules:', error);
-        alert(error.response?.data?.message || 'Failed to create schedules');
+        enqueueSnackbar("Failed to create schedules", {variant: 'error'})
     }
   };
 
-  const updateStaff = async () => {
+  const updateStaffSchedules = async () => {
     try {
         const response = await axios.put(`${API_BASE_URL}/schedules/${formData.workScheduleID}`,
             {
@@ -209,11 +214,11 @@ const SchedulesMenu = () => {
         if (response.status === 200) {
             await fetchStaff();
             handleCloseForm();
-            alert('schedules updated successfully!');
+            enqueueSnackbar("Schedules updated successfully!", {variant: 'success'})
         }
     } catch (error) {
         console.error('Error updating schedules:', error);
-        alert(error.response?.data?.message || 'Failed to update schedules');
+        enqueueSnackbar("Failed to update schedules", {variant: 'error'})
     }
   };
 
@@ -229,11 +234,11 @@ const SchedulesMenu = () => {
         
         if (response.status === 200) {
             await fetchStaff();
-            alert('schedules schedule deleted successfully!');
+            enqueueSnackbar("Schedules deleted successfully!", {variant: 'success'})
         }
     } catch (error) {
         console.error('Error deleting schedules schedule:', error);
-        alert(error.response?.data?.message || 'Failed to delete schedules schedule');
+        enqueueSnackbar("Failed to delete schedules", {variant: 'error'})
     }
   };
 
@@ -271,9 +276,9 @@ const SchedulesMenu = () => {
 
     try {
       if (showEditForm) {  // Nếu đang edit
-        await updateStaff();
+        await updateStaffSchedules();
       } else {  // Nếu đang add
-        await createStaff();
+        await createStaffSchedules();
       }
     } catch (error) {
       console.error('Error handling schedules:', error);
@@ -307,6 +312,21 @@ const SchedulesMenu = () => {
     setShowEditForm(false); 
   };
 
+  const handleDeleteClick = (workScheduleID) => {
+    setSelectedWorkScheduleID(workScheduleID); 
+    setIsDeletePopupOpen(true); 
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedWorkScheduleID) {
+      deleteStaffSchedule(selectedWorkScheduleID);
+    }
+  };
+  const handleClosePopup = () => {
+    setIsDeletePopupOpen(false);
+    setSelectedWorkScheduleID(null);
+  };
+
   const handleCloseForm = () => {
     setFormData({
       id: null,
@@ -318,8 +338,6 @@ const SchedulesMenu = () => {
     setShowEditForm(false);
     setShowAddForm(false);
   };
-
-
 
   useEffect(() => {
     fetchEmployees();
@@ -355,7 +373,7 @@ const SchedulesMenu = () => {
                   <td>{item.EndTime || 'N/A'}</td>
                   <td className="actions">
                     <button className="action-button-dashboard edit-button-dashboard" onClick={() => handleEditClick(item)}>✏️</button>
-                    <button className="action-button-dashboard delete-button-dashboard" onClick={() => deleteStaffSchedule(item.WorkScheduleID)}>🗑️</button>
+                    <button className="action-button-dashboard delete-button-dashboard" onClick={() => handleDeleteClick(item.WorkScheduleID)}>🗑️</button>
                   </td>
                 </tr>
               );
@@ -378,6 +396,11 @@ const SchedulesMenu = () => {
           employees={employees}
         />
       )}
+      <DeletePopupConfirm
+        isOpen={isDeletePopupOpen}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleClosePopup}
+      />
     </div>
   );
 };
