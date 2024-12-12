@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import '../../../styles/booking/component/ThirdStep.css';
 
-const AppointmentSummary = ({ onAddMore, onNext }) => {
+const AppointmentSummary = ({ onBack, onNext }) => {
   // State to manage appointments
   const [appointments, setAppointments] = useState([]);
 
@@ -48,33 +48,7 @@ const AppointmentSummary = ({ onAddMore, onNext }) => {
       return sum + priceToCharge;
     }, 0);
   };
-
-  // Function to handle the removal of an appointment
-  const handleRemoveAppointment = (id) => {
-    const updatedAppointments = appointments.filter(app => app.id !== id);
-    setAppointments(updatedAppointments);
-
-    // Clear localStorage if no appointments remain
-    if (updatedAppointments.length === 0) {
-      localStorage.removeItem('selectedDate');
-      localStorage.removeItem('selectedTime');
-      localStorage.removeItem('locationAddress');
-      localStorage.removeItem('employeeName');
-      localStorage.removeItem('serviceName');
-      localStorage.removeItem('servicePrice');
-      localStorage.removeItem('serviceDiscountPercentage');
-    } else {
-      // Update localStorage with the first remaining appointment
-      const [firstAppointment] = updatedAppointments;
-      localStorage.setItem('selectedDate', firstAppointment.selectedDate);
-      localStorage.setItem('selectedTime', firstAppointment.selectedTime);
-      localStorage.setItem('locationAddress', firstAppointment.locationAddress);
-      localStorage.setItem('employeeName', firstAppointment.employeeName);
-      localStorage.setItem('serviceName', firstAppointment.serviceName);
-      localStorage.setItem('servicePrice', firstAppointment.servicePrice);
-      localStorage.setItem('serviceDiscountPercentage', firstAppointment.serviceDiscountPercentage);
-    }
-  };
+  
 
   return (
     <div className="appointment-summary-container-thirdstep">
@@ -110,13 +84,6 @@ const AppointmentSummary = ({ onAddMore, onNext }) => {
                   ).toFixed(2)}</p>
                 </div>
               </div>
-
-              <button
-                className="remove-button-thirdstep"
-                onClick={() => handleRemoveAppointment(appointment.id)}
-              >
-                Remove
-              </button>
             </div>
           </div>
         ))
@@ -129,7 +96,7 @@ const AppointmentSummary = ({ onAddMore, onNext }) => {
       </div>
 
       <div className="action-buttons-thirdstep">
-        <button className="add-more-button-thirdstep" onClick={onAddMore}>Add More</button>
+        <button className="add-more-button-thirdstep" onClick={onBack}>Back</button>
         <button className="next-button-thirdstep" onClick={onNext}>Next</button>
       </div>
     </div>

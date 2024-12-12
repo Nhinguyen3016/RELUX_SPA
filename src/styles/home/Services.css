@@ -1,11 +1,11 @@
 .services-container {
-  padding: 50px;
-  background-color: #f3f3ef;
-  text-align: center;
-  height: 600px;
-  top: 2392px;
-  gap: 0px;
-  opacity: 0px;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  margin-bottom: 100px;
 
 }
 
@@ -15,6 +15,7 @@
   font-weight: 700;
   color: #5d1a40;
   margin-bottom: 50px;
+  margin-top: 50px;
   
 }
 

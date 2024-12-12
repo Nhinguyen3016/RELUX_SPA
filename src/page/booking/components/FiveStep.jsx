@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../../../styles/booking/component/FiveStep.css';
 
-const PaymentForm = () => {
+const PaymentForm  = ({ onBack}) => {
   const [paymentMethod, setPaymentMethod] = useState('onsite');
 
   return (
@@ -61,8 +61,9 @@ const PaymentForm = () => {
       </div>
 
       <div className="button-group">
-        <button className="reserve-button">Reserve</button>
-        <button className="back-button">Back</button>
+      <button className="back-button"onClick={onBack}>Back</button>
+      <button className="reserve-button">Reserve</button>
+       
       </div>
     </div>
   );

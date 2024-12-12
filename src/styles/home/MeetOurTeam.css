@@ -91,7 +91,7 @@
 .arrow-container {
   position: absolute;
   top: 50%;
-  left: 39%;
+  left: 45%;
   transform: translateX(-50%) translateY(-50%);
   display: flex;
   flex-direction: column;

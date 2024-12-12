@@ -10,9 +10,6 @@ import GiftCardPage from './page/giftcard/GiftCardPage';
 // Booking
 import BookingPage from './page/booking/BookingPage';
 import BookNowPage from './page/giftcard/BookNowPage';
-import ThirdStep from './page/booking/components/ThirdStep';
-import FourStep from './page/booking/components/FourStep';
-import FiveStep from './page/booking/components/FiveStep';
 
 // Team Our
 import TeamOurPage from './page/ourteam/OurTeamPage'; 
@@ -46,102 +43,106 @@ import GiftCards from './page/dashboard/giftCards-dashboard.jsx';
 import ProfileUser from './page/account/account/ProfileUser';
 
 // Delegate login permissions
-import PrivateRoute from './components/PrivateRoute';  
+import PrivateRoute from './components/PrivateRoute';
+
+
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          {/* Main Routes */}
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/gallery" element={<GalleryPage />} />
-            <Route path="/team-our" element={<TeamOurPage />} />
-            <Route path="/team/:id" element={<DetailEmployee />} />
-            <Route path="/account" element={<LoginPage />} />
-            <Route path="/contacts" element={<ContactPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            <Route path="/otp" element={<OtpPage />} />
-            <Route path="/change-success" element={<PasswordChanged />} />
-            <Route path="/new-password" element={<NewPasswordPage />} />
 
-            {/* Booking routes */}
-            <Route path="/booking" element={<BookingPage />} />
-            <Route path="/booknow" element={<BookNowPage />} />
-            <Route path="/giftcard" element={<GiftCardPage />} />
+      <Router>
+        <div className="App">
+          <Routes>
+            {/* Main Routes */}
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/gallery" element={<GalleryPage />} />
+              <Route path="/team-our" element={<TeamOurPage />} />
+              <Route path="/team/:id" element={<DetailEmployee />} />
+              <Route path="/account" element={<LoginPage />} />
+              <Route path="/contacts" element={<ContactPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/otp" element={<OtpPage />} />
+              <Route path="/change-success" element={<PasswordChanged />} />
+              <Route path="/new-password" element={<NewPasswordPage />} />
 
-            {/* Services routes */}
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/services/body-treatments" element={<BodyTreatments />} />
-            <Route path="/services/facials" element={<Facials />} />
-            <Route path="/services/massages" element={<Massages />} />
-            <Route path="/services/spa-programs" element={<SpaPrograms />} />
-            <Route path="/booking/:programId" element={<BookingPage />} />
+              {/* Booking routes */}
+              <Route path="/booking" element={<BookingPage />} />
+              <Route path="/booknow" element={<BookNowPage />} />
+              <Route path="/giftcard" element={<GiftCardPage />} />
 
-            <Route path="/profile" element={<ProfileUser />} />
-          </Route>
+              {/* Services routes */}
+              <Route path="/services" element={<ServicesPage />} />
+              <Route path="/services/body-treatments" element={<BodyTreatments />} />
+              <Route path="/services/facials" element={<Facials />} />
+              <Route path="/services/massages" element={<Massages />} />
+              <Route path="/services/spa-programs" element={<SpaPrograms />} />
+              <Route path="/booking/:programId" element={<BookingPage />} />
 
-          {/* Booking Flow (Add FormWrapper components here) */}
-          {/* <Route path="/thirdstep" element={<ThirdStep />} />
-          <Route path="/fourstep" element={<FourStep />} />
-          <Route path="/fivestep" element={<FiveStep />} /> */}
+              <Route path="/profile" element={<ProfileUser />} />
+            </Route>
 
-          {/* Dashboard Routes */}
-          <Route element={<MainLayoutDashboard />}>
-            <Route 
-              path="/dashboard" 
-              element={
-                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
-            <Route 
-              path="/bookingdashboard" 
-              element={
-                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
-                  <Booking />
-                </PrivateRoute>
-              }
-            />
-            <Route 
-              path="/servicecategory" 
-              element={
-                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
-                  <ServiceCategory />
-                </PrivateRoute>
-              }
-            />
-            <Route 
-              path="/giftcards" 
-              element={
-                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
-                  <GiftCards />
-                </PrivateRoute>
-              }
-            />
-            <Route 
-              path="/schedules" 
-              element={
-                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
-                  <Schedules />
-                </PrivateRoute>
-              }
-            />
-            <Route 
-              path="/servicecategory/service" 
-              element={
-                <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
-                  <Service />
-                </PrivateRoute>
-              }
-            />
-          </Route>
-        </Routes>
-      </div>
-    </Router>
+            {/* Booking Flow (Add FormWrapper components here) */}
+            {/* <Route path="/thirdstep" element={<ThirdStep />} />
+            <Route path="/fourstep" element={<FourStep />} />
+            <Route path="/fivestep" element={<FiveStep />} /> */}
+
+            {/* Dashboard Routes */}
+            <Route element={<MainLayoutDashboard />}>
+              <Route 
+                path="/dashboard" 
+                element={
+                  <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                    <Dashboard />
+                  </PrivateRoute>
+                }
+              />
+              <Route 
+                path="/bookingdashboard" 
+                element={
+                  <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                    <Booking />
+                  </PrivateRoute>
+                }
+              />
+              <Route 
+                path="/servicecategory" 
+                element={
+                  <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                    <ServiceCategory />
+                  </PrivateRoute>
+                }
+              />
+              <Route 
+                path="/giftcards" 
+                element={
+                  <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                    <GiftCards />
+                  </PrivateRoute>
+                }
+              />
+              <Route 
+                path="/schedules" 
+                element={
+                  <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                    <Schedules />
+                  </PrivateRoute>
+                }
+              />
+              <Route 
+                path="/servicecategory/service" 
+                element={
+                  <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                    <Service />
+                  </PrivateRoute>
+                }
+              />
+            </Route>
+          </Routes>
+        </div>
+      </Router>
+  
   );
 };
 

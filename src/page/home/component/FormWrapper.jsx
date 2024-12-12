@@ -21,9 +21,7 @@ const FormWrapper = ({
         setCurrentStep(prevStep => prevStep - 1); // Go back to the previous step
     };
 
-    const handleAddMore = () => {
-        setCurrentStep(0); // Go back to the ServiceForm step
-    };
+
 
     return (
         <div className="form-wrapper">
@@ -49,7 +47,7 @@ const FormWrapper = ({
                     selectedDate={selectedDate}
                     selectedTime={selectedTime}
                     selectedEmployee={selectedEmployee} // Pass selectedEmployee to AppointmentSummary
-                    onAddMore={handleAddMore} // Pass handleAddMore to AppointmentSummary
+                    onBack={handleBack}
                     onNext={handleNext}
                 />
             )}
@@ -61,6 +59,7 @@ const FormWrapper = ({
             )}
              {currentStep === 4 && (
                 <FiveStep
+                onBack={handleBack} 
                 />
             )}
         </div>
