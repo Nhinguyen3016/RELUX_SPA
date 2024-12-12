@@ -71,6 +71,8 @@
   text-align: center;
   padding: 12px 20px;
   border-bottom: 1px solid #ddd;
+  vertical-align: middle; 
+  height: 50px;
 }
 
 .schedules-table th {
@@ -81,6 +83,7 @@
 
 .schedules-table td {
   color: #000000;
+  vertical-align: middle;
 }
 
 .schedules-table tr:hover {
@@ -99,6 +102,8 @@
   display: flex;
   gap: 10px;
   justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .schedules-table .actions button {

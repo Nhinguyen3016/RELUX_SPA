@@ -42,7 +42,8 @@
 }
 
 .gift-cards-actions button:hover {
-  background-color: #D1DBE8;
+  background-color: #6193d4;
+  color: white;
 }
 
 .gift-cards-table {
@@ -58,6 +59,8 @@
   padding: 12px 15px;
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
+  vertical-align: middle;
+  height: 50px;
 }
 
 .gift-cards-table th {
@@ -75,19 +78,19 @@
   background-color: #D1DBE8;
 }
 
-.red-text {
-  color: red;
+.text {
+  color: rgb(0, 0, 0);
 }
 
 .actions {
   display: flex;
-  align-items: center; /* Căn giữa theo chiều ngang */
-  justify-content: center; /* Căn giữa theo chiều dọc */
-  gap: 10px; /* Khoảng cách giữa các nút */
+  align-items: center;
+  justify-content: center; 
+  gap: 10px;
   height: 100%;
 }
 
-.action-button {
+.action-button-dashboard {
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 50%;
@@ -99,15 +102,15 @@
   cursor: pointer;
 }
 
-.action-button:hover {
+.action-button-dashboard:hover {
   background-color: #e0e0e0;
 }
 
-.action-button.delete-button:hover {
+.action-button-dashboard.delete-button-dashboard:hover {
   color: #D1DBE8;
 }
 
-.action-button.edit-button:hover {
+.action-button-dashboard.edit-button-dashboard:hover {
   color: #D1DBE8;
 }
 
@@ -191,7 +194,7 @@
 }
 
 .form-actions button {
-  background-color: #007bff;
+  background-color: #4CAF50;
   color: white;
   border: none;
   padding: 10px 15px;

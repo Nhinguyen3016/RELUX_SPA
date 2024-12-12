@@ -13,6 +13,13 @@
     background-color: rgb(255, 255, 255);
     padding: 0 20px;
   }
+.hello-dashboard{
+  margin-left: 280px;
+  color: black;
+}
+.fullName{
+  font-size: 25px;
+}
 .header-link{
     font-weight: bold;
     color: rgb(0, 0, 0);
@@ -56,3 +63,22 @@
     flex-direction: column;
     min-height: 100vh;
   }
+  .btn_logout {
+    background-color: #4bc0c0;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer; 
+    font-size: 16px; 
+    transition: background-color 0.5s ease; 
+  }
+  
+  .btn_logout:hover {
+    background-color: #e60000;
+  }
+  
+  .btn_logout:focus {
+    outline: none;
+  }
+  

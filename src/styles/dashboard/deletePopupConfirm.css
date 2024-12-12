@@ -1,0 +1,51 @@
+.delete-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .delete-popup {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px; /* Tăng góc bo tròn để đẹp mắt hơn */
+    text-align: center;
+    width: 320px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ nhẹ cho popup */
+  }
+  
+  .popup-actions button {
+    margin: 12px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px; /* Góc bo tròn cho các nút */
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .confirm-button {
+    background-color: #4edb53; /* Màu đỏ */
+    color: white;
+  }
+  
+  .confirm-button:hover {
+    background-color: #089c0d;
+    transform: scale(1.05); 
+  }
+  
+  .cancel-button {
+    background-color: #e7625e;
+    color: white;
+  }
+  
+  .cancel-button:hover {
+    background-color: #be130d;
+    transform: scale(1.05); 
+  }
+  
