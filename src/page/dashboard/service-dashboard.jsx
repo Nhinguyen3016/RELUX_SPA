@@ -6,7 +6,7 @@ import DeletePopupConfirm from './deletePopupConfirm';
 
 const API_BASE_URL = 'http://localhost:3003/dashboard';
 
-const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange }) => {
+const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, handleFileChange }) => {
   return (
     <div className="service-form-overlays">
       <div className="service-forms-dashboard">
@@ -84,24 +84,13 @@ const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange
           </div>
 
           <div className="form-groups">
-            <label>Image Main</label>
-            <input
-              type="text"
-              name="imageMain"
-              placeholder="Enter image main URL"
-              value={formData.imageMain}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="form-groups">
             <label>Image Description</label>
             <input
-              type="text"
+              type="file"
               name="imageDescription"
+              accept="image/*"
               placeholder="Enter image description"
-              value={formData.imageDescription}
-              onChange={handleInputChange}
+              onChange={handleFileChange}
             />
           </div>
 
@@ -130,8 +119,7 @@ const ServicePackage = () => {
     imageDescription: '',
     categoryId: 0,
     description1: '',
-    description2: '',
-    imageMain: ''
+    description2: ''
   });
 
   const {enqueueSnackbar}= useSnackbar();
@@ -176,8 +164,7 @@ const ServicePackage = () => {
           DescriptionShort: service.DescriptionShort,
           Description1: service.Description1,
           Description2: service.Description2,
-          ImageDescription: service.ImageDescription,
-          ImageMain: service.ImageMain
+          ImageDescription: service.ImageDescription
         }));
 
         console.log("Filtered services:", filteredServices);  // Debug để kiểm tra kết quả
@@ -204,11 +191,9 @@ const createService = async () => {
       imageDescription: formData.imageDescription,
       categoryId: categoryId,
       description1: formData.description1,
-      description2: formData.description2,
-      imageMain: formData.imageMain
+      description2: formData.description2
     },{
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
     });
@@ -266,8 +251,7 @@ const updateService = async () => {
       imageDescription: formData.imageDescription,
       categoryId: categoryId, 
       description1: formData.description1,
-      description2: formData.description2,
-      imageMain: formData.imageMain
+      description2: formData.description2
     }, {
       headers: {
         'Content-Type': 'application/json',
@@ -324,28 +308,42 @@ const deleteService = async (serviceID) => {
     }
   } catch (error) {
     console.error('Error deleting service:', error);
-    enqueueSnackbar("Failed to delete service", {variant: 'error'})
+    if (error.response && error.response.status === 500) {
+      enqueueSnackbar("This service is currently booked so cannot be deleted.", { variant: 'error' });
+    } else {
+      enqueueSnackbar("Failed to delete service.", { variant: 'error' });
+    }
   }
 };
 
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+
+  const formDataToSend = new FormData();
+  formDataToSend.append('name', formData.name);
+  formDataToSend.append('price', formData.price);
+  formDataToSend.append('descriptionShort', formData.descriptionShort);
+  formDataToSend.append('duration', formData.duration);
+  formDataToSend.append('description1', formData.description1);
+  formDataToSend.append('description2', formData.description2);
+  formDataToSend.append('categoryId', formData.categoryId);
   
-  console.log("formData trong handleSubmit:", formData); 
-  
-  if (showEditForm && !formData.id) {
-    alert("Mã dịch vụ bị thiếu. Vui lòng thử lại.");
-    return; 
+  if (formData.image) {
+    formDataToSend.append('image', formData.image); 
   }
-  
-  if (showEditForm) {
-    await updateService(); // Gọi cập nhật
-  } else {
-    await createService(); // Gọi tạo mới
+
+  try {
+    if (showEditForm) {
+      await updateService(formDataToSend);
+    } else {
+      await createService(formDataToSend);
+    }
+  } catch (error) {
+    console.error('Error submitting form:', error);
+    enqueueSnackbar("Error submitting the service form", { variant: 'error' });
   }
 };
-
 const handleInputChange = (e) => {
   const { name, value } = e.target;
   setFormData((prevFormData) => ({
@@ -353,6 +351,14 @@ const handleInputChange = (e) => {
     [name]: value,
     id: prevFormData.id,
   }));
+};
+
+const handleFileChange = (event) => {
+  const file = event.target.files[0]; // Lấy file ảnh được chọn
+  setFormData({
+    ...formData,
+    image: file // Lưu file vào formData
+  });
 };
 
 const handleEditClick = (service) => {
@@ -370,8 +376,7 @@ const handleEditClick = (service) => {
     imageDescription: service.ImageDescription || '',
     categoryId: service.CategoryID || 0,
     description1: service.Description1 || '',
-    description2: service.Description2 || '',
-    imageMain: service.ImageMain || ''
+    description2: service.Description2 || ''
   });
   
   console.log("Đối tượng dịch vụ để chỉnh sửa:", service);
@@ -388,8 +393,7 @@ const handleAddClick = () => {
   imageDescription: null,
   categoryId: null,
   description1: null,
-  description2: null,
-  imageMain: null
+  description2: null
   });
   setShowAddForm(true);
   setShowEditForm(false);
@@ -468,6 +472,7 @@ const handleCloseForm = () => {
           onSubmit={handleSubmit}
           onClose={handleCloseForm}
           handleInputChange={handleInputChange}
+          handleFileChange={handleFileChange}
         />
       )}
       <DeletePopupConfirm

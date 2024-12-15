@@ -2,10 +2,18 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import { useSnackbar } from 'notistack';
+import { z } from 'zod';
 import '../../styles/dashboard/schedules-dashboard.css';
 import DeletePopupConfirm from './deletePopupConfirm';
 
 const API_BASE_URL = 'http://localhost:3003/dashboard';
+
+const schedulesSchema = z.object({
+  name: z.string().nonempty('Employee name is required'),
+  daysOfWeek: z.array(z.string()).min(1, 'At least one day must be selected'),
+  startTime: z.string().nonempty('Start time is required'),
+  endTime: z.string().nonempty('End time is required'),
+});
 
 const SchedulesForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, employees }) => {
   console.log('Form Data in SchedulesForm:', formData);
@@ -267,22 +275,23 @@ const SchedulesMenu = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Data being submitted:', formData);
-
-    if (!formData.name || formData.daysOfWeek.length === 0 || !formData.startTime || !formData.endTime) {
-      alert('Please fill all required fields');
-      return;
-    }
 
     try {
-      if (showEditForm) {  // Nếu đang edit
+      // Validate form data với zod
+      schedulesSchema.parse(formData);
+
+      if (showEditForm) {
         await updateStaffSchedules();
-      } else {  // Nếu đang add
+      } else {
         await createStaffSchedules();
       }
     } catch (error) {
-      console.error('Error handling schedules:', error);
-      alert(error.message || 'An error occurred');
+      if (error instanceof z.ZodError) {
+        enqueueSnackbar(error.errors[0].message, { variant: 'error' });
+      } else {
+        console.error('Unexpected error:', error);
+        enqueueSnackbar('An unexpected error occurred', { variant: 'error' });
+      }
     }
   };
 

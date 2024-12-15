@@ -2,50 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import { useSnackbar } from 'notistack';
-import { z } from 'zod';
 import '../../styles/dashboard/listGiftCards.css';
 import DeletePopupConfirm from './deletePopupConfirm';
 
 
 const API_BASE_URL = 'http://localhost:3003/dashboard';
-
-// Lấy ngày hiện tại (format yyyy-mm-dd)
-const today = new Date().toISOString().split('T')[0];
-
-const giftCardSchema = z
-  .object({
-    promotionID: z.string().nullable(),
-    name: z.string().min(1, "Service name is required"),
-    description: z.string().min(1, "Description is required"),
-    discount: z
-      .number({ invalid_type_error: "Discount must be a number" })
-      .min(0, "Discount cannot be less than 0")
-      .max(100, "Discount cannot exceed 100"),
-    startDate: z.string().min(1, "Start date is required"),
-    endDate: z.string().min(1, "End date is required"),
-  })
-  .refine(
-    (data) => new Date(data.startDate) >= new Date(today),
-    {
-      message: "Start date cannot be earlier than today.",
-      path: ["startDate"],
-    }
-  )
-  .refine(
-    (data) => new Date(data.endDate) >= new Date(today),
-    {
-      message: "End date cannot be earlier than today.",
-      path: ["endDate"], 
-    }
-  )
-  .refine(
-    (data) => new Date(data.endDate) >= new Date(data.startDate),
-    {
-      message: "End date cannot be earlier than start date.",
-      path: ["endDate"], 
-    }
-  );
-
 
 const GiftCardsForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, services }) => {
   console.log('Form Data in SchedulesForm:', formData);
@@ -133,7 +94,7 @@ const GiftCardsForm = ({ isEditing, formData, onSubmit, onClose, handleInputChan
 };
 
 const GiftCardsList = () => {
-  const [giftCards, setGiftCards] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const [services, setServices] = useState([]);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false); 
   const [selectedPromotionID, setSelectedPromotionID] = useState(null);
@@ -150,33 +111,17 @@ const GiftCardsList = () => {
 
   const {enqueueSnackbar}= useSnackbar();
 
-  const fetchServices = async () =>{
+  const fetchEmployees = async () =>{
     try {
-      const response = await axios.get(`${API_BASE_URL}/promotion/services`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-        },
-      });
-      setServices(response.data.service);
-    } catch (error) {
-      console.error('Error fetching services:', error);
-      alert('Failed to fetch services');
-    }
-  };
-
-  const fetchGiftCards = async () =>{
-    try {
-      const response = await axios.get(`${API_BASE_URL}/promotion`, {
+      const response = await axios.get(`${API_BASE_URL}/staff`, {
         header:{
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
         },
       });
-      console.log('GiftCards fetched:', response.data.giftCards);
-
-      setGiftCards(response.data.giftCards);
+      setEmployees(response.data.employees);
     }catch (error) {
-      console.error('Error fetching giftCards:', error.response?.data || error);
-      alert('Failed to fetch giftCards');
+      console.error('Error fetching employees:', error.response?.data || error);
+      alert('Failed to fetch employees');
     }
   };
 
@@ -283,30 +228,23 @@ const GiftCardsList = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Form Data being submitted:', formData);
-  
+
+    if (!formData.name || !formData.description|| !formData.discount || !formData.startDate || !formData.endDate) {
+      alert('Please fill all required fields');
+      return;
+    }
+
     try {
-      const validatedData = giftCardSchema.parse({
-        ...formData,
-        discount: Number(formData.discount), 
-      });
-  
       if (showEditForm) {
-        await updateGiftCards(validatedData);
+        await updateGiftCards();
       } else {
-        await createGiftCards(validatedData);
+        await createGiftCards();
       }
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        error.errors.forEach((err) => {
-          enqueueSnackbar(`${err.path[0]}: ${err.message}`, { variant: 'error' });
-        });
-      } else {
-        console.error('Unexpected error:', error);
-        enqueueSnackbar(error.message || 'An unexpected error occurred', { variant: 'error' });
-      }
+      console.error('Error handling gift card:', error);
+      alert(error.message || 'An error occurred');
     }
   };
-
 
   const handleEditClick = (card) => {
     setFormData({
@@ -363,14 +301,13 @@ const GiftCardsList = () => {
 
 
   useEffect(() => {
-    fetchServices();
-    fetchGiftCards();
+    fetchEmployees();
   }, []);
 
   return (
     <div className="gift-cards-container">
       <header className="gift-cards-header">
-        <h2>List Gift Cards</h2>
+        <h2>List Staff</h2>
         <div className="gift-cards-actions">
           <button className="add-button" onClick={handleAddClick}> + Add</button>
         </div>
@@ -378,23 +315,21 @@ const GiftCardsList = () => {
       <table className="gift-cards-table">
         <thead>
           <tr>
-            <th>Services</th>
-            <th>Discount</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
             <th>Description</th>
-            <th>Start Date</th>
-            <th>End Date</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {giftCards.length > 0 ?(
-          giftCards.map((item, index) => (
+          {employees.length > 0 ?(
+          employees.map((item, index) => (
             <tr key={index}>
-              <td>{item.ServiceName || 'N/A'}</td>
-              <td>{item.Discount || 'N/A'}</td>
+              <td>{item.Name || 'N/A'}</td>
+              <td>{item.Phone || 'N/A'}</td>
+              <td>{item.Email || 'N/A'}</td>
               <td>{item.Description || 'N/A'}</td>
-              <td className="text">{item.StartDate || 'N/A'}</td>
-              <td className="text">{item.EndDate || 'N/A'}</td>
               <td className="actions">
                 <button className="action-button-dashboard edit-button-dashboard" onClick={() => handleEditClick(item)}>✏️</button>
                 <button className="action-button-dashboard delete-button-dashboard" onClick={() => handleDeleteClick(item.PromotionID, index)}>🗑️</button>
