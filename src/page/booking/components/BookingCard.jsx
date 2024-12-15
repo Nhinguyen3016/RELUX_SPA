@@ -53,7 +53,7 @@ const BookingCard = ({
     const fetchWorkSchedules = async (employeeId) => {
         try {
             const token = localStorage.getItem('authToken');
-            const apiUrl = `${API_HOST}/v1/employees/${employeeId}/work-schedules`;
+            const apiUrl = `${API_HOST}/v1/employees/${employeeId}/free-time`;
 
             const response = await axios.get(apiUrl, {
                 headers: {
@@ -71,37 +71,6 @@ const BookingCard = ({
         }
     };
 
-    const getDayName = (date) => {
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        return days[date.getDay()];
-    };
-
-    const mergeTimeSlots = (daySchedules) => {
-        if (!daySchedules.length) return [];
-        const sorted = daySchedules.sort((a, b) => 
-            new Date(`2000-01-01 ${a.startTime}`).getTime() - 
-            new Date(`2000-01-01 ${b.startTime}`).getTime()
-        );
-
-        const merged = [sorted[0]];
-        for (let i = 1; i < sorted.length; i++) {
-            const current = sorted[i];
-            const last = merged[merged.length - 1];
-            const lastEnd = new Date(`2000-01-01 ${last.endTime}`);
-            const currentStart = new Date(`2000-01-01 ${current.startTime}`);
-
-            if (currentStart <= lastEnd) {
-                last.endTime = Math.max(
-                    new Date(`2000-01-01 ${last.endTime}`).getTime(),
-                    new Date(`2000-01-01 ${current.endTime}`).getTime()
-                );
-            } else {
-                merged.push(current);
-            }
-        }
-        return merged;
-    };
-
     const convertTo12Hour = (time24) => {
         const [hours, minutes] = time24.split(':');
         const hour = parseInt(hours, 10);
@@ -112,36 +81,34 @@ const BookingCard = ({
 
     const getAvailableTimeSlots = () => {
         if (!selectedDate || !workSchedules.length) return [];
-        const dayName = getDayName(selectedDate);
-        const daySchedules = workSchedules.filter(schedule => 
-            schedule.dayOfWeek === dayName && schedule.isAvailable
-        );
-
-        const mergedSchedules = mergeTimeSlots(daySchedules);
+        const formattedDate = selectedDate.toISOString().split('T')[0];
+        const daySchedules = workSchedules.filter(schedule => schedule.date === formattedDate);
+    
         const availableSlots = new Set();
-        mergedSchedules.forEach(schedule => {
-            const start = new Date(`2000-01-01 ${schedule.startTime}`);
-            const end = new Date(`2000-01-01 ${schedule.endTime}`);
+        daySchedules.forEach(schedule => {
+            const start = new Date(`2000-01-01T${schedule.startTime}:00`);
+            const end = new Date(`2000-01-01T${schedule.endTime}:00`);
             let current = new Date(start);
-
-            while (current < end) {
+    
+            while (current <= end) { // Đổi "<" thành "<="
                 availableSlots.add(convertTo12Hour(current.toTimeString().slice(0, 5)));
                 current.setMinutes(current.getMinutes() + 30);
             }
         });
-
+    
         return timeSlots.filter(slot => availableSlots.has(slot));
     };
+    
 
     const timeSlots = [
-        "7:00 am","7:30 am","8:00 am", 
+        "7:00 am", "7:30 am", "8:00 am", 
         "8:30 am", "9:00 am", "9:30 am", 
         "10:00 am", "10:30 am", "11:00 am", "11:30 am", 
         "12:00 pm", "1:00 pm", "1:30 pm", "2:00 pm", 
         "2:30 pm", "3:00 pm", "3:30 pm", "4:00 pm", 
         "4:30 pm", "5:00 pm", "5:30 pm", "6:00 pm", 
-        "6:30 pm", "7:00 pm", "7:30 pm", "8:00 pm",
-        "8:30 pm","9:00 pm"
+        "6:30 pm", "7:00 pm", "7:30 pm", "8:00 pm", 
+        "8:30 pm", "9:00 pm"
     ];
 
     const getNext7Days = (startDate) => {
@@ -170,19 +137,12 @@ const BookingCard = ({
                     onChange={date => {
                         setSelectedDate(date);
                         setSelectedTime(null);
-                        localStorage.removeItem('selectedTime'); // Clear time selection if date is changed
+                        localStorage.removeItem('selectedTime');
                     }}
                     inline
-                    minDate={new Date()} // Disables past dates
-                    maxDate={next7Days[next7Days.length - 1]} // Set maxDate to 7 days after the selected date
-                    dayClassName={date => {
-                        const dayName = getDayName(date);
-                        return workSchedules.some(schedule => 
-                            schedule.dayOfWeek === dayName && schedule.isAvailable
-                        ) && date >= new Date() // Ensure the day is not in the past
-                            ? '' 
-                            : 'unavailable-day'; // Disable past days
-                    }}
+                    minDate={new Date()}
+                    maxDate={next7Days[next7Days.length - 1]}
+                    dayClassName={date => workSchedules.some(schedule => schedule.date === date.toISOString().split('T')[0]) ? '' : 'unavailable-day'}
                 />
             </div>
 
@@ -207,19 +167,8 @@ const BookingCard = ({
             </div>
 
             <div className="buttons">
-                <button 
-                    className="back-btn" 
-                    onClick={onBack}
-                >
-                    Back
-                </button>
-                <button 
-                    className="next-btn" 
-                    onClick={onNext}
-                    disabled={!selectedDate || !selectedTime}
-                >
-                    Next
-                </button>
+                <button className="back-btn" onClick={onBack}>Back</button>
+                <button className="next-btn" onClick={onNext} disabled={!selectedDate || !selectedTime}>Next</button>
             </div>
         </div>
     );

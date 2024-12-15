@@ -153,6 +153,10 @@ const ServiceForm = ({ onSubmit }) => {
     const promotionId = selectedService ? selectedService.promotionId : null;
     const serviceName = selectedService ? selectedService.name : null;  // Store service name
 
+    // Store serviceId and categoryId in localStorage as serviceIds
+    const serviceIds = [formData.service, formData.serviceCategory];
+    localStorage.setItem('serviceIds', JSON.stringify(serviceIds));
+
     // Fetch promotion details if promotionId exists
     if (promotionId) {
       axios.get(`${API_HOST}/v1/promotions/${promotionId}`)
