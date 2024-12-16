@@ -144,7 +144,7 @@ const EmployeeDetail = () => {
       {showServiceForm && (
         <div className="service-form-overlay">
           <div className="form-close-button" onClick={handleCloseForm}>
-            ✕
+          X
           </div>
           <FormWrapper
             isServiceForm={isServiceForm}

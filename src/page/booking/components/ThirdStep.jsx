@@ -1,10 +1,11 @@
-// AppointmentSummary.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '../../../styles/booking/component/ThirdStep.css';
 
 const AppointmentSummary = ({ onBack, onNext }) => {
-  // State to manage appointments
+  // State to manage appointments, discount, and total price after discount
   const [appointments, setAppointments] = useState([]);
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
 
   // Function to load appointments from local storage on component mount
   useEffect(() => {
@@ -34,21 +35,54 @@ const AppointmentSummary = ({ onBack, onNext }) => {
     }
   }, []);
 
-  // Static function to calculate the total price
-  const calculateTotal = () => {
+  // Memoize the function to calculate total price, discount, and total after discount
+  const calculateTotal = useCallback(() => {
     const bookingCount = parseInt(localStorage.getItem('bookingCount'), 10) || 0;
 
-    return appointments.reduce((sum, app) => {
-      const discount = app.serviceDiscountPercentage || 0;
-      // If bookingCount >= 3, apply the discount, otherwise use the original price
-      const priceToCharge = bookingCount >= 3
-        ? app.servicePrice - (app.servicePrice * (discount / 100))
-        : app.servicePrice;
+    // Calculate the total price and discount for each appointment
+    let totalPrice = 0;
+    let calculatedDiscountAmount = 0;
 
-      return sum + priceToCharge;
-    }, 0);
-  };
-  
+    appointments.forEach((app) => {
+      const discount = app.serviceDiscountPercentage || 0;
+      
+      // If bookingCount >= 3, calculate discount; otherwise, set discountAmount to 0
+      if (bookingCount >= 3) {
+        calculatedDiscountAmount = app.servicePrice * (discount / 100);
+      } else {
+        calculatedDiscountAmount = 0; // No discount if bookingCount < 3
+      }
+      
+      setDiscountAmount(calculatedDiscountAmount);
+      localStorage.setItem('discountAmount', calculatedDiscountAmount.toFixed(2));
+
+      // If bookingCount >= 3, apply the discount, otherwise use the original price
+      const priceToCharge = app.servicePrice - calculatedDiscountAmount;
+      totalPrice += priceToCharge;
+    });
+
+    // Set the total after discount
+    setTotalAfterDiscount(totalPrice);
+
+    // Return the total price
+    return totalPrice;
+  }, [appointments]);
+
+  // Recalculate total whenever the discountAmount or appointments change
+  useEffect(() => {
+    // Load data from localStorage again, to make sure updates reflect
+    const updatedServicePrice = parseFloat(localStorage.getItem('servicePrice')) || 0;
+    const updatedDiscountPercentage = parseFloat(localStorage.getItem('serviceDiscountPercentage')) || 0;
+
+    // Recalculate the total price and discount
+    setAppointments((prevAppointments) => prevAppointments.map((app) => ({
+      ...app,
+      servicePrice: updatedServicePrice,
+      serviceDiscountPercentage: updatedDiscountPercentage,
+    })));
+
+    calculateTotal(); // Ensure the total is recalculated
+  }, [discountAmount, calculateTotal]); // Use discountAmount as a trigger for recalculation
 
   return (
     <div className="appointment-summary-container-thirdstep">
@@ -92,7 +126,7 @@ const AppointmentSummary = ({ onBack, onNext }) => {
       <div className="divider-thirdstep"></div>
 
       <div className="total-section-thirdstep">
-        <h3>Total: ${calculateTotal().toFixed(2)}</h3>
+        <h3>Total (After Discount): ${totalAfterDiscount.toFixed(2)}</h3>
       </div>
 
       <div className="action-buttons-thirdstep">

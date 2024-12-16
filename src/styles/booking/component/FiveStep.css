@@ -123,3 +123,61 @@
       margin-bottom: 24px;
     }
   }
+  /* Hộp nền tối mờ */
+.error-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Hộp thông báo lỗi */
+.error-modal {
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 8px;
+  width: 400px;
+  height: 150px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center; 
+  align-items: center;      
+  font-weight: bold;
+}
+
+.error-modal p {
+  color: #090909;
+  font-size: 20px;
+  margin: 0; 
+}
+
+.error-icon-p {
+  font-size: 40px;
+  color: #e63939;
+  margin-bottom: 10px;
+}
+
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: #e63946;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: #d90429;
+}

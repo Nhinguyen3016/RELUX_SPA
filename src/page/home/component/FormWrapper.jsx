@@ -4,6 +4,8 @@ import BookingCard from '../../booking/components/BookingCard';
 import AppointmentSummary from '../../booking/components/ThirdStep'; 
 import FourStep from '../../booking/components/FourStep'; 
 import FiveStep from '../../booking/components/FiveStep'; 
+import FinalStep from '../../booking/components/FinalStep'; 
+
 const FormWrapper = ({
     selectedDate,
     setSelectedDate,
@@ -20,8 +22,6 @@ const FormWrapper = ({
     const handleBack = () => {
         setCurrentStep(prevStep => prevStep - 1); // Go back to the previous step
     };
-
-
 
     return (
         <div className="form-wrapper">
@@ -57,9 +57,15 @@ const FormWrapper = ({
                     onBack={handleBack}  // Pass onBack to FourStep
                 />
             )}
-             {currentStep === 4 && (
+            {currentStep === 4 && (
                 <FiveStep
-                onBack={handleBack} 
+                    onBack={handleBack} 
+                    onNext={handleNext}
+                />
+            )}
+            {currentStep === 5 && (
+                <FinalStep 
+                    setCurrentStep={setCurrentStep} // Truyền hàm setCurrentStep xuống FinalStep
                 />
             )}
         </div>

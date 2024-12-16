@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import '../../../styles/booking/component/FiveStep.css';
+import { FaExclamationTriangle } from 'react-icons/fa';  // Import biểu tượng cảnh báo
 
-const PaymentForm = ({ onBack }) => {
+const PaymentForm = ({ onBack, onNext }) => {
   const [paymentMethod, setPaymentMethod] = useState('onsite');
   const [servicePrice, setServicePrice] = useState(0);
   const [discountAmount, setDiscountAmount] = useState(0);
   const [finalTotalPrice, setFinalTotalPrice] = useState(0);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  // Fetch data from localStorage when the component mounts
   useEffect(() => {
     const price = parseFloat(localStorage.getItem('servicePrice')) || 0;
     const discount = parseFloat(localStorage.getItem('discountAmount')) || 0;
-    const total = parseFloat(localStorage.getItem('finalTotalPrice')) || 0;
+    const total = price - discount;
 
     setServicePrice(price);
     setDiscountAmount(discount);
@@ -19,16 +20,15 @@ const PaymentForm = ({ onBack }) => {
   }, []);
 
   const handleReserveClick = async () => {
-    const authToken = localStorage.getItem('authToken'); // Get the auth token from localStorage
-    const selectedDate = localStorage.getItem('selectedDate'); // Get the selected date
-    const fourStepBookingNotes = localStorage.getItem('fourStepBookingNotes'); // Get the notes
-    const serviceIds = JSON.parse(localStorage.getItem('serviceIds')) || []; // Get the service IDs
-    const selectedLocationId = parseInt(localStorage.getItem('selectedLocationId'), 10); // Convert location ID to number
-    const selectedEmployeeId = parseInt(localStorage.getItem('selectedEmployeeId'), 10); // Convert employee ID to number
+    const authToken = localStorage.getItem('authToken');
+    const selectedDateTime = localStorage.getItem('selectedDateTime');
+    const fourStepBookingNotes = localStorage.getItem('fourStepBookingNotes');
+    const serviceIds = JSON.parse(localStorage.getItem('serviceIds')) || [];
+    const selectedLocationId = parseInt(localStorage.getItem('selectedLocationId'), 10);
+    const selectedEmployeeId = parseInt(localStorage.getItem('selectedEmployeeId'), 10);
 
-    // Check if required data is available
-    if (!selectedDate || !serviceIds.length || isNaN(selectedLocationId) || isNaN(selectedEmployeeId)) {
-      console.error('Missing necessary booking data or invalid ID format.');
+    if (!selectedDateTime || !serviceIds.length || isNaN(selectedLocationId) || isNaN(selectedEmployeeId)) {
+      setErrorMessage('Missing necessary booking data or invalid ID format.');
       return;
     }
 
@@ -36,11 +36,11 @@ const PaymentForm = ({ onBack }) => {
     const url = `${API_HOST}/v1/bookings`;
 
     const bookingData = {
-      bookingTime: selectedDate,
+      bookingTime: selectedDateTime, 
       bookingNotes: fourStepBookingNotes,
       serviceIds: serviceIds,
-      locationId: selectedLocationId, // Pass as number
-      employeeId: selectedEmployeeId, // Pass as number
+      locationId: selectedLocationId, 
+      employeeId: selectedEmployeeId, 
     };
 
     try {
@@ -48,7 +48,7 @@ const PaymentForm = ({ onBack }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`, // Include the token in the request header
+          Authorization: `Bearer ${authToken}`, 
         },
         body: JSON.stringify(bookingData),
       });
@@ -56,14 +56,21 @@ const PaymentForm = ({ onBack }) => {
       if (response.ok) {
         const responseData = await response.json();
         console.log('Booking successful:', responseData);
-        // Handle success (you can redirect or show a confirmation message here)
+        setErrorMessage('');
+        onNext();
       } else {
-        console.error('Booking failed:', response.statusText);
-        // Handle error (show an error message to the user)
+        const errorData = await response.json();
+        if (errorData.message === 'The selected employee is not available during this time slot') {
+          setErrorMessage('The selected employee is not available during this time slot');
+        } else if (errorData.message === 'You already have a booking during this time slot') {
+          setErrorMessage('You already have a booking during this time slot');
+        } else {
+          setErrorMessage('An unexpected error occurred. Please try again later.');
+        }
       }
     } catch (error) {
       console.error('Error booking appointment:', error);
-      // Handle error (show an error message to the user)
+      setErrorMessage('An unexpected error occurred. Please try again later.');
     }
   };
 
@@ -71,6 +78,20 @@ const PaymentForm = ({ onBack }) => {
     <div className="payment-container">
       <h1 className="payment-title">Make an Appointment</h1>
 
+      {errorMessage && (
+        <div className="error-modal-overlay">
+          <div className="error-modal">
+            <button className="close-button" onClick={() => setErrorMessage('')}>&times;</button>
+            {/* Biểu tượng cảnh báo và thông báo lỗi */}
+            <div className="error-content">
+              <FaExclamationTriangle className="error-icon-p" />
+              <p>{errorMessage}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Các phần khác của form */}
       <div className="payment-table">
         <table>
           <tbody>
@@ -90,6 +111,7 @@ const PaymentForm = ({ onBack }) => {
         </table>
       </div>
 
+      {/* Các phương thức thanh toán */}
       <div className="payment-methods">
         <div className="payment-option">
           <input
@@ -113,11 +135,7 @@ const PaymentForm = ({ onBack }) => {
             onChange={(e) => setPaymentMethod(e.target.value)}
           />
           <label htmlFor="vnpay" className="vnpay-label">
-            <img
-              src="/vnpay-logo.png"
-              alt="VNPAY"
-              className="vnpay-logo"
-            />
+            <img src="/vnpay-logo.png" alt="VNPAY" className="vnpay-logo" />
             <span>VNPAY e-wallet</span>
           </label>
         </div>

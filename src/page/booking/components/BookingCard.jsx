@@ -3,6 +3,7 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import '../../../styles/booking/component/BookingCard.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const BookingCard = ({ 
     selectedDate, 
@@ -14,11 +15,19 @@ const BookingCard = ({
 }) => {
     const [workSchedules, setWorkSchedules] = useState([]);
     const [fetchError, setFetchError] = useState(null);
-    const [selectedEmployee, setSelectedEmployee] = useState(null); // Local state for selected employee
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
     const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // Retrieve selectedEmployee from localStorage
+        // Check if the user is logged in
+        const authToken = localStorage.getItem('authToken');
+        if (!authToken) {
+            alert('You are not logged in yet');
+            navigate('/account');
+            return;
+        }
+
         const employeeId = localStorage.getItem('selectedEmployeeId');
         if (employeeId) {
             setSelectedEmployee(employeeId);
@@ -28,22 +37,22 @@ const BookingCard = ({
             console.log('No employee selected in localStorage');
         }
 
-        // Retrieve previously selected date and time from localStorage
         const storedDate = localStorage.getItem('selectedDate');
         const storedTime = localStorage.getItem('selectedTime');
-        
+
         if (storedDate) {
-            setSelectedDate(new Date(storedDate));
+            const [year, month, day] = storedDate.split('-').map(Number);
+            setSelectedDate(new Date(year, month - 1, day));
         }
         if (storedTime) {
             setSelectedTime(storedTime);
         }
-    }, []);
+    }, [navigate]);
 
     useEffect(() => {
-        // Save selected date and time to localStorage whenever they change
         if (selectedDate) {
-            localStorage.setItem('selectedDate', selectedDate.toISOString());
+            const formattedDate = selectedDate.toISOString().split('T')[0];
+            localStorage.setItem('selectedDate', formattedDate);
         }
         if (selectedTime) {
             localStorage.setItem('selectedTime', selectedTime);
@@ -63,11 +72,11 @@ const BookingCard = ({
 
             const schedules = response.data?.data || [];
             setWorkSchedules(schedules);
-            setFetchError(null);
+            setFetchError(null); // Clear any previous errors
         } catch (error) {
             const errorMessage = error.response?.data?.message || error.message;
             console.error("Error fetching work schedules:", errorMessage);
-            setFetchError(errorMessage);
+            setFetchError(errorMessage); // Set the error message
         }
     };
 
@@ -90,7 +99,7 @@ const BookingCard = ({
             const end = new Date(`2000-01-01T${schedule.endTime}:00`);
             let current = new Date(start);
     
-            while (current <= end) { // Đổi "<" thành "<="
+            while (current <= end) {
                 availableSlots.add(convertTo12Hour(current.toTimeString().slice(0, 5)));
                 current.setMinutes(current.getMinutes() + 30);
             }
@@ -98,7 +107,6 @@ const BookingCard = ({
     
         return timeSlots.filter(slot => availableSlots.has(slot));
     };
-    
 
     const timeSlots = [
         "7:00 am", "7:30 am", "8:00 am", 
@@ -124,6 +132,29 @@ const BookingCard = ({
     const availableTimeSlots = getAvailableTimeSlots();
     const next7Days = getNext7Days(new Date());
 
+    const handleNext = () => {
+        if (selectedDate && selectedTime) {
+            const year = selectedDate.getFullYear();
+            const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+            const day = String(selectedDate.getDate()).padStart(2, '0');
+    
+            const timeParts = selectedTime.match(/(\d+):(\d+)\s*(am|pm)/i);
+            let hours = parseInt(timeParts[1]);
+            const minutes = timeParts[2];
+            const period = timeParts[3].toLowerCase();
+    
+            if (period === 'pm' && hours < 12) hours += 12;
+            if (period === 'am' && hours === 12) hours = 0;
+    
+            const formattedTime = `${String(hours).padStart(2, '0')}:${minutes}:00`;
+    
+            const dateTimeString = `${year}-${month}-${day}T${formattedTime}.000Z`;
+    
+            localStorage.setItem('selectedDateTime', dateTimeString);
+        }
+        onNext();
+    };
+
     return (
         <div className="booking-card">
             <div className="calendar-header">
@@ -135,7 +166,8 @@ const BookingCard = ({
                 <DatePicker
                     selected={selectedDate}
                     onChange={date => {
-                        setSelectedDate(date);
+                        const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+                        setSelectedDate(localDate);
                         setSelectedTime(null);
                         localStorage.removeItem('selectedTime');
                     }}
@@ -168,7 +200,7 @@ const BookingCard = ({
 
             <div className="buttons">
                 <button className="back-btn" onClick={onBack}>Back</button>
-                <button className="next-btn" onClick={onNext} disabled={!selectedDate || !selectedTime}>Next</button>
+                <button className="next-btn" onClick={handleNext} disabled={!selectedDate || !selectedTime}>Next</button>
             </div>
         </div>
     );

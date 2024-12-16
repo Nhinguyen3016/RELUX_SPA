@@ -1,0 +1,134 @@
+
+  
+  .appointment-modal-content {
+    background-color: white;
+    min-height: 100%;
+    padding: 60px 20px 20px 20px;
+    width: 100%;
+  }
+  
+  .appointment-modal-title {
+    font-size: 24px;
+    color: #5C2B3C;
+    font-weight: 600;
+    margin-bottom: 32px;
+  }
+  
+  .appointment-modal-message {
+    font-size: 16px;
+    color: #7a7a7a;
+    place-items: center;
+    display: flex;
+    width: 270px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .appointment-modal-button {
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    margin-top: 100px;
+    transition: background-color 0.2s;
+    background-color: #8FA393;
+    color: white;
+    border: none;
+    font-size: 16px;
+    flex: 1;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .appointment-modal-button:hover {
+    background-color: #5C2B3C;
+  }
+  
+  .appointment-modal-image-container {
+    background-color: white;
+    border-radius: 9999px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    margin-top: 1.5rem;
+    margin-left: 20px;
+    width: 500px;
+    height: 300px;
+  }
+  
+  .appointment-modal-image {
+    border-radius: 9999px;
+    height: 240px;
+  }
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #8FA393;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Hiệu ứng xoay cho vòng loading */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+/* Toàn màn hình mờ */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Màu đen mờ 50% */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Đặt lớp cao để đảm bảo overlay luôn trên cùng */
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.loading-spinner {
+  width: 100px;
+  height: 100px;
+  border: 5px solid rgba(237, 237, 237, 0.288);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Hiệu ứng xoay cho vòng loading */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Phần hiển thị chính */
+.appointment-modal-overlay {
+  position: relative;
+  z-index: 1; /* Nằm dưới lớp loading */
+}
