@@ -56,13 +56,13 @@ const GiftCardsForm = ({ isEditing, formData, onSubmit, onClose, handleInputChan
   }));
 
   return (
-    <div className="gift-card-form-overlay">
-      <div className="gift-card-form-category">
-        <h2 className="gift-card-form-title">
+    <div className="gift-card-form-overlay-dashboard">
+      <div className="gift-card-form-category-dashboard">
+        <h2 className="gift-card-form-title-dashboard">
           {isEditing ? 'Edit gift card' : 'Add New gift card'}
         </h2>
-        <button className="close-button-gift-card" onClick={onClose}>×</button>
-        <form onSubmit={onSubmit} className="schedules-add-from">
+        <button className="close-button-gift-card-dashboard" onClick={onClose}>×</button>
+        <form onSubmit={onSubmit} className="gift-card-add-from">
           <div className="form-group">
             <label>Services</label>
             <Select

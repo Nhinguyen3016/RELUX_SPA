@@ -114,7 +114,7 @@
   color: #D1DBE8;
 }
 
-.gift-card-form-overlay {
+.gift-card-form-overlay-dashboard {
   position: fixed;
   top: 0;
   left: 0;
@@ -127,7 +127,7 @@
   z-index: 1000;
 }
 
-.gift-card-form-category {
+.gift-card-form-category-dashboard {
   position: relative;
   background-color: #fff;
   padding: 30px;
@@ -136,7 +136,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.gift-card-form-title {
+.gift-card-form-title-dashboard {
   font-size: 24px;
   font-weight: bold;
   color: #333;
@@ -144,7 +144,7 @@
   margin-bottom: 20px;
 }
 
-.gift-card-form-overlay .gift-card-form-category .schedules-add-from {
+.gift-card-form-overlay-dashboard .gift-card-form-category-dashboard .gift-card-add-from {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -152,7 +152,7 @@
   background-color: #ffffff;
 }
 
-.close-button-gift-card {
+.close-button-gift-card-dashboard {
   background-color: transparent;
   color: #333;
   border: none;
@@ -163,7 +163,7 @@
   cursor: pointer;
 }
 
-.close-button-gift-card:hover {
+.close-button-gift-card-dashboard:hover {
   color: red;
 }
 

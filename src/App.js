@@ -43,6 +43,7 @@ import Schedules from './page/dashboard/schedules-dashboard.jsx';
 import GiftCards from './page/dashboard/giftCards-dashboard.jsx';
 import Staff from './page/dashboard/staff-dashboard.jsx';
 import AccountList from './page/dashboard/accountList.jsx';
+import Contact from './page/dashboard/contact-dashboard.jsx';
 
 //Profile
 import ProfileUser from './page/account/account/ProfileUser';
@@ -143,6 +144,14 @@ function App() {
                 element={
                   <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
                     <Staff />
+                  </PrivateRoute>
+                }
+              />
+              <Route 
+                path="/contact" 
+                element={
+                  <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                    <Contact />
                   </PrivateRoute>
                 }
               />

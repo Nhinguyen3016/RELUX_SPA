@@ -1,49 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
+import { format } from 'date-fns';
 import { useSnackbar } from 'notistack';
-import '../../styles/dashboard/listGiftCards.css';
+import '../../styles/dashboard/staff-dashboard.css';
 import DeletePopupConfirm from './deletePopupConfirm';
 
 
 const API_BASE_URL = 'http://localhost:3003/dashboard';
 
-const GiftCardsForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, services }) => {
-  console.log('Form Data in SchedulesForm:', formData);
+const StaffForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, handleFileChange, locationNames }) => {
   
-  const servicesOptions = services.map(service => ({
-    value: service.Name,
-    label: service.Name
+  const locationOptions = locationNames.map(locationName => ({
+    value: locationName.LocationName,
+    label: locationName.LocationName
   }));
 
   return (
-    <div className="gift-card-form-overlay">
-      <div className="gift-card-form-category">
-        <h2 className="gift-card-form-title">
-          {isEditing ? 'Edit gift card' : 'Add New gift card'}
+    <div className="staff-form-overlay-dashboard">
+      <div className="staff-form-category-dashboard">
+        <h2 className="staff-form-title-dashboard">
+          {isEditing ? 'Edit Staff' : 'Add New Staff'}
         </h2>
-        <button className="close-button-gift-card" onClick={onClose}>×</button>
-        <form onSubmit={onSubmit} className="schedules-add-from">
-          <div className="form-group">
-            <label>Services</label>
-            <Select
-              name="name"
-              value={servicesOptions.find(option => option.value === formData.name)}
-              onChange={selectedOption => handleInputChange({
-                target: { name: 'name', value: selectedOption ? selectedOption.value : '' }
-              })}
-              options={servicesOptions}
-              placeholder="Select or type to search"
-            />
-          </div>
-          
-          <div className="form-groups">
-            <label>Discount (%)</label>
+        <button className="close-button-staff-dashboard" onClick={onClose}>×</button>
+        <form onSubmit={onSubmit} className="staff-add-from">
+
+        <div className="form-groups">
+            <label>Name</label>
             <input
-              type="number"
-              name="discount"
-              placeholder="Enter discount"
-              value={formData.discount}
+              type="text"
+              name="name"
+              placeholder="Enter name"
+              value={formData.name}
               onChange={handleInputChange}
             />
           </div>
@@ -60,30 +48,86 @@ const GiftCardsForm = ({ isEditing, formData, onSubmit, onClose, handleInputChan
           </div>
 
           <div className="form-group">
-            <label>Start Date</label>
+            <label>Phone</label>
             <input
-              type="date"
-              name="startDate"
-              value={formData.startDate}
+              type="text"
+              name="phone"
+              value={formData.phone}
               onChange={handleInputChange}
               required
             />
           </div>
           
           <div className="form-group">
-            <label>End Date</label>
+            <label>Email</label>
             <input
-              type="date"
-              name="endDate"
-              value={formData.endDate}
+              type="text"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Specialty Type</label>
+            <input
+              type="text"
+              name="specialtyType"
+              value={formData.specialtyType}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Status</label>
+            <input
+              type="text"
+              name="status"
+              value={formData.status}
               onChange={handleInputChange}
               required
             />
           </div>
 
+          <div className="form-group">
+            <label>Hire Date</label>
+            <input
+              type="date"
+              name="hireDate"
+              value={formData.hireDate}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Location Name</label>
+            <Select
+              name="locationName"
+              value={locationOptions.find(option => option.value === formData.name)}
+              onChange={selectedOption => handleInputChange({
+                target: { name: 'locationName', value: selectedOption ? selectedOption.value : '' }
+              })}
+              options={locationOptions}
+              isClearable
+              placeholder="Select or type to search"
+            />
+          </div>
+
+          <div className="form-groups">
+            <label>Avatar</label>
+            <input
+              type="file"
+              name="avatar"
+              accept="image/*"
+              placeholder="Enter image avatar"
+              onChange={handleFileChange}
+            />
+          </div>
+
           <div className="form-actions">
             <button type="submit">
-              {isEditing ? 'Update gift card' : 'Add gift card'}
+              {isEditing ? 'Update staff' : 'Add staff'}
             </button>
             <button type="button" onClick={onClose}>Cancel</button>
           </div>
@@ -93,23 +137,27 @@ const GiftCardsForm = ({ isEditing, formData, onSubmit, onClose, handleInputChan
   );
 };
 
-const GiftCardsList = () => {
+const StaffList = () => {
   const [employees, setEmployees] = useState([]);
-  const [services, setServices] = useState([]);
-  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false); 
-  const [selectedPromotionID, setSelectedPromotionID] = useState(null);
+  const [locationNames, setLocationNames] = useState([]);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+  const [selectedEmployeesID, setSelectedEmployeesID] = useState(null);
   const [showEditForm, setShowEditForm] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({
-    promotionID: null,
+    employeeID: null,
     name: '',
     description: '',
-    discount: '',
-    startDate: '',
-    endDate: ''
+    phone: '',
+    email: '',
+    specialtyType: '',
+    status: '',
+    hireDate: '',
+    avatar: '',
+    locationName: '',
   });
 
-  const {enqueueSnackbar}= useSnackbar();
+  const {enqueueSnackbar, closeSnackbar}= useSnackbar();
 
   const fetchEmployees = async () =>{
     try {
@@ -125,97 +173,129 @@ const GiftCardsList = () => {
     }
   };
 
-  const createGiftCards = async () => {
+  const fetchLocationName = async () =>{
     try {
-      const dataToSend = {
-        ...formData,
-        discount: Number(formData.discount), 
-      };
-
-      const response = await axios.post(`${API_BASE_URL}/promotion`, dataToSend, {
-        headers: {
+      const response = await axios.get(`${API_BASE_URL}/staff/location`, {
+        header:{
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
         },
       });
+      setLocationNames(response.data.locationName);
+    }catch (error) {
+      console.error('Error fetching employees:', error.response?.data || error);
+      alert('Failed to fetch employees');
+    }
+  };
+  const createStaff = async () => {
+
+
+    const formDataToSend = new FormData();
+    formDataToSend.append('Name', formData.name.trim());
+    formDataToSend.append('Description', formData.description.trim());
+    formDataToSend.append('Phone', formData.phone.trim());
+    formDataToSend.append('Email', formData.email.trim());
+    formDataToSend.append('SpecialtyType', formData.specialtyType.trim());
+    formDataToSend.append('Status', formData.status.trim());
+    formDataToSend.append('HireDate', formData.hireDate);
+    formDataToSend.append('LocationName', formData.locationName.trim()); 
+
+    if (formData.avatar instanceof File) {
+      formDataToSend.append('avatar', formData.avatar); 
+    } else {
+      console.warn('No valid image file provided for image.');
+    }
+
+    for (let [key, value] of formDataToSend.entries()) {
+        console.log(key, value);
+    }
+
+
+    const loadingSnackbar = enqueueSnackbar('Creating staff... Please wait.', {
+      variant: 'info',
+      persist: true,
+    });
+
+    try {
+      const response = await axios.post(`${API_BASE_URL}/staff`, formDataToSend, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+        },
+      });
+
+      
 
       if (response.status === 201) {
-        await fetchGiftCards();
+        closeSnackbar(loadingSnackbar);
+        enqueueSnackbar("Staff created successfully!", { variant: 'success' });
         handleCloseForm();
-        enqueueSnackbar("Gift card created successfully!", {variant: 'success'})
-      }
-    } catch (error) {
-      console.error('Error creating gift card:', error);
-      enqueueSnackbar("Failed to create gift card", {variant: 'error'})
-    }
-  };
-
-  const updateGiftCards = async () => {
-    try {
-      // Kiểm tra tất cả các trường bắt buộc
-      const { promotionID, name, description, discount, startDate, endDate } = formData; // Lấy dữ liệu từ form
-      if (!promotionID || !name || !description || discount === '' || !startDate || !endDate) {
-        throw new Error("All fields (promotionID, name, description, discount, startDate, endDate) are required.");
-      }
-
-      // Kiểm tra giá trị discount hợp lệ (chuyển thành số)
-      const discountValue = parseInt(discount, 10);
-      if (isNaN(discountValue) || discountValue < 0 || discountValue > 100) { // Ensure discount is between 0 and 100
-          throw new Error('Discount value must be a number between 0 and 100.');
-      }
-
-    
-      const dataToSend = {
-        promotionID, 
-        name, 
-        description, 
-        discount: discountValue, 
-        startDate, 
-        endDate, 
-      };
-
-      console.log('Data to send for update:', dataToSend); // Log dữ liệu đang gửi
-
-      // Gửi yêu cầu cập nhật thông tin gift card
-      const response = await axios.put(`${API_BASE_URL}/promotion/${promotionID}`, dataToSend, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-        },
-      });
-
-
-      if (response.status === 200 && response.data.success) {
-        await fetchGiftCards(); 
-        handleCloseForm(); 
-        enqueueSnackbar("Gift card updated successfully!", {variant: 'success'})
+        fetchEmployees();
       } else {
-        throw new Error(response.data.message || 'Unknown error occurred');
+        enqueueSnackbar("Failed to create Staff. Please try again.", { variant: 'error' });
       }
     } catch (error) {
-      console.error('Error updating gift card:', error.response?.data || error.message || error);
-      enqueueSnackbar("Failed to update gift card", {variant: 'error'})
+      closeSnackbar(loadingSnackbar);
+      console.error('Error creating Staff:', error.response?.data || error.message);
+      enqueueSnackbar(error.response?.data?.message || "Failed to create Staff.", { variant: 'error' });
     }
   };
 
+  const updateStaff = async () => {
 
-  const deleteGiftCards = async (promotionID) => {
-    try {
-      console.log('Deleting promotion with ID:', promotionID);
+      const formDataToSend = new FormData();
+      formDataToSend.append('Name', formData.name.trim());
+      formDataToSend.append('Description', formData.description.trim());
+      formDataToSend.append('Phone', formData.phone.trim());
+      formDataToSend.append('Email', formData.email.trim());
+      formDataToSend.append('SpecialtyType', formData.specialtyType.trim());
+      formDataToSend.append('Status', formData.status.trim());
+      formDataToSend.append('LocationName', formData.locationName.trim()); 
 
-      const response = await axios.delete(`${API_BASE_URL}/promotion/${promotionID}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-        }, 
+      if (formData.avatar instanceof File) {
+        formDataToSend.append('avatar', formData.avatar); 
+      } else {
+        console.warn('No valid image file provided for image.');
+      }
+
+      for (let [key, value] of formDataToSend.entries()) {
+          console.log(key, value);
+      }
+      // Hiển thị thông báo "loading"
+      const loadingSnackbar = enqueueSnackbar('Creating staff... Please wait.', {
+        variant: 'info',
+        persist: true, // Thông báo không tự động đóng
       });
+  
+    try {
+      const response = await axios.put(`${API_BASE_URL}/staff/${formData.employeeID}`, formDataToSend, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        }
+      });
+  
       if (response.status === 200) {
-        await fetchGiftCards();
-        enqueueSnackbar("Gift card deleted successfully!", {variant: 'success'});
-        setIsDeletePopupOpen(false);
+        closeSnackbar(loadingSnackbar);
+        enqueueSnackbar("Staff updated successfully!", {variant: 'success'})
+        handleCloseForm();
+        fetchEmployees();
+      } else {
+        enqueueSnackbar("Failed to update Staff. Please try again.", {variant: 'error'})
       }
     } catch (error) {
-      console.error('Error deleting giftCards:', error);
-      alert(error.response?.data?.message || 'Failed to delete giftCards');
-      enqueueSnackbar("Failed to delete gift cards", {variant: 'error'})
+      closeSnackbar(loadingSnackbar);
+      console.error('Error updating Staff:', error);
+      enqueueSnackbar("Failed to update Staff", {variant: 'error'})
     }
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        console.log("file:", file);
+         setFormData({
+            ...formData,
+            avatar: file,
+          });
+      }
   };
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -225,75 +305,130 @@ const GiftCardsList = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log('Form Data being submitted:', formData);
-
-    if (!formData.name || !formData.description|| !formData.discount || !formData.startDate || !formData.endDate) {
-      alert('Please fill all required fields');
-      return;
-    }
+  const deleteStaff = async (employeeID) => {
 
     try {
-      if (showEditForm) {
-        await updateGiftCards();
-      } else {
-        await createGiftCards();
+      const response = await axios.delete(`${API_BASE_URL}/staff/${employeeID}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        }
+      });
+  
+      if (response.status === 200) {
+        fetchEmployees();
+        enqueueSnackbar("Staff deleted successfully!", {variant: 'success'})
+        setIsDeletePopupOpen(false);
       }
     } catch (error) {
-      console.error('Error handling gift card:', error);
-      alert(error.message || 'An error occurred');
+      console.error('Error deleting staff:', error);
+      if (error.response && error.response.status === 500) {
+        enqueueSnackbar("This staff is currently booked so cannot be deleted.", { variant: 'error' });
+      } else {
+        enqueueSnackbar("Failed to delete staff.", { variant: 'error' });
+      }
     }
   };
 
-  const handleEditClick = (card) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    const formDataToSend = new FormData();
+  formDataToSend.append('Name', formData.name.trim());
+  formDataToSend.append('Description', formData.description.trim());
+  formDataToSend.append('Phone', formData.phone.trim());
+  formDataToSend.append('Email', formData.email.trim());
+  formDataToSend.append('SpecialtyType', formData.specialtyType.trim());
+  formDataToSend.append('Status', formData.status.trim());
+  formDataToSend.append('LocationName', formData.locationName.trim()); 
+
+  if (formData.avatar instanceof File) {
+    formDataToSend.append('avatar', formData.avatar); 
+  } else {
+    console.warn('No valid image file provided for image.');
+  }
+
+  for (let [key, value] of formDataToSend.entries()) {
+      console.log(key, value);
+  }
+    try {
+      if (showEditForm) {
+        await updateStaff(formDataToSend);
+      } else {
+        await createStaff(formDataToSend);
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      enqueueSnackbar("Error submitting the service form", { variant: 'error' });
+    }
+  };
+
+  const handleEditClick = (employees) => {
+    console.log(employees); // Kiểm tra dữ liệu từ API
+
+    const formattedHireDate = employees.HireDate ? format(new Date(employees.HireDate), 'yyyy-MM-dd') : ''; // Định dạng hireDate
+  
     setFormData({
-      promotionID: card.PromotionID,
-      name: card.ServiceName,
-      description: card.Description,
-      discount: card.Discount * 100,
-      startDate: card.StartDate,
-      endDate: card.EndDate
+      employeeID: employees.EmployeeID || '',
+      name: employees.Name || '',            // Kiểm tra tên trường chính xác ở đây
+      description: employees.Description || '',
+      phone: employees.Phone || '',
+      email: employees.Email || '',
+      specialtyType: employees.SpecialtyType || '',
+      status: employees.Status || '',
+      hireDate: formattedHireDate, // Sử dụng formattedHireDate ở đây
+      avatar: employees.avatar || '',
+      locationName: employees.LocationName || ''  // Đảm bảo LocationName có trong dữ liệu API
     });
+  
     setShowAddForm(false);
     setShowEditForm(true);
   };
-
+  
   const handleAddClick = () => {
     setFormData({
-      promotionID: null,
+      employeeID: null,
       name: '',
       description: '',
-      discount: '',
-      startDate: '',
-      endDate: ''
+      phone: '',
+      email: '',
+      specialtyType: '',
+      status: '',
+      hireDate: '',
+      avatar: '',
+      locationName: '',
     });
     setShowAddForm(true);  
     setShowEditForm(false); 
   };
-  const handleDeleteClick = (promotionID) => {
-    setSelectedPromotionID(promotionID); 
-    setIsDeletePopupOpen(true); 
-  };
 
+  const handleDeleteClick = (employeeID) => {
+    setSelectedEmployeesID(employeeID);
+    setIsDeletePopupOpen(true);
+  };
+  
   const handleConfirmDelete = () => {
-    if (selectedPromotionID) {
-      deleteGiftCards(selectedPromotionID);
+    if (selectedEmployeesID) {
+      deleteStaff(selectedEmployeesID);
     }
   };
+
   const handleClosePopup = () => {
     setIsDeletePopupOpen(false);
-    setSelectedPromotionID(null);
+    setSelectedEmployeesID(null);
   };
 
   const handleCloseForm = () => {
     setFormData({
-      promotionID: null,
+      employeeID: null,
       name: '',
       description: '',
-      discount: '',
-      startDate: '',
-      endDate: ''
+      phone: '',
+      email: '',
+      specialtyType: '',
+      status: '',
+      hireDate: '',
+      avatar: '',
+      locationName: '',
     });
     setShowEditForm(false);
     setShowAddForm(false);
@@ -302,6 +437,7 @@ const GiftCardsList = () => {
 
   useEffect(() => {
     fetchEmployees();
+    fetchLocationName();
   }, []);
 
   return (
@@ -332,7 +468,7 @@ const GiftCardsList = () => {
               <td>{item.Description || 'N/A'}</td>
               <td className="actions">
                 <button className="action-button-dashboard edit-button-dashboard" onClick={() => handleEditClick(item)}>✏️</button>
-                <button className="action-button-dashboard delete-button-dashboard" onClick={() => handleDeleteClick(item.PromotionID, index)}>🗑️</button>
+                <button className="action-button-dashboard delete-button-dashboard" onClick={() => handleDeleteClick(item.EmployeeID)}>🗑️</button>
               </td>
             </tr>
           ))
@@ -345,13 +481,14 @@ const GiftCardsList = () => {
       </table>
 
       {(showAddForm || showEditForm) && (
-        <GiftCardsForm
+        <StaffForm
           isEditing={showEditForm}
           formData={formData}
           onSubmit={handleSubmit}
           onClose={handleCloseForm}
           handleInputChange={handleInputChange}
-          services={services}
+          handleFileChange={handleFileChange}
+          locationNames={locationNames}
         />
       )}
       <DeletePopupConfirm
@@ -363,4 +500,4 @@ const GiftCardsList = () => {
   );
 };
 
-export default GiftCardsList;
+export default StaffList;

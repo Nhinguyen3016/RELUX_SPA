@@ -30,6 +30,18 @@ body {
     background-color: white;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
+.card::-webkit-scrollbar {
+    width: 0; /* Ẩn thanh cuộn ngang */
+    height: 0; /* Ẩn thanh cuộn dọc */
+}
+  
+.card::-webkit-scrollbar-thumb {
+    background-color: transparent; /* Ẩn thumb (vùng kéo của thanh cuộn) */
+}
+  
+.card::-webkit-scrollbar-track {
+    background-color: transparent; /* Ẩn track (vùng chứa thanh cuộn) */
+}
 
 .booking-title {
     text-align: center;
