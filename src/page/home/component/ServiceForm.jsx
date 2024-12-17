@@ -147,12 +147,66 @@ const ServiceForm = ({ onSubmit }) => {
       employee: parseInt(selectedEmployee, 10),
     };
 
-    // Store both employee ID and location ID in localStorage
-    localStorage.setItem('selectedEmployeeId', formData.employee.toString());
-    localStorage.setItem('selectedLocationId', formData.location.toString());
-    
-    console.log('Submitting form data:', formData);
-    onSubmit(formData);
+    // Get selected service's price and promotionId
+    const selectedService = services.find(service => service.id === formData.service);
+    const price = selectedService ? selectedService.price : null;
+    const promotionId = selectedService ? selectedService.promotionId : null;
+    const serviceName = selectedService ? selectedService.name : null;  // Store service name
+
+    // Store serviceId and categoryId in localStorage as serviceIds
+    const serviceIds = [formData.service, formData.serviceCategory];
+    localStorage.setItem('serviceIds', JSON.stringify(serviceIds));
+
+    // Fetch promotion details if promotionId exists
+    if (promotionId) {
+      axios.get(`${API_HOST}/v1/promotions/${promotionId}`)
+        .then((res) => {
+          const discountPercentage = res.data.data ? parseFloat(res.data.data.discountPercentage) : 0;
+
+          // Store selected data in localStorage
+          localStorage.setItem('selectedEmployeeId', formData.employee.toString());
+          localStorage.setItem('selectedLocationId', formData.location.toString());
+          if (price) localStorage.setItem('servicePrice', price);
+          if (discountPercentage) localStorage.setItem('serviceDiscountPercentage', discountPercentage);
+          if (promotionId) localStorage.setItem('promotionId', promotionId);  // Store promotionId
+          if (serviceName) localStorage.setItem('serviceName', serviceName);  // Store service name
+
+          // Store employee and location details in localStorage
+          const selectedEmployeeObj = allEmployees.find(emp => emp.id === formData.employee);
+          const selectedLocationObj = allLocations.find(loc => loc.id === formData.location);
+
+          if (selectedEmployeeObj) {
+            localStorage.setItem('employeeName', selectedEmployeeObj.name);  // Store employee name
+          }
+          if (selectedLocationObj) {
+            localStorage.setItem('locationAddress', selectedLocationObj.address);  // Store location address
+          }
+
+          console.log('Submitting form data:', formData);
+          onSubmit({ ...formData, discountPercentage });
+        })
+        .catch((error) => {
+          console.error('Error fetching promotion details:', error);
+          setError('Failed to fetch promotion');
+        });
+    } else {
+      console.log('No promotion for this service');
+      localStorage.setItem('serviceDiscountPercentage', 0);
+      localStorage.setItem('serviceName', serviceName);  // Store service name
+
+      // Store employee and location details in localStorage
+      const selectedEmployeeObj = allEmployees.find(emp => emp.id === formData.employee);
+      const selectedLocationObj = allLocations.find(loc => loc.id === formData.location);
+
+      if (selectedEmployeeObj) {
+        localStorage.setItem('employeeName', selectedEmployeeObj.name);  // Store employee name
+      }
+      if (selectedLocationObj) {
+        localStorage.setItem('locationAddress', selectedLocationObj.address);  // Store location address
+      }
+
+      onSubmit(formData);
+    }
   };
 
   if (isLoading) {

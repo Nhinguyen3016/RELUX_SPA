@@ -9,26 +9,30 @@
 .spa-the-service-section {
     position: relative;
     width: 100%;
-    max-width: 1440px;
+    max-width: 100%;
     margin: 0 auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    margin-bottom: 100px;
 }
 
 .spa-service-image {
-    width: 100%;
-    max-width: 3000px;
     text-align: center;
-    margin-bottom: 100px;
-    height: 300px;
-    margin-top:-100px;
+    margin-bottom: 50px;
+    height: 350px;
+    width: 100vw;
+    max-width: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .spa-service-title {
     position: absolute;
-    top: 30%;
+    top: 40%;
     left: 20%;
     transform: translate(-50%, -50%);
     color: rgba(0, 0, 0, 1);
-    font-size: 50px;
+    font-size: 45px;
     font-weight: bold;
 }
 

@@ -1,111 +1,82 @@
-import React, { useState } from 'react';
-import '../../../styles/booking/component/FourStep.css';
-const AppointmentForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    bookingNotes: ''
-  });
-  
-  const [phoneError, setPhoneError] = useState('');
-  
+import React, { useState, useEffect } from 'react';
+import '../../../styles/booking/component/FourStep.css'; // Import the updated CSS file
+
+const FourStep = ({ onNext, onBack }) => { 
+  // 🟢 Tạo state riêng biệt cho "name" và "bookingNotes"
+  const [name, setName] = useState('');
+  const [bookingNotes, setBookingNotes] = useState('');
+
+  // 🟢 Load dữ liệu từ localStorage khi component được mount
+  useEffect(() => {
+    const savedName = localStorage.getItem('fourStepName');
+    const savedBookingNotes = localStorage.getItem('fourStepBookingNotes');
+    
+    if (savedName) setName(savedName); // Load dữ liệu name từ localStorage
+    if (savedBookingNotes) setBookingNotes(savedBookingNotes); // Load dữ liệu bookingNotes từ localStorage
+  }, []);
+
+  // 🟢 Lưu dữ liệu vào localStorage mỗi khi "name" hoặc "bookingNotes" thay đổi
+  useEffect(() => {
+    localStorage.setItem('fourStepName', name);
+  }, [name]);
+
+  useEffect(() => {
+    localStorage.setItem('fourStepBookingNotes', bookingNotes);
+  }, [bookingNotes]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
     
-    if (name === 'phone') {
-      setPhoneError('');
+    if (name === 'name') {
+      setName(value);
+    } else if (name === 'bookingNotes') {
+      setBookingNotes(value);
     }
   };
-  
-  const validatePhone = (phone) => {
-    const phoneRegex = /^\d{3}-\d{3}-\d{3}$/;
-    return phoneRegex.test(phone);
-  };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validatePhone(formData.phone)) {
-      setPhoneError('Phone number is invalid.');
-      return;
-    }
-    console.log('Form submitted:', formData);
+    console.log('Form submitted:', { name, bookingNotes });
+    onNext(); // Trigger onNext when the form is submitted
   };
 
   return (
-    <div className="appointment-form-container">
-      <h1 className="form-title">Make an Appointment</h1>
+    <div className="appointment-form-container-fourstep">
+      <h1 className="form-title-fourstep">Make an Appointment</h1>
       
-      <form onSubmit={handleSubmit} className="appointment-form">
-        <div className="form-group">
-          <label>Name</label>
+      <form onSubmit={handleSubmit} className="appointment-form-fourstep">
+        
+        {/* Form group for Name */}
+        <div className="form-group-fourstep">
+          <label className="form-label-fourstep">Name</label>
           <input
             type="text"
             name="name"
-            value={formData.name}
+            value={name}
             onChange={handleInputChange}
             placeholder="Name"
             required
+            className="form-input-fourstep"
           />
         </div>
         
-        <div className="form-group">
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            placeholder="Email"
-            required
-          />
-        </div>
-        
-        <div className="form-group">
-          <label>Phone</label>
-          <div className="phone-input-container">
-            <div className="country-code">
-              <img
-                src="/images/flags/vn.png"
-                alt="Vietnam flag"
-                className="flag-icon"
-              />
-              <span>+84</span>
-            </div>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              placeholder="561-666-660"
-              required
-              className="phone-input"
-            />
-          </div>
-          {phoneError && (
-            <p className="error-message">{phoneError}</p>
-          )}
-        </div>
-        
-        <div className="form-group">
-          <label>Booking notes</label>
+        {/* Form group for Booking Notes */}
+        <div className="form-group-fourstep">
+          <label className="form-label-fourstep">Booking Notes</label>
           <textarea
             name="bookingNotes"
-            value={formData.bookingNotes}
+            value={bookingNotes}
             onChange={handleInputChange}
             placeholder="Add any special requests or notes"
+            className="form-textarea-fourstep"
           />
         </div>
         
-        <div className="button-group">
-          <button type="button" className="back-button">
+        <div className="button-group-fourstep">
+          <button type="button" className="back-button-fourstep" onClick={onBack}>
             Back
           </button>
-          <button type="submit" className="next-button">
+          <button type="submit" className="next-button-fourstep">
             Next
           </button>
         </div>
@@ -114,4 +85,4 @@ const AppointmentForm = () => {
   );
 };
 
-export default AppointmentForm;
+export default FourStep;

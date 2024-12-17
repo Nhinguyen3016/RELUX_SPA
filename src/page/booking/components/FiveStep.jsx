@@ -1,32 +1,117 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../../styles/booking/component/FiveStep.css';
+import { FaExclamationTriangle } from 'react-icons/fa';  // Import biểu tượng cảnh báo
 
-const PaymentForm = () => {
+const PaymentForm = ({ onBack, onNext }) => {
   const [paymentMethod, setPaymentMethod] = useState('onsite');
+  const [servicePrice, setServicePrice] = useState(0);
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [finalTotalPrice, setFinalTotalPrice] = useState(0);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    const price = parseFloat(localStorage.getItem('servicePrice')) || 0;
+    const discount = parseFloat(localStorage.getItem('discountAmount')) || 0;
+    const total = price - discount;
+
+    setServicePrice(price);
+    setDiscountAmount(discount);
+    setFinalTotalPrice(total);
+  }, []);
+
+  const handleReserveClick = async () => {
+    const authToken = localStorage.getItem('authToken');
+    const selectedDateTime = localStorage.getItem('selectedDateTime');
+    const fourStepBookingNotes = localStorage.getItem('fourStepBookingNotes');
+    const serviceIds = JSON.parse(localStorage.getItem('serviceIds')) || [];
+    const selectedLocationId = parseInt(localStorage.getItem('selectedLocationId'), 10);
+    const selectedEmployeeId = parseInt(localStorage.getItem('selectedEmployeeId'), 10);
+
+    if (!selectedDateTime || !serviceIds.length || isNaN(selectedLocationId) || isNaN(selectedEmployeeId)) {
+      setErrorMessage('Missing necessary booking data or invalid ID format.');
+      return;
+    }
+
+    const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
+    const url = `${API_HOST}/v1/bookings`;
+
+    const bookingData = {
+      bookingTime: selectedDateTime, 
+      bookingNotes: fourStepBookingNotes,
+      serviceIds: serviceIds,
+      locationId: selectedLocationId, 
+      employeeId: selectedEmployeeId, 
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`, 
+        },
+        body: JSON.stringify(bookingData),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log('Booking successful:', responseData);
+        setErrorMessage('');
+        onNext();
+      } else {
+        const errorData = await response.json();
+        if (errorData.message === 'The selected employee is not available during this time slot') {
+          setErrorMessage('The selected employee is not available during this time slot');
+        } else if (errorData.message === 'You already have a booking during this time slot') {
+          setErrorMessage('You already have a booking during this time slot');
+        } else {
+          setErrorMessage('An unexpected error occurred. Please try again later.');
+        }
+      }
+    } catch (error) {
+      console.error('Error booking appointment:', error);
+      setErrorMessage('An unexpected error occurred. Please try again later.');
+    }
+  };
 
   return (
     <div className="payment-container">
       <h1 className="payment-title">Make an Appointment</h1>
 
+      {errorMessage && (
+        <div className="error-modal-overlay">
+          <div className="error-modal">
+            <button className="close-button" onClick={() => setErrorMessage('')}>&times;</button>
+            {/* Biểu tượng cảnh báo và thông báo lỗi */}
+            <div className="error-content">
+              <FaExclamationTriangle className="error-icon-p" />
+              <p>{errorMessage}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Các phần khác của form */}
       <div className="payment-table">
         <table>
           <tbody>
             <tr>
-              <td>Ayurvedic Spa Program</td>
-              <td className="price-column">$49</td>
+              <td>Listed price</td>
+              <td className="price-column">${servicePrice.toFixed(2)}</td>
             </tr>
             <tr>
-              <td>Subtotal</td>
-              <td className="price-column">$49</td>
+              <td>Discount offers</td>
+              <td className="price-column">-${discountAmount.toFixed(2)}</td>
             </tr>
             <tr>
               <td>Total</td>
-              <td className="price-column">$49</td>
+              <td className="price-column">${finalTotalPrice.toFixed(2)}</td>
             </tr>
           </tbody>
         </table>
       </div>
 
+      {/* Các phương thức thanh toán */}
       <div className="payment-methods">
         <div className="payment-option">
           <input
@@ -50,19 +135,15 @@ const PaymentForm = () => {
             onChange={(e) => setPaymentMethod(e.target.value)}
           />
           <label htmlFor="vnpay" className="vnpay-label">
-            <img
-              src="/vnpay-logo.png"
-              alt="VNPAY"
-              className="vnpay-logo"
-            />
+            <img src="/vnpay-logo.png" alt="VNPAY" className="vnpay-logo" />
             <span>VNPAY e-wallet</span>
           </label>
         </div>
       </div>
 
       <div className="button-group">
-        <button className="reserve-button">Reserve</button>
-        <button className="back-button">Back</button>
+        <button className="back-button" onClick={onBack}>Back</button>
+        <button className="reserve-button" onClick={handleReserveClick}>Reserve</button>
       </div>
     </div>
   );

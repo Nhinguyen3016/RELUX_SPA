@@ -59,9 +59,9 @@ const SpaPrograms = () => {
     };
 
     return (
-        <div className="services-container">
+        <div className="services-program">
             <div className="spa-the-service-section">
-                <h2 className="spa-service-title">Spa Programs</h2>
+                <h2 className="spa-service-title">SWellness & Grooming</h2>
                 <img src={Spa} alt="Service Promotion" className="spa-service-image" />
             </div>
 

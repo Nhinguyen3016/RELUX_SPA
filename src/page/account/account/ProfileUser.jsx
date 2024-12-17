@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import profileImage from "../../../images/main_profile.jpg";
 import "../../../styles/account/account/ProfileUser.css";
-import defaultAvatar from "../../../images/avatar_pf.jpg"; 
+import defaultAvatar from "../../../images/avatar_pf.jpg";
 import { useNavigate } from "react-router-dom";
 
 const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:3000";
@@ -12,7 +12,7 @@ const Profile = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedAvatar, setSelectedAvatar] = useState(null); 
+  const [selectedAvatar, setSelectedAvatar] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const Profile = () => {
           error.response?.data?.message || "An error occurred while fetching profile."
         );
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
@@ -58,7 +58,8 @@ const Profile = () => {
   const handleEditClick = () => setIsEditing(true);
   const handleCancelClick = () => setIsEditing(false);
 
-  const handleUpdateClick = async () => {
+  const handleUpdateClick = async (e) => {
+    e.preventDefault(); // Prevent page reload
     const token = localStorage.getItem("authToken");
     if (!token) {
       setErrorMessage("Authentication token not found. Please login again.");
@@ -95,18 +96,16 @@ const Profile = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/login");
+    navigate("/account");
   };
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Preview selected avatar
     const avatarUrl = URL.createObjectURL(file);
     setSelectedAvatar(avatarUrl);
 
-    // Save avatar URL to local storage
     localStorage.setItem("avatar", avatarUrl);
 
     const formData = new FormData();
@@ -228,14 +227,12 @@ const Profile = () => {
                 {isEditing ? (
                   <div className="button-group-pf">
                     <button
-                      type="button"
                       className="button-cancel-pf"
                       onClick={handleCancelClick}
                     >
                       Cancel
                     </button>
                     <button
-                      type="button"
                       className="button-update-pf"
                       onClick={handleUpdateClick}
                     >
@@ -244,7 +241,6 @@ const Profile = () => {
                   </div>
                 ) : (
                   <button
-                    type="button"
                     className="button-pf"
                     onClick={handleEditClick}
                   >
@@ -256,6 +252,12 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      <div className="form-history-book">
+      <div className="history-book">
+      <div className="history-book-content">
+      </div>
+        </div>
+        </div>
     </>
   );
 };

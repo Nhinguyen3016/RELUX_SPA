@@ -63,7 +63,7 @@ const BodyTreatments = () => {
         
         <div className="body-page">  
             <div className="body-the-service-section">
-                <h2 className="body-service-title">Body Treatments</h2>
+                <h2 className="body-service-title"> Body Care & Detox</h2>
                 <img src={BodyImage} alt="Service Promotion" className="body-service-image" />
             </div>
             <div className="body-programs-container">

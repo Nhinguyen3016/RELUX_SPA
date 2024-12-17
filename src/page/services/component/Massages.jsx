@@ -62,7 +62,7 @@ const Massages = () => {
     return (
         <div className="massages-page">
             <div className="massage-the-service-section">
-                <h2 className="massage-service-title">Massages</h2>
+                <h2 className="massage-service-title">Facial & Head Treatments</h2>
                 <img src={Massage} alt="Service Promotion" className="massage-service-image" />
             </div>
 

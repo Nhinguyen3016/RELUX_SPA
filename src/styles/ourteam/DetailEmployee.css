@@ -202,5 +202,31 @@ section.team-banner-detail {
     z-index: 9999;
     padding: 10px;
     box-sizing: border-box;
+    width:450px;
 }
 
+.form-close-button {
+    position: absolute;
+    left: 15px;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    color: #5c2b3c;
+    font-size: 25px;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    z-index: 10;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    top: 2%;
+}
+
+.form-close-button:hover {
+    background-color: #5c2b3c;
+    color: white;
+}

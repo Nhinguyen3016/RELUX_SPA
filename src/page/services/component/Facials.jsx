@@ -63,7 +63,7 @@ const Facials = () => {
     return (
         <div className="facial-programs-page">
             <div className="facial-the-service-section">
-                <h2 className="facial-service-title">Facials</h2>
+                <h2 className="facial-service-title">Massage Therapies</h2>
                 <img src={Facial} alt="Service Promotion" className="facial-service-image" /> 
             </div>
 
