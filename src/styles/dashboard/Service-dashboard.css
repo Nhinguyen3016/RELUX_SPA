@@ -171,10 +171,22 @@
   width: 90%;
   max-height: 90vh;
   max-width: 450px;
-  overflow-y: auto;
+  overflow-y: scroll;
   position: relative;
 }
+/* Ẩn thanh cuộn */
+.service-forms-dashboard::-webkit-scrollbar {
+  width: 0; /* Ẩn thanh cuộn ngang */
+  height: 0; /* Ẩn thanh cuộn dọc */
+}
 
+.service-forms-dashboard::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Ẩn thumb (vùng kéo của thanh cuộn) */
+}
+
+.service-forms-dashboard::-webkit-scrollbar-track {
+  background-color: transparent; /* Ẩn track (vùng chứa thanh cuộn) */
+}
 .service-form-title {
   text-align: center;
   padding-bottom: 15px;
@@ -200,6 +212,7 @@
   display: block;
   margin-bottom: 0.5rem;
   font-weight: bold;
+  text-align: left;
 }
 
 .form-groups input,

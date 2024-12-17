@@ -41,6 +41,8 @@ const Header=()=>{
             localStorage.removeItem("authToken");
             localStorage.removeItem("refreshToken");
             localStorage.removeItem("userRole");
+            localStorage.removeItem("Username");
+            localStorage.removeItem("selectedServiceId");
             navigate("/");
         } catch (error) {
           console.error("Error during logout:", error);
