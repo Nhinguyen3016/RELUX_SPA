@@ -144,6 +144,7 @@ body {
   flex-direction: column;
   align-items: center;
   padding: 10px;
+  z-index: 99999;
 }
 .chatbot-modal {
   position: fixed;
@@ -155,7 +156,7 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 8px; /* Bo góc cho modal */
   padding: 15px;
-  z-index: 9999; /* Đảm bảo modal luôn ở trên */
+  z-index: 99999; /* Đảm bảo modal luôn ở trên */
   overflow-y: auto; /* Cuộn khi nội dung vượt quá chiều cao */
 }
 
@@ -166,6 +167,7 @@ body {
   border-radius: 6px;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+  z-index: 1000;
 }
 
 .message span {
@@ -177,6 +179,7 @@ body {
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  z-index: 999;
 }
 
 .help-icon img {

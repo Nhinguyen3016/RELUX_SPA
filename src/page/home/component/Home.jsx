@@ -1,17 +1,27 @@
-import React, { useState } from "react";
+import React from "react";
 import "../../../styles/home/Home.css";
 import homeImage from "../../../images/homeImage.png";
 import helpIcon from "../../../images/help.png";
 import helpArrow from "../../../images/help-arrow.png";
+import Chatbot from '../component/chatbot'
+import { useState } from "react";
 
 const Home = ({ sectionRef }) => {
-  const [showChatbot, setShowChatbot] = useState(true); // Đặt giá trị ban đầu là true để chatbot luôn hiển thị
 
-const Home = () => {
-  const [showBookingForm, setShowBookingForm] = useState(false); 
+  const [showChatbot, setShowChatbot] = useState(false)
 
+  const toggleChatbot = () => {
+    setShowChatbot(!showChatbot);
+};
+  // Cuộn đến Section khi nhấn nút
   const handleBookAppointment = () => {
-    setShowBookingForm(true); 
+    if (sectionRef && sectionRef.current) {
+      // Scroll to the service form (inside the Section component)
+      const serviceFormElement = sectionRef.current.querySelector('.service-form');
+      if (serviceFormElement) {
+        serviceFormElement.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   };
 
   return (
@@ -37,14 +47,16 @@ const Home = () => {
             Younger face, elongated oval, smoothing nasolabial folds, chin lift.
             Younger and toned face after the first procedure.
           </p>
-          <button className="appointment-btn" onClick={toggleShow}>Book an appointment</button>
+          <button className="appointment-btn" onClick={handleBookAppointment}>
+            Book an appointment
+          </button>
         </div>
       </div>
 
-      <div className="help-container">
+      <div className="help-container" >
         <div className="message">
           <span>Hello, Can I help you?</span>
-          {showChatbot && (<div className="chatbot-modal"><Chatbot /></div>)}
+          {showChatbot && (<Chatbot/>)}
         </div>
         <div className="icon-arrow-container">
           <div className="help-icon">

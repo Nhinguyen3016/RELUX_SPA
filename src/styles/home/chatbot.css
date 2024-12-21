@@ -1,111 +1,231 @@
 /* Container chính của chatbot */
 .chatbot-container {
-    width: 330px;
-    height: 480px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    /* float: right; */
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Phần hiển thị các tin nhắn */
-  .chatbot-messages {
-    flex: 1;
-    padding: 10px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    word-wrap: break-word; /* Cho phép ngắt từ */
-    white-space: normal; /* Đảm bảo văn bản sẽ ngắt dòng */
-  }
-  
-  /* Tin nhắn người dùng */
-  .message.user {
-    align-self: flex-end;
-    background-color: #007bff;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 20px;
-    max-width: 70%;
-    word-wrap: break-word; /* Cho phép ngắt từ */
-    white-space: normal; /* Đảm bảo văn bản sẽ ngắt dòng */
-  }
-  
-  /* Tin nhắn từ bot */
-  .message.bot {
-    align-self: flex-start;
-    background-color: #e9ecef;
-    color: #333;
-    padding: 8px 12px;
-    border-radius: 20px;
-    max-width: 70%;
-  }
-  
-  /* Phần nhập và gửi tin nhắn */
-  .chatbot-input {
-    border-radius: 0 0 5px 5px;
-    display: flex;
-    border-top: 1px solid #ccc;
-    padding: 10px;
-    background-color: white;
-  }
-  
-  .chatbot-input input {
-    flex: 1;
-    border: none;
-    outline: none;
-    padding: 10px;
-    border-radius: 5px;
-    margin-right: 10px;
-    background-color: #f1f1f1;
-  }
-  
-  .chatbot-input button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .chatbot-input button:hover {
-    background-color: #0056b3;
-  }
-  
-  .link-servey {
-    text-decoration:none;
+  width: 400px;
+  height: 600px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  border: none;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #ffffff, #f9f9f9);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  background-image: url('https://www.transparenttextures.com/patterns/winter-light.png'), linear-gradient(135deg, #ffffff, #f9f9f9);
+  /* Thêm họa tiết tuyết nhẹ nhàng */
+}
+
+.chatbot-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 20px;
+  z-index: 9999;
+  background-color: #e17575;
+  box-shadow: 0px 5px 5px #dedede;
+  width: 100%;
+  height: 50px;
+  padding-left: 10px;
+  padding-right: 20px;
+}
+
+.chatbot-logo {
+display: flex;
+gap: 5px;
+align-items: center;
+}
+
+.chatbot-icon {
+  height: auto;
+  width: 50px;
+}
+
+.chatbot-title {
+  font-family: 'Kaushan Script', cursive;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 80px;
+  letter-spacing: 0.01em;
+  margin-left: 10px;
+  text-align: center;
+}
+
+/* Nút bật/tắt chatbox */
+.chatbot-toggle-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  background-color: #e74c3c;
+  /* Đỏ Giáng Sinh */
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+
+.chatbot-toggle-button:hover {
+  background-color: #c0392b;
+  transform: scale(1.1);
+}
+
+/* Tin nhắn trong chatbot */
+.chatbot-messages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+  color: #555;
+  scroll-behavior: smooth;
+  transition: all 0.2s ease;
+  text-align: start ;
+}
+
+/* Hiệu ứng các tin nhắn */
+.message {
+  max-width: 80%;
+  padding: 12px 15px;
+  border-radius: 25px;
+  line-height: 1.7;
+  word-wrap: break-word;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-in-out;
+  /* Hiệu ứng fade-in khi hiển thị tin nhắn */
+}
+
+.message.bot {
+  align-self: flex-start;
+  background-color: #f7c4c4;
+  /* Màu hồng nhạt cho bot */
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.message.user {
+  align-self: flex-end;
+  background-color: #27ae60;
+  /* Xanh lá Giáng Sinh cho người dùng */
+  color: white;
+}
+
+/* Input chat */
+.chatbot-input {
+  display: flex;
+  padding: 12px;
+  border-top: 1px solid #ddd;
+  gap: 10px;
+  background-color: #f7f7f7;
+}
+
+.chatbot-input input {
+  flex: 1;
+  padding: 12px 18px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+  transition: border-color 0.3s ease, transform 0.2s ease;
+}
+
+.chatbot-input input:focus {
+  border-color: #e74c3c;
+  /* Đỏ khi focus */
+  transform: scale(1.05);
+}
+
+.chatbot-input button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 25px;
+  background-color: #e74c3c;
+  /* Đỏ Giáng Sinh */
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.chatbot-input button:hover {
+  background-color: #c0392b;
+  transform: scale(1.1);
+}
+
+/* Nút X để ẩn chatbot */
+.close-button {
+  border: none;
+  background: none;
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: #e74c3c;
+  /* Đỏ khi hover */
+}
+
+/* Hiện lại chatbot khi tắt */
+.chatbot-open-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 18px;
+  background-color: #e74c3c;
+  /* Đỏ Giáng Sinh */
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.chatbot-open-btn:hover {
+  background-color: #c0392b;
+  transform: scale(1.1);
+}
+
+/* Hiệu ứng tuyết rơi */
+@keyframes snow {
+  0% {
+    transform: translateY(-100px);
   }
 
-  .link-servey:hover {
-    text-decoration:none;
-    color: #9c9c9c;
+  100% {
+    transform: translateY(100vh);
   }
+}
 
-  .courseChat {
-    display: flex;
-    justify-content: start;
-    align-items: start;
-    flex-direction: column;
-    gap: 5px;
-  }
+.snowflakes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
 
-  .courseChat h1 {
-    font-size: 16px;
-    font-weight: normal !important;
-    color: #333;
-    margin:  0 !important;
-  }
-  .linkServey a {
-    font-size: 16px;
-    font-weight: normal !important;
-    color: #333;
-    margin:  0 !important;
-  }
-  .course-link{
-    text-decoration: none !important;
-  }
+.snowflake {
+  position: absolute;
+  background-color: white;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: snow 10s linear infinite;
+}
+
+.snowflake:nth-child(odd) {
+  animation-duration: 12s;
+  animation-delay: -3s;
+}
+
+.snowflake:nth-child(even) {
+  animation-duration: 10s;
+  animation-delay: 0s;
+}
