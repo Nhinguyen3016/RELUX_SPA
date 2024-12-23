@@ -23,11 +23,11 @@ const PaymentForm = ({ onBack, onNext }) => {
     const authToken = localStorage.getItem('authToken');
     const selectedDateTime = localStorage.getItem('selectedDateTime');
     const fourStepBookingNotes = localStorage.getItem('fourStepBookingNotes');
-    const serviceIds = JSON.parse(localStorage.getItem('serviceIds')) || [];
+    const selectedServiceId = JSON.parse(localStorage.getItem('selectedServiceId')) || []; // Lấy từ localStorage
     const selectedLocationId = parseInt(localStorage.getItem('selectedLocationId'), 10);
     const selectedEmployeeId = parseInt(localStorage.getItem('selectedEmployeeId'), 10);
 
-    if (!selectedDateTime || !serviceIds.length || isNaN(selectedLocationId) || isNaN(selectedEmployeeId)) {
+    if (!selectedDateTime || !selectedServiceId.length || isNaN(selectedLocationId) || isNaN(selectedEmployeeId)) {
       setErrorMessage('Missing necessary booking data or invalid ID format.');
       return;
     }
@@ -35,10 +35,10 @@ const PaymentForm = ({ onBack, onNext }) => {
     const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
     const url = `${API_HOST}/v1/bookings`;
 
-    const bookingData = {
+    const bookingData = { 
       bookingTime: selectedDateTime, 
       bookingNotes: fourStepBookingNotes,
-      serviceIds: serviceIds,
+      serviceIds: selectedServiceId,  // Sử dụng selectedServiceId từ localStorage
       locationId: selectedLocationId, 
       employeeId: selectedEmployeeId, 
     };
