@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import '../../styles/dashboard/Header-dashboard.css';
 
-const API_BASE_URL = 'http://localhost:3003/dashboard';
+const API_BASE_URL = 'http://localhost:3000/dashboard';
 
 const Header=()=>{
     const navigate = useNavigate();
@@ -56,10 +56,10 @@ const Header=()=>{
     return(
         <header className="header-dashboard">
             <h1 class="hello-dashboard">Hello <span className="fullName">{fullName}</span></h1>
-            <div className="search">
+            {/* <div className="search">
                 <input type="text" placeholder="Search" className="search-input"/>
                 <button type="submit" className="search-button">Search</button>
-            </div>
+            </div> */}
             <button className="btn_logout" onClick={handleLogout}> Logout </button>
         </header>
 

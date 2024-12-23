@@ -62,13 +62,13 @@
   tbody {
     text-align: left;
 }
-  .vnpay-label {
+  .payos-label {
     display: flex;
     align-items: center;
     gap: 8px;
   }
   
-  .vnpay-logo {
+  .payos-logo {
     height: 24px;
     width: auto;
   }

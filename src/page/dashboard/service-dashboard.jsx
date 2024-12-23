@@ -2,9 +2,43 @@ import React, { useState, useEffect } from 'react';
 import '../../styles/dashboard/Service-dashboard.css';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
+import { z } from 'zod';
 import DeletePopupConfirm from './deletePopupConfirm';
 
-const API_BASE_URL = 'http://localhost:3003/dashboard';
+const API_BASE_URL = 'http://localhost:3000/dashboard';
+
+const ServiceSchema = z.object({
+  serviceId: z.number().optional(),
+  name: z
+    .string("Service name is required.")
+    .min(2, "Service name must be at least 2 characters long.")
+    .max(100, "Service name must not exceed 100 characters."),
+  price: z
+    .number("Price is required.")
+    .min(0, "Price must be a positive number."),
+  descriptionShort: z
+    .string("Short description is required.")
+    .min(5, "Short description must be at least 5 characters long.")
+    .max(255, "Short description must not exceed 255 characters."),
+  description1: z
+    .string()
+    .min(0, "Detailed description (part 1) must be at least 0 characters.")
+    .max(1000, "Detailed description (part 1) must not exceed 1000 characters.")
+    .nullable()
+    .optional(),
+  imageDescription: z.string().optional(),
+  description2: z
+    .string()
+    .min(0, "Detailed description (part 2) must be at least 0 characters.")
+    .max(1000, "Detailed description (part 2) must not exceed 1000 characters.")
+    .nullable()
+    .optional(),
+  duration: z
+    .number("Duration is required.")
+    .min(1, "Duration must be at least 1 hour."),
+  categoryId: z.number("Category ID is required."),
+  promotionId: z.number().optional(),
+});
 
 const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, handleFileChange }) => {
   return (
@@ -174,68 +208,85 @@ const ServicePackage = () => {
       }
     } catch (error) {
       console.error('Error fetching services:', error.response ? error.response.data : error);
-      alert(error.response?.data?.message || 'Failed to fetch services');
+      // alert(error.response?.data?.message || 'Failed to fetch services');
     }
 };
 
 const createService = async () => {
-  const categoryId = Number(localStorage.getItem('selectedServiceId'));
+  const categoryId = Number(localStorage.getItem("selectedServiceId"));
+
+  // Validate the categoryId
   if (isNaN(categoryId) || categoryId <= 0) {
-    enqueueSnackbar("Invalid category ID. Please select a valid category.", { variant: 'error' });
+    enqueueSnackbar("Invalid category ID. Please select a valid category.", { variant: "error" });
     return;
   }
 
-  if (!formData.name.trim() || formData.price <= 0 || formData.duration <= 0 || !formData.descriptionShort.trim()) {
-    enqueueSnackbar("Please fill in all required fields with valid data.", { variant: 'error' });
+  // Validate required fields
+  if (
+    !formData.name?.trim() ||
+    isNaN(formData.price) ||
+    Number(formData.price) <= 0 ||
+    isNaN(formData.duration) ||
+    Number(formData.duration) <= 0 ||
+    !formData.descriptionShort?.trim()
+  ) {
+    enqueueSnackbar("Please fill in all required fields with valid data.", { variant: "error" });
     return;
   }
 
+  // Prepare FormData
   const formDataToSend = new FormData();
-  formDataToSend.append('name', formData.name.trim());
-  formDataToSend.append('price', Number(formData.price));
-  formDataToSend.append('descriptionShort', formData.descriptionShort.trim());
-  formDataToSend.append('duration', Number(formData.duration));
-  formDataToSend.append('description1', formData.description1?.trim() || '');
-  formDataToSend.append('description2', formData.description2?.trim() || '');
-  formDataToSend.append('categoryId', Number(categoryId)); 
+  formDataToSend.append("name", formData.name.trim());
+  formDataToSend.append("price", Number(formData.price));
+  formDataToSend.append("descriptionShort", formData.descriptionShort.trim());
+  formDataToSend.append("duration", Number(formData.duration));
+  formDataToSend.append("description1", formData.description1?.trim() || "");
+  formDataToSend.append("description2", formData.description2?.trim() || "");
+  formDataToSend.append("categoryId", categoryId);
 
   if (formData.imageDescription instanceof File) {
-    formDataToSend.append('image', formData.imageDescription); 
+    formDataToSend.append("image", formData.imageDescription); // Append the file if valid
   } else {
-    console.warn('No valid image file provided for image.');
+    console.warn("No valid image file provided for image.");
   }
 
+  // Log FormData entries for debugging
   for (let [key, value] of formDataToSend.entries()) {
-      console.log(key, value);
+    console.log(`${key}:`, value);
   }
 
-
-  const loadingSnackbar = enqueueSnackbar('Creating service... Please wait.', {
-    variant: 'info',
+  // Show a loading snackbar
+  const loadingSnackbar = enqueueSnackbar("Creating service... Please wait.", {
+    variant: "info",
     persist: true,
   });
 
   try {
+    // Make API request to create the service
     const response = await axios.post(`${API_BASE_URL}/services`, formDataToSend, {
       headers: {
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+        "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
       },
     });
 
+    // Handle success response
     if (response.status === 201) {
       closeSnackbar(loadingSnackbar);
-      enqueueSnackbar("Service created successfully!", { variant: 'success' });
+      enqueueSnackbar("Service created successfully!", { variant: "success" });
       handleCloseForm();
       fetchServices(categoryId);
     } else {
-      enqueueSnackbar("Failed to create service. Please try again.", { variant: 'error' });
+      closeSnackbar(loadingSnackbar);
+      enqueueSnackbar("Failed to create service. Please try again.", { variant: "error" });
     }
   } catch (error) {
+    // Handle error response
     closeSnackbar(loadingSnackbar);
-    console.error('Error creating service:', error.response?.data || error.message);
-    enqueueSnackbar(error.response?.data?.message || "Failed to create service.", { variant: 'error' });
+    console.error("Error creating service:", error.response?.data || error.message);
+    enqueueSnackbar(error.response?.data?.message || "Failed to create service.", { variant: "error" });
   }
 };
+
 const updateService = async () => {
 
   const categoryId = Number(localStorage.getItem('selectedServiceId'));
@@ -350,32 +401,57 @@ const deleteService = async (serviceID) => {
 const handleSubmit = async (e) => {
   e.preventDefault();
 
-  const formDataToSend = new FormData();
-  formDataToSend.append('name', formData.name);
-  formDataToSend.append('price', formData.price);
-  formDataToSend.append('descriptionShort', formData.descriptionShort);
-  formDataToSend.append('duration', formData.duration);
-  formDataToSend.append('description1', formData.description1);
-  formDataToSend.append('description2', formData.description2);
-  formDataToSend.append('categoryId', formData.categoryId);
-
-  if (formData.imageDescription) {
-    formDataToSend.append('image', formData.imageDescription);
-  }
-  for (let [key, value] of formDataToSend.entries()) {
-    console.log(key, value);
-  }
   try {
+    // Validate the preprocessed data
+    const validatedData = ServiceSchema.parse(formData);
+
+    // Prepare formData for submission
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", validatedData.name);
+    formDataToSend.append("price", validatedData.price);
+    formDataToSend.append("descriptionShort", validatedData.descriptionShort);
+    formDataToSend.append("duration", validatedData.duration);
+    if (validatedData.description1) {
+      formDataToSend.append("description1", validatedData.description1);
+    }
+    if (validatedData.description2) {
+      formDataToSend.append("description2", validatedData.description2);
+    }
+    formDataToSend.append("categoryId", validatedData.categoryId);
+    if (validatedData.imageDescription) {
+      formDataToSend.append("image", formData.imageDescription); // Append the file object
+    }
+    if (validatedData.promotionId !== undefined) {
+      formDataToSend.append("promotionId", validatedData.promotionId);
+    }
+
+    // Log formData entries
+    for (let [key, value] of formDataToSend.entries()) {
+      console.log(key, value);
+    }
+
+    // Submit data
     if (showEditForm) {
       await updateService(formDataToSend);
     } else {
       await createService(formDataToSend);
     }
+
+    enqueueSnackbar("Service submitted successfully!", { variant: "success" });
   } catch (error) {
-    console.error('Error submitting form:', error);
-    enqueueSnackbar("Error submitting the service form", { variant: 'error' });
+    if (error instanceof z.ZodError) {
+      // Handle validation errors
+      error.errors.forEach((err) => {
+        enqueueSnackbar(`${err.path[0]}: ${err.message}`, { variant: "error" });
+      });
+    } else {
+      console.error("Unexpected error:", error);
+      enqueueSnackbar("Unexpected error occurred.", { variant: "error" });
+    }
   }
 };
+
+
 const handleInputChange = (e) => {
   const { name, value } = e.target;
   setFormData((prevFormData) => ({

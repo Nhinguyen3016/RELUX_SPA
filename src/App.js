@@ -14,6 +14,7 @@ import BookNowPage from './page/giftcard/BookNowPage';
 import ThirdStep from './page/booking/components/ThirdStep';
 import FourStep from './page/booking/components/FourStep';
 import FiveStep from './page/booking/components/FiveStep';
+import FinalStep from './page/booking/components/FinalStep.jsx';
 
 // Team Our
 import TeamOurPage from './page/ourteam/OurTeamPage'; 
@@ -80,7 +81,7 @@ function App() {
               <Route path="/fivestep" element={<FiveStep />} />
               <Route path="/booknow" element={<BookNowPage />} />
               <Route path="/giftcard" element={<GiftCardPage />} />
-
+              <Route path="/final" element={<FinalStep />} />
               {/* Services routes */}
               <Route path="/services" element={<ServicesPage />} />
               <Route path="/services/body-treatments" element={<BodyTreatments />} />

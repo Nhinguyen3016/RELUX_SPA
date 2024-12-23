@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../styles/dashboard/booking-dashboard.css';
 
-const API_BASE_URL = 'http://localhost:3003/dashboard';
+const API_BASE_URL = 'http://localhost:3000/dashboard';
 
 const BookingStatistics = () => {
     const [statisticsBooking, setStatisticsBooking] = useState([]);

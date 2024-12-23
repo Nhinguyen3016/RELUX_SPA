@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../../styles/booking/component/FiveStep.css';
-import { FaExclamationTriangle } from 'react-icons/fa';  // Import biểu tượng cảnh báo
+import { FaExclamationTriangle } from 'react-icons/fa';
 
 const PaymentForm = ({ onBack, onNext }) => {
   const [paymentMethod, setPaymentMethod] = useState('onsite');

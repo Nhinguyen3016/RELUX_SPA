@@ -6,7 +6,7 @@ import '../../styles/dashboard/chart.css';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const API_BASE_URL = 'http://localhost:3003/dashboard';
+const API_BASE_URL = 'http://localhost:3000/dashboard';
 
 const BookingChart = () => {
     const [selectedYear, setSelectedYear] = useState(2024);

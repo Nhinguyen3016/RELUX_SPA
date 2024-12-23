@@ -19,7 +19,7 @@
     position: relative;
 }
 
-.stat-item .icon {
+.stat-item .icon-dashboard {
     position: absolute; 
     top: 20px;
     left: 20px; 

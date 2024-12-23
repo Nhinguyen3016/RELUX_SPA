@@ -4,7 +4,7 @@ import Select from 'react-select';
 import { useSnackbar } from 'notistack';
 import '../../styles/dashboard/accountList-dashboard.css';
 
-const API_BASE_URL = 'http://localhost:3003/dashboard';
+const API_BASE_URL = 'http://localhost:3000/dashboard';
 
 const RoleNameForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, roleName }) => {
     const roleOptions = roleName.map(role => ({
@@ -16,7 +16,7 @@ const RoleNameForm = ({ isEditing, formData, onSubmit, onClose, handleInputChang
         <div className="role-id-form-overlay">
             <div className="role-id-form-category">
                 <h2 className="role-id-form-title">
-                    {isEditing ? 'Edit Role ID' : ''}
+                    {isEditing ? 'Edit Role' : ''}
                 </h2>
                 <form onSubmit={onSubmit} className="role-id-form">
                     <div className="form-group">

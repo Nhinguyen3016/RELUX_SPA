@@ -7,7 +7,7 @@ import totalServicesIcon from '../../image/totalServices.png';
 import totalIcon from '../../image/onGoing.png';
 import BookingChart from './chart-dashboard';
 
-const API_BASE_URL = 'http://localhost:3003/dashboard';
+const API_BASE_URL = 'http://localhost:3000/dashboard';
 
 const DashboardMenu = () => {
     const [loading, setLoading] = useState(true);
@@ -60,32 +60,32 @@ const DashboardMenu = () => {
         <div className="dashboard">
             <div className="stats">
                 <div className="stat-item">
-                    <div className="icon">
+                    <div className="icon-dashboard">
                         <img src={totalBookingIcon} alt="Booking Icon" />
                     </div>
                     <span>Total Booking</span>
-                    <span>{data.totalBookings !== null ? data.totalBookings : 'No data available'}</span>
+                    <span>{data.totalBookings !== null ? data.totalBookings : '0'}</span>
                 </div>
                 <div className="stat-item">
-                    <div className="icon">
+                    <div className="icon-dashboard">
                         <img src={totalStaffIcon} alt="Staff Icon" />
                     </div>
                     <span>Staff</span>
-                    <span>{data.totalStaff !== null ? data.totalStaff : 'No data available'}</span>
+                    <span>{data.totalStaff !== null ? data.totalStaff : '0'}</span>
                 </div>
                 <div className="stat-item">
-                    <div className="icon">
+                    <div className="icon-dashboard">
                         <img src={totalServicesIcon} alt="Services Icon" />
                     </div>
                     <span>Total Services</span>
-                    <span>{data.totalServices !== null ? data.totalServices : 'No data available'}</span>
+                    <span>{data.totalServices !== null ? data.totalServices : '0'}</span>
                 </div>
                 <div className="stat-item">
-                    <div className="icon">
+                    <div className="icon-dashboard">
                         <img src={totalIcon} alt="Total Icon" />
                     </div>
                     <span>Revenue</span>
-                    <span>{data.total !== null ? data.total : 'No data available'}</span>
+                    <span>{data.total !== null ? data.total : '0'}</span>
                 </div>
             </div>
             <div className="booking-chart">

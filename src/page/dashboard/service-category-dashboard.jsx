@@ -5,13 +5,22 @@ import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { z } from 'zod';
 
-const API_BASE_URL = 'http://localhost:3003/dashboard';
+const API_BASE_URL = 'http://localhost:3000/dashboard';
 
-const serviceSchema = z.object({
+const ServiceCategorySchema = z.object({
   categoryID: z.number().optional(),
-  name: z.string().min(3, { message: 'Service name must have at least 3 characters.' }).nonempty({ message: 'Service name is required.' }),
-  descriptionShort: z.string().min(10, { message: 'Description must have at least 10 characters.' }).nonempty({ message: 'Description is required.' }),
-  typeService: z.string().nonempty({ message: 'TypeService is required.' }),
+  name: z
+    .string("Name is required.")
+    .min(2, "Name must be at least 2 characters long.")
+    .max(100, "Name must not exceed 100 characters."),
+  descriptionShort: z
+    .string("Short description is required.")
+    .min(10, "Short description must be at least 10 characters long.")
+    .max(255, "Short description must not exceed 255 characters."),
+  typeService: z
+    .string("Type of service is required.")
+    .min(2, "Type of service must be at least 2 characters long.")
+    .max(50, "Type of service must not exceed 50 characters."),
 });
 
 
@@ -73,6 +82,7 @@ const ServiceMenu = () => {
   const [services, setServices] = useState([]);
   const [showEditForm, setShowEditForm] = useState(false);
   const [formData, setFormData] = useState({
+    categoryID: null,
     name: '',
     descriptionShort: '',
     typeService: '',
@@ -95,54 +105,29 @@ const ServiceMenu = () => {
     }
   };
 
-  //   try {
-  //     console.log('Updating service with data:', formData);
-
-  //     if (isNaN(formData.categoryID)) {
-  //       alert('Invalid category ID');
-  //       return;
-  //     }
-
-  //     const response = await axios.put(`${API_BASE_URL}/servicecategory/${formData.categoryID}`, {
-  //       name: formData.name,
-  //       descriptionShort: formData.descriptionShort,
-  //       typeService: formData.typeService,
-  //     },{
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-  //       }
-  //     });
-  //     if (response.status === 200) {
-  //       await fetchServices();
-  //       handleCloseForm();
-  //       alert('Service updated successfully!');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error updating service:', error);
-  //     console.error('Response data:', error.response?.data);
-  //     alert(error.response?.data?.message || 'Failed to update service');
-  //   }
-  // };
   const updateService = async (validatedData) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/servicecategory/${validatedData.categoryID}`, validatedData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-        },
-      });
-  
+      const response = await axios.put(
+        `${API_BASE_URL}/servicecategory/${validatedData.categoryID}`,
+        validatedData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
       if (response.status === 200) {
         await fetchServices();
         handleCloseForm();
-        enqueueSnackbar('Service updated successfully!', { variant: 'success' });
+        enqueueSnackbar("Service updated successfully!", { variant: "success" });
       }
     } catch (error) {
-      console.error('Error updating service:', error);
-      enqueueSnackbar('Failed to update service.', { variant: 'error' });
+      console.error("Error updating service:", error);
+      enqueueSnackbar("Failed to update service.", { variant: "error" });
     }
   };
+
   
   
 
@@ -158,7 +143,7 @@ const ServiceMenu = () => {
     e.preventDefault();
   
     try {
-      const validatedData = serviceSchema.parse(formData);
+      const validatedData = ServiceCategorySchema.parse(formData);
   
       if (showEditForm) {
         await updateService(validatedData);
@@ -166,7 +151,7 @@ const ServiceMenu = () => {
     } catch (error) {
       if (error instanceof z.ZodError) {
         error.errors.forEach((err) => {
-          enqueueSnackbar(`${err.path[0]}: ${err.message}`, { variant: 'error' });
+          enqueueSnackbar(`${err.message}`, { variant: 'error' });
         });
       } else {
         console.error('Unexpected error:', error);

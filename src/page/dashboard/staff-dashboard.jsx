@@ -3,11 +3,12 @@ import axios from 'axios';
 import Select from 'react-select';
 import { format } from 'date-fns';
 import { useSnackbar } from 'notistack';
+import { z } from 'zod';
 import '../../styles/dashboard/staff-dashboard.css';
 import DeletePopupConfirm from './deletePopupConfirm';
 
 
-const API_BASE_URL = 'http://localhost:3003/dashboard';
+const API_BASE_URL = 'http://localhost:3000/dashboard';
 
 const StaffForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, handleFileChange, locationNames }) => {
   
@@ -52,6 +53,7 @@ const StaffForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, 
             <input
               type="text"
               name="phone"
+              placeholder="Enter phone"
               value={formData.phone}
               onChange={handleInputChange}
               required
@@ -63,6 +65,7 @@ const StaffForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, 
             <input
               type="text"
               name="email"
+              placeholder="Enter email"
               value={formData.email}
               onChange={handleInputChange}
               required
@@ -73,6 +76,7 @@ const StaffForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, 
             <input
               type="text"
               name="specialtyType"
+              placeholder="Enter specialty type"
               value={formData.specialtyType}
               onChange={handleInputChange}
               required
@@ -83,6 +87,7 @@ const StaffForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, 
             <input
               type="text"
               name="status"
+              placeholder="Enter status"
               value={formData.status}
               onChange={handleInputChange}
               required
@@ -94,6 +99,7 @@ const StaffForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, 
             <input
               type="date"
               name="hireDate"
+              placeholder="Enter hire date"
               value={formData.hireDate}
               onChange={handleInputChange}
               required
@@ -137,6 +143,20 @@ const StaffForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, 
   );
 };
 
+const EmployeeSchema = z.object({
+  EmployeeID: z.number().optional(),
+  Name: z.string().min(2, "Name must be at least 2 characters").max(255, "Name can't exceed 255 characters"),
+  Description: z.string().optional(),
+  Phone: z.string().max(20, "Phone number can't exceed 20 characters").optional(),
+  Email: z.string().email("Invalid email format").max(255, "Email can't exceed 255 characters").optional(),
+  SpecialtyType: z.string().optional(),
+  Status: z.string().optional(),
+  HireDate: z.string().optional(), // Ensure you handle this field properly based on format
+  Avatar: z.string().optional(),
+  LocationID: z.number().optional(),
+  LocationName: z.string().optional(), 
+});
+
 const StaffList = () => {
   const [employees, setEmployees] = useState([]);
   const [locationNames, setLocationNames] = useState([]);
@@ -169,7 +189,7 @@ const StaffList = () => {
       setEmployees(response.data.employees);
     }catch (error) {
       console.error('Error fetching employees:', error.response?.data || error);
-      alert('Failed to fetch employees');
+      // alert('Failed to fetch employees');
     }
   };
 
@@ -183,7 +203,7 @@ const StaffList = () => {
       setLocationNames(response.data.locationName);
     }catch (error) {
       console.error('Error fetching employees:', error.response?.data || error);
-      alert('Failed to fetch employees');
+      // alert('Failed to fetch employees');
     }
   };
   const createStaff = async () => {
@@ -329,38 +349,61 @@ const StaffList = () => {
     }
   };
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    const formDataToSend = new FormData();
-  formDataToSend.append('Name', formData.name.trim());
-  formDataToSend.append('Description', formData.description.trim());
-  formDataToSend.append('Phone', formData.phone.trim());
-  formDataToSend.append('Email', formData.email.trim());
-  formDataToSend.append('SpecialtyType', formData.specialtyType.trim());
-  formDataToSend.append('Status', formData.status.trim());
-  formDataToSend.append('LocationName', formData.locationName.trim()); 
-
-  if (formData.avatar instanceof File) {
-    formDataToSend.append('avatar', formData.avatar); 
-  } else {
-    console.warn('No valid image file provided for image.');
-  }
-
-  for (let [key, value] of formDataToSend.entries()) {
-      console.log(key, value);
-  }
     try {
+      // Validate the preprocessed formData using the Zod schema
+      const validatedData = EmployeeSchema.parse(formData); // Validate the form data against the schema
+  
+      // Prepare FormData for submission
+      const formDataToSend = new FormData();
+      
+      // Append validated data to the FormData
+      formDataToSend.append('Name', validatedData.Name.trim());
+      formDataToSend.append('Description', validatedData.Description?.trim() || ''); // Default to empty string if not provided
+      formDataToSend.append('Phone', validatedData.Phone?.trim() || '');
+      formDataToSend.append('Email', validatedData.Email?.trim() || '');
+      formDataToSend.append('SpecialtyType', validatedData.SpecialtyType?.trim() || '');
+      formDataToSend.append('Status', validatedData.Status?.trim() || '');
+      formDataToSend.append('LocationName', validatedData.LocationName?.trim() || ''); // Default to empty string if not provided
+  
+      // Check for avatar file and append it to FormData
+      if (formData.avatar instanceof File) {
+        formDataToSend.append('avatar', formData.avatar);
+      } else {
+        console.warn('No valid image file provided for avatar.');
+      }
+  
+      // Log FormData entries for debugging
+      for (let [key, value] of formDataToSend.entries()) {
+        console.log(key, value);
+      }
+  
+      // Submit data depending on whether it's an edit or create
       if (showEditForm) {
         await updateStaff(formDataToSend);
       } else {
         await createStaff(formDataToSend);
       }
+  
+      // Show success message on successful submission
+      enqueueSnackbar("Employee submitted successfully!", { variant: 'success' });
     } catch (error) {
-      console.error('Error submitting form:', error);
-      enqueueSnackbar("Error submitting the service form", { variant: 'error' });
+      // Handle Zod validation errors
+      if (error instanceof z.ZodError) {
+        error.errors.forEach((err) => {
+          enqueueSnackbar(`${err.path[0]}: ${err.message}`, { variant: "error" });
+        });
+      } else {
+        // Handle any unexpected errors
+        console.error("Unexpected error:", error);
+        enqueueSnackbar("Error submitting the employee form.", { variant: 'error' });
+      }
     }
   };
+  
 
   const handleEditClick = (employees) => {
     console.log(employees); // Kiểm tra dữ liệu từ API

@@ -3,6 +3,7 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import '../../../styles/booking/component/BookingCard.css';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 
 const BookingCard = ({ 
@@ -18,12 +19,14 @@ const BookingCard = ({
     const [selectedEmployee, setSelectedEmployee] = useState(null);
     const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
     const navigate = useNavigate();
+    const {enqueueSnackbar}= useSnackbar();
 
     useEffect(() => {
         // Check if the user is logged in
         const authToken = localStorage.getItem('authToken');
         if (!authToken) {
-            alert('You are not logged in yet');
+            // alert('You are not logged in yet');
+            enqueueSnackbar("You are not logged in yet",{variant: 'info'})
             navigate('/account');
             return;
         }
