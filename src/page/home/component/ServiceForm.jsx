@@ -12,6 +12,7 @@ const ServiceForm = ({ onSubmit }) => {
   const [allEmployees, setAllEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedService, setSelectedService] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -119,7 +120,7 @@ const ServiceForm = ({ onSubmit }) => {
         employee.location && employee.location.id === locationId
       );
       setFilteredEmployees(employeesInLocation);
-      
+
       if (!employeesInLocation.some(emp => emp.id.toString() === selectedEmployee)) {
         setSelectedEmployee("");
       }
@@ -127,6 +128,14 @@ const ServiceForm = ({ onSubmit }) => {
       setFilteredEmployees(allEmployees);
     }
   }, [selectedLocation, allEmployees, selectedEmployee]);
+
+  // Updated useEffect for saving selectedServiceId as an array
+  useEffect(() => {
+    if (selectedService) {
+      const serviceIds = [parseInt(selectedService, 10)]; // Wrap selectedService in an array
+      localStorage.setItem('selectedServiceId', JSON.stringify(serviceIds)); // Store it as an array
+    }
+  }, [selectedService]);
 
   const handleEmployeeChange = (e) => {
     const employeeId = e.target.value;
@@ -142,44 +151,39 @@ const ServiceForm = ({ onSubmit }) => {
     e.preventDefault();
     const formData = {
       serviceCategory: parseInt(e.target.serviceCategory.value, 10),
-      service: parseInt(e.target.service.value, 10),
+      service: parseInt(selectedService, 10),
       location: parseInt(selectedLocation, 10),
       employee: parseInt(selectedEmployee, 10),
     };
 
-    // Get selected service's price and promotionId
-    const selectedService = services.find(service => service.id === formData.service);
-    const price = selectedService ? selectedService.price : null;
-    const promotionId = selectedService ? selectedService.promotionId : null;
-    const serviceName = selectedService ? selectedService.name : null;  // Store service name
+    const selectedServiceObj = services.find(service => service.id === formData.service);
+    const price = selectedServiceObj ? selectedServiceObj.price : null;
+    const promotionId = selectedServiceObj ? selectedServiceObj.promotionId : null;
+    const serviceName = selectedServiceObj ? selectedServiceObj.name : null;
 
-    // Store serviceId and categoryId in localStorage as serviceIds
     const serviceIds = [formData.service, formData.serviceCategory];
     localStorage.setItem('serviceIds', JSON.stringify(serviceIds));
 
-    // Fetch promotion details if promotionId exists
     if (promotionId) {
       axios.get(`${API_HOST}/v1/promotions/${promotionId}`)
         .then((res) => {
           const discountPercentage = res.data.data ? parseFloat(res.data.data.discountPercentage) : 0;
 
-          // Store selected data in localStorage
           localStorage.setItem('selectedEmployeeId', formData.employee.toString());
           localStorage.setItem('selectedLocationId', formData.location.toString());
           if (price) localStorage.setItem('servicePrice', price);
           if (discountPercentage) localStorage.setItem('serviceDiscountPercentage', discountPercentage);
-          if (promotionId) localStorage.setItem('promotionId', promotionId);  // Store promotionId
-          if (serviceName) localStorage.setItem('serviceName', serviceName);  // Store service name
+          if (promotionId) localStorage.setItem('promotionId', promotionId);
+          if (serviceName) localStorage.setItem('serviceName', serviceName);
 
-          // Store employee and location details in localStorage
           const selectedEmployeeObj = allEmployees.find(emp => emp.id === formData.employee);
           const selectedLocationObj = allLocations.find(loc => loc.id === formData.location);
 
           if (selectedEmployeeObj) {
-            localStorage.setItem('employeeName', selectedEmployeeObj.name);  // Store employee name
+            localStorage.setItem('employeeName', selectedEmployeeObj.name);
           }
           if (selectedLocationObj) {
-            localStorage.setItem('locationAddress', selectedLocationObj.address);  // Store location address
+            localStorage.setItem('locationAddress', selectedLocationObj.address);
           }
 
           console.log('Submitting form data:', formData);
@@ -192,17 +196,16 @@ const ServiceForm = ({ onSubmit }) => {
     } else {
       console.log('No promotion for this service');
       localStorage.setItem('serviceDiscountPercentage', 0);
-      localStorage.setItem('serviceName', serviceName);  // Store service name
+      localStorage.setItem('serviceName', serviceName);
 
-      // Store employee and location details in localStorage
       const selectedEmployeeObj = allEmployees.find(emp => emp.id === formData.employee);
       const selectedLocationObj = allLocations.find(loc => loc.id === formData.location);
 
       if (selectedEmployeeObj) {
-        localStorage.setItem('employeeName', selectedEmployeeObj.name);  // Store employee name
+        localStorage.setItem('employeeName', selectedEmployeeObj.name);
       }
       if (selectedLocationObj) {
-        localStorage.setItem('locationAddress', selectedLocationObj.address);  // Store location address
+        localStorage.setItem('locationAddress', selectedLocationObj.address);
       }
 
       onSubmit(formData);
@@ -236,11 +239,13 @@ const ServiceForm = ({ onSubmit }) => {
       </select>
 
       <label htmlFor="service">Service</label>
-      <select 
-        id="service" 
-        name="service" 
+      <select
+        id="service"
+        name="service"
         required
         disabled={!selectedCategory}
+        value={selectedService}
+        onChange={(e) => setSelectedService(e.target.value)}
       >
         <option value="">- Select Service -</option>
         {services.map((service) => (
@@ -251,9 +256,9 @@ const ServiceForm = ({ onSubmit }) => {
       </select>
 
       <label htmlFor="employee">Employee</label>
-      <select 
-        id="employee" 
-        name="employee" 
+      <select
+        id="employee"
+        name="employee"
         required
         value={selectedEmployee}
         onChange={handleEmployeeChange}
@@ -267,9 +272,9 @@ const ServiceForm = ({ onSubmit }) => {
       </select>
 
       <label htmlFor="location">Location</label>
-      <select 
-        id="location" 
-        name="location" 
+      <select
+        id="location"
+        name="location"
         required
         value={selectedLocation}
         onChange={handleLocationChange}
