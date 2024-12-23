@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../../styles/dashboard/Sidebar-dashboard.css';
@@ -9,7 +8,8 @@ import servicesIcon from '../../image/Service.png';
 import giftCards from '../../image/giftCards.png';
 import schedulesIcon from '../../image/schedules.png';
 import accountListIcon from '../../image/accountList.png';
-// import feedbackIcon from '../../image/feedback.png';
+import staffIcon from '../../image/staff.png';
+import contactIcon from '../../image/contact.png';
 
 const Sidebar = () => {
   const pathName=useLocation().pathname;
@@ -46,10 +46,22 @@ const Sidebar = () => {
               Gift Cards
             </Link>
           </li>
-          <li className={(pathName=== '/Schedules')?'active' :''}>
-            <Link to="/Schedules">
+          <li className={(pathName=== '/schedules')?'active' :''}>
+            <Link to="/schedules">
               <img src={schedulesIcon} alt="icon schedules" className="icon" />
               Schedules
+            </Link>
+          </li>
+          <li className={(pathName=== '/staff')?'active' :''}>
+            <Link to="/staff">
+              <img src={staffIcon} alt="icon staff" className="icon" />
+              Staff
+            </Link>
+          </li>
+          <li className={(pathName=== '/contact')?'active' :''}>
+            <Link to="/contact">
+              <img src={contactIcon} alt="icon contact" className="icon" />
+              Contact
             </Link>
           </li>
           {userRole === "ADMIN" &&(

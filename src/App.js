@@ -42,7 +42,9 @@ import ServiceCategory from './page/dashboard/service-category-dashboard.jsx';
 import Service from './page/dashboard/service-dashboard.jsx';
 import Schedules from './page/dashboard/schedules-dashboard.jsx';
 import GiftCards from './page/dashboard/giftCards-dashboard.jsx';
+import Staff from './page/dashboard/staff-dashboard.jsx';
 import AccountList from './page/dashboard/accountList.jsx';
+import Contact from './page/dashboard/contact-dashboard.jsx';
 
 // Profile
 import ProfileUser from './page/account/account/ProfileUser';
@@ -54,7 +56,8 @@ function App() {
   return (
     <Router>
 
-      <SnackbarProvider anchorOrigin={{vertical: 'top', horizontal: 'right'}}>
+      <SnackbarProvider anchorOrigin={{vertical: 'top', horizontal: 'right'}} autoHideDuration={3000}>
+
         <div className="App">
           <Routes>
             {/* Main Routes */}
@@ -139,6 +142,24 @@ function App() {
                   </PrivateRoute>
                 }
               />
+
+              <Route 
+                path="/staff" 
+                element={
+                  <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                    <Staff />
+                  </PrivateRoute>
+                }
+              />
+              <Route 
+                path="/contact" 
+                element={
+                  <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
+                    <Contact />
+                  </PrivateRoute>
+                }
+              />
+
               <Route 
                 path="/accountlist" 
                 element={

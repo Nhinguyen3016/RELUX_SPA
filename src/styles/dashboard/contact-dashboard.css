@@ -1,0 +1,55 @@
+.contact-container-dashboard {
+  padding: 20px;
+  background-color: #f8f9fa;
+  font-family: Arial, sans-serif;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.contact-header-dashboard{
+  background-color: #D1DBE8;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.contact-header-dashboard h2 {
+  margin: 0;
+  font-size: 40px;
+  font-weight: bold;
+  color: #333;
+}
+
+.contact-table-dashboard {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: white;
+}
+
+.contact-table-dashboard th,
+.contact-table-dashboard td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  vertical-align: middle;
+  height: 50px;
+}
+
+.contact-table-dashboard th {
+  background-color: #D1DBE8;
+  font-size: 20px;
+  color: #000000;
+  font-weight: bold;
+}
+
+.contact-table-dashboard tbody tr {
+  transition: background-color 0.2s;
+}
+
+.contact-table-dashboard tbody tr:hover {
+  background-color: #D1DBE8;
+}

@@ -6,7 +6,7 @@ import DeletePopupConfirm from './deletePopupConfirm';
 
 const API_BASE_URL = 'http://localhost:3003/dashboard';
 
-const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange }) => {
+const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, handleFileChange }) => {
   return (
     <div className="service-form-overlays">
       <div className="service-forms-dashboard">
@@ -84,24 +84,13 @@ const ServiceForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange
           </div>
 
           <div className="form-groups">
-            <label>Image Main</label>
-            <input
-              type="text"
-              name="imageMain"
-              placeholder="Enter image main URL"
-              value={formData.imageMain}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="form-groups">
             <label>Image Description</label>
             <input
-              type="text"
+              type="file"
               name="imageDescription"
+              accept="image/*"
               placeholder="Enter image description"
-              value={formData.imageDescription}
-              onChange={handleInputChange}
+              onChange={handleFileChange}
             />
           </div>
 
@@ -130,11 +119,10 @@ const ServicePackage = () => {
     imageDescription: '',
     categoryId: 0,
     description1: '',
-    description2: '',
-    imageMain: ''
+    description2: ''
   });
 
-  const {enqueueSnackbar}= useSnackbar();
+  const {enqueueSnackbar, closeSnackbar}= useSnackbar();
 
   useEffect(() => {
     const selectedServiceId = localStorage.getItem('selectedServiceId');
@@ -176,8 +164,7 @@ const ServicePackage = () => {
           DescriptionShort: service.DescriptionShort,
           Description1: service.Description1,
           Description2: service.Description2,
-          ImageDescription: service.ImageDescription,
-          ImageMain: service.ImageMain
+          ImageDescription: service.ImageDescription
         }));
 
         console.log("Filtered services:", filteredServices);  // Debug để kiểm tra kết quả
@@ -191,52 +178,73 @@ const ServicePackage = () => {
     }
 };
 
-  
 const createService = async () => {
-  try {
-    const categoryId =Number(localStorage.getItem('selectedServiceId')) ; 
+  const categoryId = Number(localStorage.getItem('selectedServiceId'));
+  if (isNaN(categoryId) || categoryId <= 0) {
+    enqueueSnackbar("Invalid category ID. Please select a valid category.", { variant: 'error' });
+    return;
+  }
 
-    const response = await axios.post(`${API_BASE_URL}/services`, {
-      name: formData.name,
-      price: Number(formData.price),
-      descriptionShort: formData.descriptionShort,
-      duration: Number(formData.duration),
-      imageDescription: formData.imageDescription,
-      categoryId: categoryId,
-      description1: formData.description1,
-      description2: formData.description2,
-      imageMain: formData.imageMain
-    },{
+  if (!formData.name.trim() || formData.price <= 0 || formData.duration <= 0 || !formData.descriptionShort.trim()) {
+    enqueueSnackbar("Please fill in all required fields with valid data.", { variant: 'error' });
+    return;
+  }
+
+  const formDataToSend = new FormData();
+  formDataToSend.append('name', formData.name.trim());
+  formDataToSend.append('price', Number(formData.price));
+  formDataToSend.append('descriptionShort', formData.descriptionShort.trim());
+  formDataToSend.append('duration', Number(formData.duration));
+  formDataToSend.append('description1', formData.description1?.trim() || '');
+  formDataToSend.append('description2', formData.description2?.trim() || '');
+  formDataToSend.append('categoryId', Number(categoryId)); 
+
+  if (formData.imageDescription instanceof File) {
+    formDataToSend.append('image', formData.imageDescription); 
+  } else {
+    console.warn('No valid image file provided for image.');
+  }
+
+  for (let [key, value] of formDataToSend.entries()) {
+      console.log(key, value);
+  }
+
+
+  const loadingSnackbar = enqueueSnackbar('Creating service... Please wait.', {
+    variant: 'info',
+    persist: true,
+  });
+
+  try {
+    const response = await axios.post(`${API_BASE_URL}/services`, formDataToSend, {
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-      }
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+      },
     });
 
     if (response.status === 201) {
-      const selectedServiceId = localStorage.getItem('selectedServiceId');
-      if (selectedServiceId) {
-        const id = Number(selectedServiceId);
-        if (!isNaN(id) && id > 0) {
-          await fetchServices(id); // Gọi lại hàm fetchServices với ID hợp lệ
-        } else {
-          console.error('Invalid service ID after deletion:', selectedServiceId);
-        }
-      } else {
-        console.log('No service ID found in localStorage after deletion');
-      }
+      closeSnackbar(loadingSnackbar);
+      enqueueSnackbar("Service created successfully!", { variant: 'success' });
       handleCloseForm();
-      enqueueSnackbar("Service created successfully!", {variant: 'success'})
+      fetchServices(categoryId);
+    } else {
+      enqueueSnackbar("Failed to create service. Please try again.", { variant: 'error' });
     }
   } catch (error) {
-    console.error('Error creating service:', error);
-    enqueueSnackbar("Failed to create service", {variant: 'error'})
+    closeSnackbar(loadingSnackbar);
+    console.error('Error creating service:', error.response?.data || error.message);
+    enqueueSnackbar(error.response?.data?.message || "Failed to create service.", { variant: 'error' });
   }
 };
-
 const updateService = async () => {
-  
-  console.log("formData trước khi update:", formData);
+
+  const categoryId = Number(localStorage.getItem('selectedServiceId'));
+  console.log("categoryId from localStorage:", categoryId); 
+
+  if (isNaN(categoryId) || categoryId <= 0) {
+    alert("Invalid category ID. Please select a valid category.");
+    return;
+  }
 
   if (!formData.id) {
     alert("Service ID is missing. Please try again.");
@@ -249,33 +257,38 @@ const updateService = async () => {
     return;
   }
 
-  const categoryId = Number(localStorage.getItem('selectedServiceId'));
-  console.log("categoryId from localStorage:", categoryId); 
+  const formDataToSend = new FormData();
+  formDataToSend.append('name', formData.name.trim());
+  formDataToSend.append('price', Number(formData.price));
+  formDataToSend.append('descriptionShort', formData.descriptionShort.trim());
+  formDataToSend.append('duration', Number(formData.duration));
+  formDataToSend.append('description1', formData.description1?.trim() || '');
+  formDataToSend.append('description2', formData.description2?.trim() || '');
+  formDataToSend.append('categoryId', Number(categoryId)); 
 
-  if (isNaN(categoryId) || categoryId <= 0) {
-    alert("Invalid category ID. Please select a valid category.");
-    return;
+  if (formData.imageDescription instanceof File) {
+    formDataToSend.append('image', formData.imageDescription); 
+  } else {
+    console.warn('No valid image file provided for image.');
   }
 
+    // Hiển thị thông báo "loading"
+    const loadingSnackbar = enqueueSnackbar('Creating service... Please wait.', {
+      variant: 'info',
+      persist: true, // Thông báo không tự động đóng
+    });
+
   try {
-    const response = await axios.put(`${API_BASE_URL}/services/${formData.id}`, {
-      name: formData.name,
-      price: Number(formData.price),
-      descriptionShort: formData.descriptionShort,
-      duration: Number(formData.duration),
-      imageDescription: formData.imageDescription,
-      categoryId: categoryId, 
-      description1: formData.description1,
-      description2: formData.description2,
-      imageMain: formData.imageMain
-    }, {
+    const response = await axios.put(`${API_BASE_URL}/services/${formData.id}`, formDataToSend, {
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
     });
 
+    
+
     if (response.status === 200) {
+      closeSnackbar(loadingSnackbar);
       const selectedServiceId = localStorage.getItem('selectedServiceId');
       if (selectedServiceId) {
         const id = Number(selectedServiceId);
@@ -293,6 +306,7 @@ const updateService = async () => {
       enqueueSnackbar("Failed to update service. Please try again.", {variant: 'error'})
     }
   } catch (error) {
+    closeSnackbar(loadingSnackbar);
     console.error('Error updating service:', error);
     enqueueSnackbar("Failed to update service", {variant: 'error'})
   }
@@ -324,28 +338,44 @@ const deleteService = async (serviceID) => {
     }
   } catch (error) {
     console.error('Error deleting service:', error);
-    enqueueSnackbar("Failed to delete service", {variant: 'error'})
+    if (error.response && error.response.status === 500) {
+      enqueueSnackbar("This service is currently booked so cannot be deleted.", { variant: 'error' });
+    } else {
+      enqueueSnackbar("Failed to delete service.", { variant: 'error' });
+    }
   }
 };
 
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-  
-  console.log("formData trong handleSubmit:", formData); 
-  
-  if (showEditForm && !formData.id) {
-    alert("Mã dịch vụ bị thiếu. Vui lòng thử lại.");
-    return; 
+
+  const formDataToSend = new FormData();
+  formDataToSend.append('name', formData.name);
+  formDataToSend.append('price', formData.price);
+  formDataToSend.append('descriptionShort', formData.descriptionShort);
+  formDataToSend.append('duration', formData.duration);
+  formDataToSend.append('description1', formData.description1);
+  formDataToSend.append('description2', formData.description2);
+  formDataToSend.append('categoryId', formData.categoryId);
+
+  if (formData.imageDescription) {
+    formDataToSend.append('image', formData.imageDescription);
   }
-  
-  if (showEditForm) {
-    await updateService(); // Gọi cập nhật
-  } else {
-    await createService(); // Gọi tạo mới
+  for (let [key, value] of formDataToSend.entries()) {
+    console.log(key, value);
+  }
+  try {
+    if (showEditForm) {
+      await updateService(formDataToSend);
+    } else {
+      await createService(formDataToSend);
+    }
+  } catch (error) {
+    console.error('Error submitting form:', error);
+    enqueueSnackbar("Error submitting the service form", { variant: 'error' });
   }
 };
-
 const handleInputChange = (e) => {
   const { name, value } = e.target;
   setFormData((prevFormData) => ({
@@ -353,6 +383,17 @@ const handleInputChange = (e) => {
     [name]: value,
     id: prevFormData.id,
   }));
+};
+
+const handleFileChange = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+      console.log("file:", file);
+       setFormData({
+          ...formData,
+          imageDescription: file,
+        });
+    }
 };
 
 const handleEditClick = (service) => {
@@ -370,8 +411,7 @@ const handleEditClick = (service) => {
     imageDescription: service.ImageDescription || '',
     categoryId: service.CategoryID || 0,
     description1: service.Description1 || '',
-    description2: service.Description2 || '',
-    imageMain: service.ImageMain || ''
+    description2: service.Description2 || ''
   });
   
   console.log("Đối tượng dịch vụ để chỉnh sửa:", service);
@@ -386,10 +426,9 @@ const handleAddClick = () => {
   descriptionShort: '',
   duration: '',
   imageDescription: null,
-  categoryId: null,
-  description1: null,
-  description2: null,
-  imageMain: null
+  categoryId: '',
+  description1: '',
+  description2: ''
   });
   setShowAddForm(true);
   setShowEditForm(false);
@@ -468,6 +507,7 @@ const handleCloseForm = () => {
           onSubmit={handleSubmit}
           onClose={handleCloseForm}
           handleInputChange={handleInputChange}
+          handleFileChange={handleFileChange}
         />
       )}
       <DeletePopupConfirm

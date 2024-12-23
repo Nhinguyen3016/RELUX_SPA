@@ -2,11 +2,50 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import { useSnackbar } from 'notistack';
+import { z } from 'zod';
 import '../../styles/dashboard/listGiftCards.css';
 import DeletePopupConfirm from './deletePopupConfirm';
 
 
 const API_BASE_URL = 'http://localhost:3003/dashboard';
+
+// Lấy ngày hiện tại (format yyyy-mm-dd)
+const today = new Date().toISOString().split('T')[0];
+
+const giftCardSchema = z
+  .object({
+    promotionID: z.string().nullable(),
+    name: z.string().min(1, "Service name is required"),
+    description: z.string().min(1, "Description is required"),
+    discount: z
+      .number({ invalid_type_error: "Discount must be a number" })
+      .min(0, "Discount cannot be less than 0")
+      .max(100, "Discount cannot exceed 100"),
+    startDate: z.string().min(1, "Start date is required"),
+    endDate: z.string().min(1, "End date is required"),
+  })
+  .refine(
+    (data) => new Date(data.startDate) >= new Date(today),
+    {
+      message: "Start date cannot be earlier than today.",
+      path: ["startDate"],
+    }
+  )
+  .refine(
+    (data) => new Date(data.endDate) >= new Date(today),
+    {
+      message: "End date cannot be earlier than today.",
+      path: ["endDate"], 
+    }
+  )
+  .refine(
+    (data) => new Date(data.endDate) >= new Date(data.startDate),
+    {
+      message: "End date cannot be earlier than start date.",
+      path: ["endDate"], 
+    }
+  );
+
 
 const GiftCardsForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, services }) => {
   console.log('Form Data in SchedulesForm:', formData);
@@ -17,15 +56,15 @@ const GiftCardsForm = ({ isEditing, formData, onSubmit, onClose, handleInputChan
   }));
 
   return (
-    <div className="gift-card-form-overlay">
-      <div className="gift-card-form-category">
-        <h2 className="gift-card-form-title">
+    <div className="gift-card-form-overlay-dashboard">
+      <div className="gift-card-form-category-dashboard">
+        <h2 className="gift-card-form-title-dashboard">
           {isEditing ? 'Edit gift card' : 'Add New gift card'}
         </h2>
-        <button className="close-button-gift-card" onClick={onClose}>×</button>
-        <form onSubmit={onSubmit} className="schedules-add-from">
+        <button className="close-button-gift-card-dashboard" onClick={onClose}>×</button>
+        <form onSubmit={onSubmit} className="gift-card-add-from">
           <div className="form-group">
-            <label>Employee</label>
+            <label>Services</label>
             <Select
               name="name"
               value={servicesOptions.find(option => option.value === formData.name)}
@@ -244,23 +283,30 @@ const GiftCardsList = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Form Data being submitted:', formData);
-
-    if (!formData.name || !formData.description|| !formData.discount || !formData.startDate || !formData.endDate) {
-      alert('Please fill all required fields');
-      return;
-    }
-
+  
     try {
+      const validatedData = giftCardSchema.parse({
+        ...formData,
+        discount: Number(formData.discount), 
+      });
+  
       if (showEditForm) {
-        await updateGiftCards();
+        await updateGiftCards(validatedData);
       } else {
-        await createGiftCards();
+        await createGiftCards(validatedData);
       }
     } catch (error) {
-      console.error('Error handling gift card:', error);
-      alert(error.message || 'An error occurred');
+      if (error instanceof z.ZodError) {
+        error.errors.forEach((err) => {
+          enqueueSnackbar(`${err.path[0]}: ${err.message}`, { variant: 'error' });
+        });
+      } else {
+        console.error('Unexpected error:', error);
+        enqueueSnackbar(error.message || 'An unexpected error occurred', { variant: 'error' });
+      }
     }
   };
+
 
   const handleEditClick = (card) => {
     setFormData({
@@ -337,7 +383,7 @@ const GiftCardsList = () => {
             <th>Description</th>
             <th>Start Date</th>
             <th>End Date</th>
-            <th></th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>

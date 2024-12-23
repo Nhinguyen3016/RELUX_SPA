@@ -24,7 +24,7 @@ const BookingChart = () => {
             },
             title: {
                 display: true,
-                text: 'Statistics',
+                text: 'Static',
                 font: {
                     size: 18,
                     family: 'Arial, sans-serif', 

@@ -84,7 +84,7 @@ const DashboardMenu = () => {
                     <div className="icon">
                         <img src={totalIcon} alt="Total Icon" />
                     </div>
-                    <span>Total</span>
+                    <span>Revenue</span>
                     <span>{data.total !== null ? data.total : 'No data available'}</span>
                 </div>
             </div>
