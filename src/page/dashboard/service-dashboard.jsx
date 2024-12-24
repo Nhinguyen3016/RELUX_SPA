@@ -14,7 +14,7 @@ const ServiceSchema = z.object({
     .min(2, "Service name must be at least 2 characters long.")
     .max(100, "Service name must not exceed 100 characters."),
   price: z
-    .number("Price is required.")
+    .string("Price is required.")
     .min(0, "Price must be a positive number."),
   descriptionShort: z
     .string("Short description is required.")
@@ -26,7 +26,10 @@ const ServiceSchema = z.object({
     .max(1000, "Detailed description (part 1) must not exceed 1000 characters.")
     .nullable()
     .optional(),
-  imageDescription: z.string().optional(),
+  imageDescription: z
+    .instanceof(File)
+    .optional() // Nếu bạn muốn xử lý tệp, sử dụng `instanceof(File)` thay vì `string()`
+    .or(z.string().optional()), // Hoặc có thể là chuỗi nếu không phải tệp
   description2: z
     .string()
     .min(0, "Detailed description (part 2) must be at least 0 characters.")
@@ -34,9 +37,9 @@ const ServiceSchema = z.object({
     .nullable()
     .optional(),
   duration: z
-    .number("Duration is required.")
+    .string("Duration is required.")
     .min(1, "Duration must be at least 1 hour."),
-  categoryId: z.number("Category ID is required."),
+  categoryId: z.string("Category ID is required."),
   promotionId: z.number().optional(),
 });
 
@@ -442,6 +445,7 @@ const handleSubmit = async (e) => {
     if (error instanceof z.ZodError) {
       // Handle validation errors
       error.errors.forEach((err) => {
+        console.log("lỗi",`${err.path[0]}: ${err.message}`);
         enqueueSnackbar(`${err.path[0]}: ${err.message}`, { variant: "error" });
       });
     } else {
