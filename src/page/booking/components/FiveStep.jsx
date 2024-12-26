@@ -201,8 +201,6 @@ const PaymentForm = ({ onBack, onNext }) => {
     }
   }, []);
   
-  
-   
 
   return (
     <div className="payment-container">
