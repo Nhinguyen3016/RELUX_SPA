@@ -104,7 +104,7 @@ const BookingChart = () => {
         labels: labels,
         datasets: [
             {
-                label: 'Revenue',
+                label: 'Revenue ($)',
                 data: revenueData,
                 backgroundColor: 'rgba(255, 99, 132, 0.6)',
                 borderColor: 'rgba(255, 99, 132, 1)',

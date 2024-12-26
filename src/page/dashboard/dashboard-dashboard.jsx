@@ -85,7 +85,7 @@ const DashboardMenu = () => {
                         <img src={totalIcon} alt="Total Icon" />
                     </div>
                     <span>Revenue</span>
-                    <span>{data.total !== null ? data.total : '0'}</span>
+                    <span>${data.total !== null ? data.total : '0'}</span>
                 </div>
             </div>
             <div className="booking-chart">
