@@ -4,25 +4,26 @@ import '../../styles/mainlayout/Header.css';
 
 import logo from '../../images/Logo.png';
 import smallIcon from '../../images/dropdown.png';
-import defaultAvatar from '../../images/avatar_pf.jpg'; // Default avatar if API doesn't return one
+import defaultAvatar from '../../images/avatar_pf.jpg';
+import logout from '../../images/logout.png';
+import user from '../../images/user.png';
 
 const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:3000";
 
 const Header = () => {
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isPagesOpen, setIsPagesOpen] = useState(false);
-  const [userInfo, setUserInfo] = useState(null); // State for user info
-  const [selectedAvatar, setSelectedAvatar] = useState(null); // State for avatar preview
-  const [serviceLinks, setServiceLinks] = useState([]); // State to hold service links
+  const [userInfo, setUserInfo] = useState(null);
+  const [selectedAvatar, setSelectedAvatar] = useState(null);
+  const [serviceLinks, setServiceLinks] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate();
 
-  // Fetch user profile on component mount
   useEffect(() => {
     const fetchUserProfile = async () => {
       const token = localStorage.getItem('authToken');
-      if (!token) {
-        return; // Handle token error
-      }
+      if (!token) return;
 
       try {
         const response = await fetch(`${API_HOST}/v1/profile`, {
@@ -33,7 +34,7 @@ const Header = () => {
         const data = await response.json();
         if (data && data.data) {
           setUserInfo(data.data);
-          setSelectedAvatar(data.data.avatar || null); // Set avatar if available
+          setSelectedAvatar(data.data.avatar || null);
         }
       } catch (error) {
         console.error('Error fetching user profile:', error);
@@ -41,9 +42,8 @@ const Header = () => {
     };
 
     fetchUserProfile();
-  }, []); // Dependency array empty so it only runs once on mount
+  }, []);
 
-  // Fetch service categories and links dynamically
   useEffect(() => {
     const fetchServiceCategories = async () => {
       try {
@@ -65,10 +65,10 @@ const Header = () => {
         const data = await Promise.all(responses.map((response) => response.json()));
 
         const links = data.map((serviceData, index) => {
-          const categoryId = endpoints[index].split('/').pop(); // Get category ID from the endpoint
+          const categoryId = endpoints[index].split('/').pop();
           return {
             name: serviceData.data.name,
-            link: categoryPaths[categoryId] || `/services/${serviceData.data.slug || index + 1}`, // Fallback to slug or number
+            link: categoryPaths[categoryId] || `/services/${serviceData.data.slug || index + 1}`,
           };
         });
 
@@ -79,22 +79,63 @@ const Header = () => {
     };
 
     fetchServiceCategories();
-  }, []); // Fetch service categories on component mount
+  }, []);
 
-  const handleIconClick = () => {
-    navigate('/profile');
+  const handleIconClick = (e) => {
+    e.stopPropagation();
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+        navigate('/account');
+      }, 2000);
+      return;
+    }
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
-  // Dynamically update the avatar after a change in local storage
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setIsDropdownOpen(false);
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    navigate('/account');
+  };
+
   useEffect(() => {
     const storedAvatar = localStorage.getItem("avatar");
     if (storedAvatar) {
-      setSelectedAvatar(storedAvatar); // Update state when localStorage changes
+      setSelectedAvatar(storedAvatar);
     }
-  }, [selectedAvatar]); // Re-run when the avatar state changes
+  }, [selectedAvatar]);
 
   return (
     <header className="header">
+      {showAlert && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            backgroundColor: '#f8d7da',
+            color: '#721c24',
+            padding: '12px 20px',
+            borderRadius: '4px',
+            border: '1px solid #f5c6cb',
+            zIndex: 1000,
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+          }}
+        >
+          Please log in to access your profile
+        </div>
+      )}
       <div className="logo">
         <img src={logo} alt="ReLux Logo" />
         <h1>ReLux</h1>
@@ -141,15 +182,26 @@ const Header = () => {
           <li><Link to="/contacts">Contacts</Link></li>
         </ul>
       </nav>
-      <div className="icon">
-        <img 
-          src={selectedAvatar || (userInfo?.avatar ? `${API_HOST}/v1/images/${userInfo.avatar}` : defaultAvatar)} 
-          alt="User Avatar" 
-          width="24" 
-          height="24" 
-          onClick={handleIconClick}
-          style={{ cursor: 'pointer', borderRadius: '50%' }}
-        />
+      <div className="user-profile">
+        <div className="avatar-container" onClick={handleIconClick}>
+          <img 
+            src={selectedAvatar || (userInfo?.avatar ? `${API_HOST}/v1/images/${userInfo.avatar}` : defaultAvatar)} 
+            alt="User Avatar"
+            className="avatar-image"
+          />
+          {isDropdownOpen && localStorage.getItem('authToken') && (
+            <div className="profile-dropdown">
+              <Link to="/profile" className="dropdown-item">
+                <img src={user} alt="Profile" className="dropdown-icon" />
+                Profile
+              </Link>
+              <button onClick={handleLogout} className="dropdown-item">
+                <img src={logout} alt="Logout" className="dropdown-icon" />
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
