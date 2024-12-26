@@ -69,6 +69,7 @@
     display: flex; 
     list-style: none; 
     gap: 30px; 
+    font-weight: bold;
   } 
   
   .nav-links li { 

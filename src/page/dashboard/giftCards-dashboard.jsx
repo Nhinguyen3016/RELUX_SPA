@@ -7,7 +7,7 @@ import '../../styles/dashboard/listGiftCards.css';
 import DeletePopupConfirm from './deletePopupConfirm';
 
 
-const API_BASE_URL = 'http://localhost:3003/dashboard';
+const API_BASE_URL = 'http://localhost:3000/dashboard';
 
 // Lấy ngày hiện tại (format yyyy-mm-dd)
 const today = new Date().toISOString().split('T')[0];
@@ -160,7 +160,7 @@ const GiftCardsList = () => {
       setServices(response.data.service);
     } catch (error) {
       console.error('Error fetching services:', error);
-      alert('Failed to fetch services');
+      // alert('Failed to fetch services');
     }
   };
 
@@ -176,7 +176,7 @@ const GiftCardsList = () => {
       setGiftCards(response.data.giftCards);
     }catch (error) {
       console.error('Error fetching giftCards:', error.response?.data || error);
-      alert('Failed to fetch giftCards');
+      // alert('Failed to fetch giftCards');
     }
   };
 
@@ -268,7 +268,7 @@ const GiftCardsList = () => {
       }
     } catch (error) {
       console.error('Error deleting giftCards:', error);
-      alert(error.response?.data?.message || 'Failed to delete giftCards');
+      // alert(error.response?.data?.message || 'Failed to delete giftCards');
       enqueueSnackbar("Failed to delete gift cards", {variant: 'error'})
     }
   };

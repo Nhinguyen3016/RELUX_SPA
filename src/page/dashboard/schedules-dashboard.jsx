@@ -6,7 +6,7 @@ import { z } from 'zod';
 import '../../styles/dashboard/schedules-dashboard.css';
 import DeletePopupConfirm from './deletePopupConfirm';
 
-const API_BASE_URL = 'http://localhost:3003/dashboard';
+const API_BASE_URL = 'http://localhost:3000/dashboard';
 
 const schedulesSchema = z.object({
   name: z.string().nonempty('Employee name is required'),
@@ -147,7 +147,7 @@ const SchedulesMenu = () => {
       setSchedules(processedSchedules || []);
     } catch (error) {
       console.error('Error fetching schedules:', error.response?.data || error);
-      alert('Failed to fetch schedules list');
+      // alert('Failed to fetch schedules list');
     }
   };
 
@@ -161,7 +161,7 @@ const SchedulesMenu = () => {
       setEmployees(response.data.employees);
     } catch (error) {
       console.error('Error fetching employees:', error);
-      alert('Failed to fetch employees list');
+      // alert('Failed to fetch employees list');
     }
   };
 
@@ -196,7 +196,7 @@ const SchedulesMenu = () => {
         }
     } catch (error) {
         console.error('Error creating schedules:', error);
-        enqueueSnackbar("Failed to create schedules", {variant: 'error'})
+        enqueueSnackbar("This employee already has a work schedule assigned.", {variant: 'info'})
     }
   };
 
@@ -243,6 +243,7 @@ const SchedulesMenu = () => {
         if (response.status === 200) {
             await fetchStaff();
             enqueueSnackbar("Schedules deleted successfully!", {variant: 'success'})
+            setIsDeletePopupOpen(false);
         }
     } catch (error) {
         console.error('Error deleting schedules schedule:', error);
