@@ -38,11 +38,12 @@ const PaymentForm = ({ onBack, onNext }) => {
       setErrorMessage('Missing necessary booking data or invalid ID format.');
       setIsSubmitting(false);
       return;
-    }
+    }       
   
     const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
     const url = `${API_HOST}/v1/bookings`;
-  
+    const paymentUrl =`${API_HOST}/v1/payment/savepayment`; 
+
     const bookingData = { 
       bookingTime: selectedDateTime, 
       bookingNotes: fourStepBookingNotes,
@@ -50,7 +51,7 @@ const PaymentForm = ({ onBack, onNext }) => {
       locationId: selectedLocationId, 
       employeeId: selectedEmployeeId, 
     };
-  
+
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -60,14 +61,39 @@ const PaymentForm = ({ onBack, onNext }) => {
         },
         body: JSON.stringify(bookingData),
       });
+
       const responseData = await response.json();
       console.log('Booking Response:', responseData); 
 
       if (response.ok) {
         const bookingID = responseData.data;
         if (paymentMethod === 'onsite') {
-          setErrorMessage('');
-          onNext();
+           // Xử lý thanh toán cho phương thức "onsite"
+            const paymentData = {
+              bookingID: bookingID,
+              amount: finalTotalPrice,
+              paymentMethod: 'Onsite',
+              paymentStatus: 'Pending',
+            };
+
+            const paymentResponse = await fetch(paymentUrl, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${authToken}`,
+              },
+              body: JSON.stringify(paymentData),
+            });
+
+            const paymentResult = await paymentResponse.json();
+            console.log('Payment Response:', paymentResult);
+
+            if (paymentResponse.ok) {
+              setErrorMessage('');
+              onNext();
+            } else {
+              setErrorMessage('Failed to save payment. Please try again.');
+            }
         } else if (paymentMethod === 'payos') {
             await createPaymentLink(bookingID);
         }
@@ -107,7 +133,7 @@ const PaymentForm = ({ onBack, onNext }) => {
       const data = await response.json();
       const usdToVndRate = data.conversion_rates.VND;
   
-      // Chuyển đổi từ USD sang VND
+
       const vndAmount = usdAmount * usdToVndRate;
       return vndAmount;
     } catch (error) {
@@ -130,9 +156,10 @@ const PaymentForm = ({ onBack, onNext }) => {
       try {
         setLoading(true);
         const finalTotalPricePayOS = Math.round(await convertUsdToVnd(finalTotalPrice));
+        console.log("A",finalTotalPricePayOS);
 
-        if (finalTotalPricePayOS === null) {
-          setErrorMessage('Currency conversion is not possible. Please try again.');
+        if (isNaN(finalTotalPricePayOS) || finalTotalPricePayOS <= 0) {
+          setErrorMessage('Converted amount must be a positive integer.');
           setLoading(false);
           return;
         }
@@ -142,10 +169,10 @@ const PaymentForm = ({ onBack, onNext }) => {
         if (!serviceResponse.ok) {
           throw new Error(`Failed to fetch service with ID: ${selectedServiceId}`);
         }
-  
+        console.log('Service Response:', serviceResponse);
         const service = await serviceResponse.json();
-  
-    
+        console.log('Parsed Service:', service);
+        
         if (service.Name && service.Price) {
           items.push({
             name: service.Name,
@@ -153,7 +180,6 @@ const PaymentForm = ({ onBack, onNext }) => {
             price: service.Price,
           });
         }
-
 
         const paymentData = {
           amount: finalTotalPricePayOS,
@@ -192,7 +218,7 @@ const PaymentForm = ({ onBack, onNext }) => {
   
     // Nếu trạng thái thanh toán là 'CANCELLED' hoặc có tham số 'cancel=true'
     if (cancelStatus === 'true' || status === 'CANCELLED') {
-      window.location.replace('http://localhost:3001/service');  // Chuyển hướng về trang dịch vụ mà không giữ tham số
+      window.location.replace('http://localhost:3001/services');  // Chuyển hướng về trang dịch vụ mà không giữ tham số
     }
   
     // Nếu thanh toán thành công (PAID), có thể chuyển hướng khác nếu cần
