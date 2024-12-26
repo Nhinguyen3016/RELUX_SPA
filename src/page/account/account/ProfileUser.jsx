@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import profileImage from "../../../images/main_profile.jpg";
 import "../../../styles/account/account/ProfileUser.css";
 import defaultAvatar from "../../../images/avatar_pf.jpg";
@@ -13,7 +14,26 @@ const Profile = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedAvatar, setSelectedAvatar] = useState(null);
+  const [bookings, setBookings] = useState([]);
+  const [userId, setUserId] = useState(localStorage.getItem("userId"));
+  const [activeTab, setActiveTab] = useState("upcoming");
   const navigate = useNavigate();
+
+  const fetchEmployeeDetails = async (employeeId) => {
+    const token = localStorage.getItem("authToken");
+    try {
+      const response = await axios.get(
+        `${API_HOST}/v1/employees/${employeeId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      console.error(`Error fetching employee details: ${error}`);
+      return null;
+    }
+  };
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -33,7 +53,10 @@ const Profile = () => {
         );
 
         if (response.data && response.data.data) {
-          setUserInfo(response.data.data);
+          const user = response.data.data;
+          setUserInfo(user);
+          localStorage.setItem("userId", user.id);
+          setUserId(user.id);
         } else {
           setErrorMessage("Failed to fetch user profile.");
         }
@@ -46,20 +69,58 @@ const Profile = () => {
       }
     };
 
-    fetchUserProfile();
+    const fetchUserBookings = async () => {
+      const token = localStorage.getItem("authToken");
+      if (!token || !userId) {
+        setErrorMessage("Authentication token or user ID not found. Please login again.");
+        return;
+      }
 
-    // Retrieve avatar from localStorage if available
+      try {
+        const response = await axios.get(
+          `${API_HOST}/v1/bookings/user/${userId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        if (response.data && response.data.data) {
+          const bookingsWithDetails = await Promise.all(
+            response.data.data.map(async (booking) => {
+              const employeeDetail = await fetchEmployeeDetails(booking.employeeId);
+              return {
+                ...booking,
+                employeeDetail
+              };
+            })
+          );
+          setBookings(bookingsWithDetails);
+        } else {
+          setErrorMessage("Failed to fetch user bookings.");
+        }
+      } catch (error) {
+        setErrorMessage(
+          error.response?.data?.message || "An error occurred while fetching bookings."
+        );
+      }
+    };
+
+    fetchUserProfile();
+    if (userId) {
+      fetchUserBookings();
+    }
+
     const storedAvatar = localStorage.getItem("avatar");
     if (storedAvatar) {
       setSelectedAvatar(storedAvatar);
     }
-  }, []);
+  }, [userId]);
 
   const handleEditClick = () => setIsEditing(true);
   const handleCancelClick = () => setIsEditing(false);
 
   const handleUpdateClick = async (e) => {
-    e.preventDefault(); // Prevent page reload
+    e.preventDefault();
     const token = localStorage.getItem("authToken");
     if (!token) {
       setErrorMessage("Authentication token not found. Please login again.");
@@ -105,7 +166,6 @@ const Profile = () => {
 
     const avatarUrl = URL.createObjectURL(file);
     setSelectedAvatar(avatarUrl);
-
     localStorage.setItem("avatar", avatarUrl);
 
     const formData = new FormData();
@@ -138,6 +198,67 @@ const Profile = () => {
       });
   };
 
+  const getChartData = () => {
+    const bookingsByMonth = {};
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    bookings.forEach(booking => {
+      const date = new Date(booking.bookingTime);
+      const monthIndex = date.getMonth();
+      const monthName = monthNames[monthIndex];
+      const year = date.getFullYear().toString().substr(-2);
+      const key = `${monthName} ${year}`;
+      
+      if (!bookingsByMonth[key]) {
+        bookingsByMonth[key] = {
+          name: key,
+          count: 0,
+          revenue: 0
+        };
+      }
+      
+      bookingsByMonth[key].count += 1;
+      bookingsByMonth[key].revenue += booking.services.reduce(
+        (total, service) => total + parseFloat(service.price), 
+        0
+      );
+    });
+
+    return Object.values(bookingsByMonth)
+      .sort((a, b) => {
+        const [aMonth, aYear] = a.name.split(' ');
+        const [bMonth, bYear] = b.name.split(' ');
+        const aIndex = monthNames.indexOf(aMonth) + parseInt(aYear) * 12;
+        const bIndex = monthNames.indexOf(bMonth) + parseInt(bYear) * 12;
+        return aIndex - bIndex;
+      })
+      .slice(-6); // Show only last 6 months
+  };
+
+  const categorizeBookings = () => {
+    const currentTime = new Date();
+    const upcoming = [];
+    const ongoing = [];
+    const completed = [];
+
+    bookings.forEach((booking) => {
+      const bookingTime = new Date(booking.bookingTime);
+      const endTime = new Date(booking.endTime);
+
+      if (endTime < currentTime) {
+        completed.push(booking);
+      } else if (bookingTime <= currentTime && endTime >= currentTime) {
+        ongoing.push(booking);
+      } else {
+        upcoming.push(booking);
+      }
+    });
+
+    return { upcoming, ongoing, completed };
+  };
+
+  const { upcoming, ongoing, completed } = categorizeBookings();
+
   if (loading) {
     return <p>Loading profile...</p>;
   }
@@ -145,6 +266,52 @@ const Profile = () => {
   if (errorMessage) {
     return <p className="error-message">{errorMessage}</p>;
   }
+
+  const renderBookingTable = (bookings) => {
+    if (bookings.length === 0) {
+      return <p>No bookings found.</p>;
+    }
+    
+
+    return (
+      <table className="booking-history-table">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Service</th>
+            <th>Employee</th>
+            <th>Location</th>
+            <th>Booking Time</th>
+            <th>End Time</th>
+            <th>Price</th>
+            <th>Duration</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bookings.map((booking, index) => (
+            <tr key={booking.id}>
+              <td>{index + 1}</td>
+              <td>
+                {booking.services.map((service) => (
+                  <div key={service.id}>
+                    {service.name} <br />
+                  </div>
+                ))}
+              </td>
+              <td>{booking.employeeDetail?.name || 'Loading...'}</td>
+              <td>{booking.employeeDetail?.location?.locationName || 'Loading...'}</td>
+              <td>{new Date(booking.bookingTime).toLocaleString()}</td>
+              <td>{new Date(booking.endTime).toLocaleString()}</td>
+              <td>${booking.services.reduce((total, service) => total + parseFloat(service.price), 0).toFixed(2)}</td>
+              <td>{booking.services.reduce((total, service) => total + service.duration, 0)} minutes</td>
+              <td>{booking.bookingNotes}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
 
   return (
     <>
@@ -252,12 +419,101 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <div className="form-history-book">
-      <div className="history-book">
-      <div className="history-book-content">
+
+      <div className="booking-chart">
+        <h2 className="chart-title">Booking History</h2>
+        <div className="chart-container">
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart 
+              data={getChartData()} 
+              margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+            >
+              <CartesianGrid 
+                strokeDasharray="3 3" 
+                vertical={false} 
+                stroke="#e5e7eb"
+              />
+              <XAxis 
+                dataKey="name" 
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: '#6b7280', fontSize: 12 }}
+                dy={10}
+              />
+              <YAxis 
+                yAxisId="left"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: '#6b7280', fontSize: 12 }}
+                dx={-10}
+              />
+              <YAxis 
+                yAxisId="right"
+                orientation="right"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: '#6b7280', fontSize: 12 }}
+                dx={10}
+              />
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: '#fff',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '4px',
+                  padding: '10px'
+                }}
+              />
+              <Line 
+                yAxisId="left"
+                type="monotone" 
+                dataKey="count" 
+                stroke="#2563eb" 
+                strokeWidth={2}
+                dot={{ fill: '#fff', stroke: '#2563eb', strokeWidth: 2, r: 4 }}
+                activeDot={{ fill: '#2563eb', stroke: '#fff', strokeWidth: 2, r: 6 }}
+              />
+              <Line 
+                yAxisId="right"
+                type="monotone" 
+                dataKey="revenue" 
+                stroke="#10b981" 
+                strokeWidth={2}
+                dot={{ fill: '#fff', stroke: '#10b981', strokeWidth: 2, r: 4 }}
+                activeDot={{ fill: '#10b981', stroke: '#fff', strokeWidth: 2, r: 6 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </div>
+
+      <div className="booking-tabs">
+        <button
+          className={`tab-button ${activeTab === "upcoming" ? "active" : ""}`}
+          onClick={() => setActiveTab("upcoming")}
+        >
+          Upcoming
+        </button>
+        <button
+          className={`tab-button ${activeTab === "ongoing" ? "active" : ""}`}
+          onClick={() => setActiveTab("ongoing")}
+        >
+          Ongoing
+        </button>
+        <button
+          className={`tab-button ${activeTab === "completed" ? "active" : ""}`}
+          onClick={() => setActiveTab("completed")}
+        >
+          Completed
+        </button>
+      </div>
+
+      <div className="form-history-book">
+        <div className="history-book">
+          {activeTab === "upcoming" && renderBookingTable(upcoming)}
+          {activeTab === "ongoing" && renderBookingTable(ongoing)}
+          {activeTab === "completed" && renderBookingTable(completed)}
         </div>
-        </div>
+      </div>
     </>
   );
 };
