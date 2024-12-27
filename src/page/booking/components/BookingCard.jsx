@@ -20,7 +20,7 @@ const BookingCard = ({
     const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:3000';
     const navigate = useNavigate();
     const {enqueueSnackbar}= useSnackbar();
-
+    let schedules=[];
     useEffect(() => {
         // Check if the user is logged in
         const authToken = localStorage.getItem('authToken');
@@ -73,8 +73,10 @@ const BookingCard = ({
                 },
             });
 
-            const schedules = response.data?.data || [];
+            schedules = response.data?.data || [];
+            console.log( response.data);
             setWorkSchedules(schedules);
+           
             setFetchError(null); // Clear any previous errors
         } catch (error) {
             const errorMessage = error.response?.data?.message || error.message;
@@ -92,35 +94,48 @@ const BookingCard = ({
     };
 
     const getAvailableTimeSlots = () => {
+        console.log(schedules.data);
         if (!selectedDate || !workSchedules.length) return [];
         const formattedDate = selectedDate.toISOString().split('T')[0];
-        const daySchedules = workSchedules.filter(schedule => schedule.date === formattedDate);
-    
+        const daySchedules = workSchedules.filter(schedule=> schedule.date === formattedDate);
+        console.log(schedules);
         const availableSlots = new Set();
+
+        
+
         daySchedules.forEach(schedule => {
             const start = new Date(`2000-01-01T${schedule.startTime}:00`);
             const end = new Date(`2000-01-01T${schedule.endTime}:00`);
             let current = new Date(start);
-    
-            while (current <= end) {
-                availableSlots.add(convertTo12Hour(current.toTimeString().slice(0, 5)));
-                current.setMinutes(current.getMinutes() + 30);
+           while (current < end) {
+                availableSlots.add(convertTo12Hour(current.toTimeString().slice(0, 5)))
+              
+               current.setMinutes(current.getMinutes() + 30);
             }
         });
-    
+       console.log(availableSlots)
+    //console.log(timeSlots.filter(slot => availableSlots.has(slot)))
         return timeSlots.filter(slot => availableSlots.has(slot));
     };
 
     const timeSlots = [
-        "7:00 am", "7:30 am", "8:00 am", 
-        "8:30 am", "9:00 am", "9:30 am", 
-        "10:00 am", "10:30 am", "11:00 am", "11:30 am", 
-        "12:00 pm", "1:00 pm", "1:30 pm", "2:00 pm", 
-        "2:30 pm", "3:00 pm", "3:30 pm", "4:00 pm", 
-        "4:30 pm", "5:00 pm", "5:30 pm", "6:00 pm", 
-        "6:30 pm", "7:00 pm", "7:30 pm", "8:00 pm", 
-        "8:30 pm", "9:00 pm"
+        "7:00 am", "7:15 am", "7:30 am", "7:45 am", 
+        "8:00 am", "8:15 am", "8:30 am", "8:45 am", 
+        "9:00 am", "9:15 am", "9:30 am", "9:45 am", 
+        "10:00 am", "10:15 am", "10:30 am", "10:45 am", 
+        "11:00 am", "11:15 am", "11:30 am", "11:45 am", 
+        "12:00 pm", "12:15 pm", "12:30 pm", "12:45 pm", 
+        "1:00 pm", "1:15 pm", "1:30 pm", "1:45 pm", 
+        "2:00 pm", "2:15 pm", "2:30 pm", "2:45 pm", 
+        "3:00 pm", "3:15 pm", "3:30 pm", "3:45 pm", 
+        "4:00 pm", "4:15 pm", "4:30 pm", "4:45 pm", 
+        "5:00 pm", "5:15 pm", "5:30 pm", "5:45 pm", 
+        "6:00 pm", "6:15 pm", "6:30 pm", "6:45 pm", 
+        "7:00 pm", "7:15 pm", "7:30 pm", "7:45 pm", 
+        "8:00 pm", "8:15 pm", "8:30 pm", "8:45 pm", 
+        "9:00 pm", "9:15 pm", "9:30 pm", "9:45 pm"
     ];
+    
 
     const getNext7Days = (startDate) => {
         const dates = [];
@@ -177,7 +192,19 @@ const BookingCard = ({
                     inline
                     minDate={new Date()}
                     maxDate={next7Days[next7Days.length - 1]}
-                    dayClassName={date => workSchedules.some(schedule => schedule.date === date.toISOString().split('T')[0]) ? '' : 'unavailable-day'}
+                    
+                    daClassName={date => {
+                        console.log('Full date object:', date); // Lưu ý rằng `date` là đối tượng Date
+                        const isAvailable = workSchedules.some(schedule => {
+
+                            const formattedDate = date.toISOString().split('T')[0];
+                            //console.log(formattedDate)
+                            return schedule.date === formattedDate;
+                        });
+                    
+                        return isAvailable ? '' : 'unavailable-day';
+                    }}
+                
                 />
             </div>
 
