@@ -130,7 +130,6 @@ const StaffForm = ({ isEditing, formData, onSubmit, onClose, handleInputChange, 
               onChange={handleFileChange}
             />
           </div>
-
           <div className="form-actions">
             <button type="submit">
               {isEditing ? 'Update staff' : 'Add staff'}

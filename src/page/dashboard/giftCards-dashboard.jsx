@@ -14,7 +14,7 @@ const today = new Date().toISOString().split('T')[0];
 
 const giftCardSchema = z
   .object({
-    promotionID: z.string().nullable(),
+    promotionID: z.number().nullable(),
     name: z.string().min(1, "Service name is required"),
     description: z.string().min(1, "Description is required"),
     discount: z
@@ -212,9 +212,7 @@ const GiftCardsList = () => {
         throw new Error("All fields (promotionID, name, description, discount, startDate, endDate) are required.");
       }
 
-      // Kiểm tra giá trị discount hợp lệ (chuyển thành số)
-      const discountValue = parseInt(discount, 10);
-      if (isNaN(discountValue) || discountValue < 0 || discountValue > 100) { // Ensure discount is between 0 and 100
+      if (isNaN(discount) || discount < 0 || discount > 100) { // Ensure discount is between 0 and 100
           throw new Error('Discount value must be a number between 0 and 100.');
       }
 
@@ -223,7 +221,7 @@ const GiftCardsList = () => {
         promotionID, 
         name, 
         description, 
-        discount: discountValue, 
+        discount, 
         startDate, 
         endDate, 
       };
@@ -313,7 +311,7 @@ const GiftCardsList = () => {
       promotionID: card.PromotionID,
       name: card.ServiceName,
       description: card.Description,
-      discount: card.Discount * 100,
+      discount: card.Discount ,
       startDate: card.StartDate,
       endDate: card.EndDate
     });
@@ -381,8 +379,8 @@ const GiftCardsList = () => {
             <th>Services</th>
             <th>Discount</th>
             <th>Description</th>
-            <th>Start Date</th>
-            <th>End Date</th>
+            <th className='start'>Start Date</th>
+            <th className='end'>End Date</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -391,7 +389,7 @@ const GiftCardsList = () => {
           giftCards.map((item, index) => (
             <tr key={index}>
               <td>{item.ServiceName || 'N/A'}</td>
-              <td>{item.Discount || 'N/A'}</td>
+              <td className="discount">{item.Discount ? (item.Discount *100) : 0 || 'N/A'}%</td>
               <td>{item.Description || 'N/A'}</td>
               <td className="text">{item.StartDate || 'N/A'}</td>
               <td className="text">{item.EndDate || 'N/A'}</td>
