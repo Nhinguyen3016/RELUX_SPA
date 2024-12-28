@@ -61,6 +61,13 @@
   vertical-align: middle;
   height: 50px;
 }
+.gift-cards-table .text{
+  width: 113px;
+}
+.gift-cards-table .discount{
+  text-align: center;
+}
+
 
 .gift-cards-table th {
   background-color: #D1DBE8;
@@ -68,7 +75,6 @@
   color: #000000;
   font-weight: bold;
 }
-
 .gift-cards-table tbody tr {
   transition: background-color 0.2s;
 }

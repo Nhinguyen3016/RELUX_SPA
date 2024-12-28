@@ -49,7 +49,7 @@ const GiftCardsPage = () => {
             key={service.id}
             title={service.name}
             price={service.price}
-            oldPrice={service.discountPercentage ? (service.price / (1 - service.discountPercentage / 100)).toFixed(2) : null}
+            oldPrice={service.discountPercentage}
             image={service.imageMain}
             description1={service.description1}
             description2={service.description2}
