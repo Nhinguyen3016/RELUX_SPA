@@ -49,9 +49,14 @@ const LoginForm = () => {
       localStorage.setItem('Username', data.username);
 
 
-      if (response.data && response.data.data) {
-        const { accessToken, refreshToken, username } = response.data.data;
 
+      if (response.data && response.data.data) {
+        const { accessToken, refreshToken, username, employeeId  } = response.data.data;
+        console.log("Access Token:", accessToken);
+        if (employeeId) {
+          localStorage.setItem('employeesID', employeeId);
+          console.log("EmployeeID saved:", employeeId);
+        }
         // Log the username to check its value
         console.log("Username from response:", username);
 
@@ -77,6 +82,8 @@ const LoginForm = () => {
           navigate("/");  
         } else if (userRole === "ADMIN" || userRole === "MANAGER") {
           navigate("/dashboard"); 
+        }else if (userRole === "EMPLOYEES") {
+          navigate("/bookingemployees"); 
         }
 
         setSuccess("You have logged in successfully!");

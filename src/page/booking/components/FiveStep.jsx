@@ -155,6 +155,7 @@ const PaymentForm = ({ onBack, onNext }) => {
 
       try {
         setLoading(true);
+        
         const finalTotalPricePayOS = Math.round(await convertUsdToVnd(finalTotalPrice));
         console.log("A",finalTotalPricePayOS);
 
@@ -164,22 +165,30 @@ const PaymentForm = ({ onBack, onNext }) => {
           return;
         }
  
-        const serviceResponse = await fetch(`${API_HOST}/dashboard/services/nameprice/${selectedServiceId}`);
-        
+        const serviceResponse = await fetch(`${API_HOST}/dashboard/services/nameprice/${selectedServiceId[0]}`);
+    
         if (!serviceResponse.ok) {
-          throw new Error(`Failed to fetch service with ID: ${selectedServiceId}`);
+          throw new Error(`Failed to fetch service with ID: ${selectedServiceId[0]}`);
         }
-        console.log('Service Response:', serviceResponse);
-        const service = await serviceResponse.json();
+
+        const service = await serviceResponse.json(); // Lấy dữ liệu dịch vụ trả về
         console.log('Parsed Service:', service);
-        
-        if (service.Name && service.Price) {
+
+        const serviceData = service[0]; 
+
+        if (serviceData && serviceData.Name && serviceData.Price) {
+          const priceService = Math.round(await convertUsdToVnd(serviceData.Price));
           items.push({
-            name: service.Name,
+            name: serviceData.Name,
             quantity: 1,
-            price: service.Price,
+            price: parseFloat(priceService), // Đảm bảo giá là một số (parseFloat)
           });
+        } else {
+          setErrorMessage('Service data is incomplete.');
+          return;
         }
+
+        console.log('Items before sending payment data:', items);
 
         const paymentData = {
           amount: finalTotalPricePayOS,
@@ -201,7 +210,8 @@ const PaymentForm = ({ onBack, onNext }) => {
 
       if (response.ok) {
         const paymentResponse = await response.json();
-        window.location.href = paymentResponse.paymentUrl; 
+        window.location.href = paymentResponse.paymentUrl;
+
       } else {
         const errorData = await response.json();
         setErrorMessage(`Payment error: ${errorData.message}`);

@@ -14,7 +14,23 @@ const BookingStatistics = () => {
     // Fetch statistics
     const fetchStatisticsBooking = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/booking/count-booking`);
+            // Lấy employeesID từ localStorage
+            const employeesID = localStorage.getItem('employeesID');  // Giả sử bạn đã lưu 'employeesID' vào localStorage
+    
+            // Kiểm tra nếu employeesID tồn tại
+            if (!employeesID) {
+                console.error('EmployeeID is not found in localStorage');
+                return;  // Nếu không có employeesID, không thực hiện request
+            }
+    
+            // Gửi request với employeesID trong query params
+            const response = await axios.get(`${API_BASE_URL}/bookingE/count-booking-employees`, {
+                params: {
+                    employeesID: employeesID,  // Gửi employeesID làm tham số trong URL
+                },
+            });
+    
+            // Kiểm tra và xử lý kết quả trả về
             if (response.data && Array.isArray(response.data.serviceQuantities)) {
                 setStatisticsBooking(response.data.serviceQuantities);
             } else {
@@ -26,38 +42,87 @@ const BookingStatistics = () => {
             setStatisticsBooking([]);
         }
     };
+    
     // Fetch Pending Booking
     const fetchPendingBooking = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/booking/pending`);
+            // Lấy employeesID từ localStorage
+            const employeesID = localStorage.getItem('employeesID');
+            
+            if (!employeesID) {
+                console.error('EmployeeID is not found in localStorage');
+                return;
+            }
+    
+            // Gọi API với employeesID
+            const response = await axios.get(`${API_BASE_URL}/bookingE/pending-employees`, {
+                params: {
+                    employeesID: employeesID, // Truyền employeesID vào query params
+                }
+            });
+    
+            // Set dữ liệu vào state
             setPendingBooking(response.data.serviceBookingPending);
         } catch (error) {
             console.error('Error fetching pending booking:', error);
             setPendingBooking([]);
         }
     };
+    
 
     // Fetch InProgress Booking
     const fetchInProgressBooking = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/booking/inprogress`);
+            // Lấy employeesID từ localStorage
+            const employeesID = localStorage.getItem('employeesID');
+            
+            if (!employeesID) {
+                console.error('EmployeeID is not found in localStorage');
+                return;
+            }
+    
+            // Gọi API với employeesID
+            const response = await axios.get(`${API_BASE_URL}/bookingE/inprogress-employees`, {
+                params: {
+                    employeesID: employeesID, // Truyền employeesID vào query params
+                }
+            });
+    
+            // Set dữ liệu vào state
             setInProgressBooking(response.data.serviceBookingInProgress);
         } catch (error) {
             console.error('Error fetching in-progress booking:', error);
             setInProgressBooking([]);
         }
     };
+    
 
     // Fetch Completed Booking
     const fetchCompletedBooking = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/booking/completed`);
+            // Lấy employeesID từ localStorage
+            const employeesID = localStorage.getItem('employeesID');
+            
+            if (!employeesID) {
+                console.error('EmployeeID is not found in localStorage');
+                return;
+            }
+    
+            // Gọi API với employeesID
+            const response = await axios.get(`${API_BASE_URL}/bookingE/completed-employees`, {
+                params: {
+                    employeesID: employeesID, // Truyền employeesID vào query params
+                }
+            });
+    
+            // Set dữ liệu vào state
             setCompletedBooking(response.data.serviceBookingCompleted);
         } catch (error) {
             console.error('Error fetching completed booking:', error);
             setCompletedBooking([]);
         }
     };
+    
 
     useEffect(() => {
         fetchStatisticsBooking();
@@ -75,7 +140,6 @@ const BookingStatistics = () => {
                     data.map((item, index) => (
                         <div className="appointment-card" key={index}>
                             <h4>Client: {item.CustomerName}</h4>
-                            <p><span className="detail-label1">Employees:  </span>{item.EmployeesName}</p>
                             <p> <span className="detail-label1">Service: </span>{item.ServiceName}</p>
                             <p> <span className="detail-label1">Date: </span>{item.BookingDate}</p>
                             <p><span className="detail-label1">Time: </span>{item.BookingTime}</p>

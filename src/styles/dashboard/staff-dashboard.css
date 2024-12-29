@@ -61,6 +61,13 @@
     vertical-align: middle;
     height: 50px;
   }
+  .gift-cards-table .NameStaff {
+    padding: 12px 15px;
+    text-align: left;
+    vertical-align: middle;
+    height: 50px;
+    width: 165px;
+  }
   
   .gift-cards-table th {
     background-color: #D1DBE8;

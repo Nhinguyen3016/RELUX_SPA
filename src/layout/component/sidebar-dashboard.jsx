@@ -22,18 +22,31 @@ const Sidebar = () => {
       </Link>
       <nav>
         <ul  className="nav-links-sidebar">
+        {(userRole === 'ADMIN' || userRole === 'MANAGER') && (
           <li className={(pathName=== '/dashboard')?'active' :''}>
             <Link to="/dashboard" >
             <img src={dashboardIcon} alt="icon dashboard" className="icon" /> 
             Dashboard
             </Link>
           </li>
+        )}
+        {userRole === "EMPLOYEES" &&(
+        <li className={(pathName=== '/bookingemployees')?'active' :''}>
+            <Link to="/bookingemployees">
+              <img src={bookingIcon} alt="icon booking" className="icon" />
+              Booking
+            </Link>
+          </li>
+        )}
+          {(userRole === 'ADMIN' || userRole === 'MANAGER') && (
+            <>
           <li className={(pathName=== '/bookingdashboard')?'active' :''}>
             <Link to="/bookingdashboard">
               <img src={bookingIcon} alt="icon booking" className="icon" />
               Booking
             </Link>
           </li>
+          
           <li className={(pathName=== '/servicecategory') || (pathName=== '/servicecategory/service') ?'active' :''}>          
             <Link to="/servicecategory">
               <img src={servicesIcon} alt="icon services" className="icon" />
@@ -64,6 +77,8 @@ const Sidebar = () => {
               Contact
             </Link>
           </li>
+          </>
+          )}
           {userRole === "ADMIN" &&(
             <li className={(pathName=== '/accountlist')?'active' :''}>
             <Link to="/accountlist">
