@@ -56,7 +56,7 @@ const Home = ({ sectionRef }) => {
       <div className="help-container" >
         <div className="message">
           <span>Hello, Can I help you?</span>
-          {showChatbot && (<div className="chatbot-modal"><Chatbot /></div>)}
+          {showChatbot && (<Chatbot/>)}
         </div>
         <div className="icon-arrow-container">
           <div className="help-icon">

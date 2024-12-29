@@ -1,39 +1,29 @@
 import { useState, useEffect } from 'react';
 import '../../../styles/home/chatbot.css';
 import axios from 'axios';
-import { Link } from 'react-router-dom'; // Import Link
-
+import logo from '../../../images/Logo.png';
 
 
 function Chatbot() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const [stage, setStage] = useState('welcome'); // Theo dõi luồng hội thoại
+  const [stage, setStage] = useState('welcome');
+  const [isVisible, setIsVisible] = useState(true); // Trạng thái hiển thị chatbot
 
   useEffect(() => {
-    // Gửi tin nhắn chào mừng khi khởi động
     const welcomeMessage = {
       sender: 'bot',
-      text: 'Xin chào! Bạn muốn tôi hỗ trợ những gì?',
+      text: 'Hello! Welcome to Relux Spa. How can I help you today?',
     };
-      const Consultation = {
-        sender: 'bot',
-        text: 'Tư vấn khóa học',
-        clickable: true
-      };
-      const cost = {
-        sender: 'bot',
-        text: 'Giá cả khóa học',
-        clickable: true
+    const options = [
+      { sender: 'bot', text: '1.Make an appointment', clickable: true },
+      { sender: 'bot', text: '2.Learn about the service', clickable: true },
+      { sender: 'bot', text: '3.Ask about offers', clickable: true },
+      { sender: 'bot', text: '4.Special notes about Spa ', clickable: true },
+      { sender: 'bot', text: '5.Body condition advice', clickable: true },
+    ];
 
-      };
-      const recommendations = {
-        sender: 'bot',
-        text: 'Đề xuất khóa học',
-        clickable: true
-
-      };
-    setMessages([welcomeMessage,Consultation,cost,recommendations]);
+    setMessages([welcomeMessage, ...options]);
   }, []);
 
   const handleClickOption = (text) => {
@@ -55,16 +45,10 @@ function Chatbot() {
       case 'welcome':
         handleWelcomeOption(input);
         break;
-        case 'courseConsultation':
-          handleCourseConsultation(input);
-          break;
-        case 'courseRecommendation':
-          handleCourseRecommendation();
-          break;
-        case 'awaitingPriceInfo':
-          handleAwaitingPriceInfo(input);
-          break;
-        case 'end':
+      case 'Middle':
+        handleMiddle(input);
+        break;
+      case 'end':
         handleEnding(input);
         break;
       default:
@@ -72,80 +56,33 @@ function Chatbot() {
     }
   };
 
-  // Xử lý lựa chọn ban đầu
-  const changeStage = () => {
-    setMessages(prev => [...prev, { sender: 'bot', text: 'Bạn muốn tôi hỗ trợ thêm về tư vấn các khóa học, về giá cả hay đề xuất một vài khóa học' }]);
-    setStage('welcome');
-  };
-  const handleEnding = () =>{
-      setMessages(prev => [...prev, { sender: 'bot', text: 'Rất vui vì đã giúp đỡ được bạn một phần nào! Cảm ơn bạn đã sử dụng hệ thống!' }]);
-  }
   const handleWelcomeOption = (input) => {
     const lowerInput = input.toLowerCase();
-    // Kiểm tra nếu lowerInput chứa bất kỳ cụm từ nào trong options
-    
-    if (lowerInput) {
-      
-      if (lowerInput.includes('tư vấn')) {
-        setMessages(prev => [...prev, { sender: 'bot', text: 'Bạn đã làm trắc nghiệm khảo sát để xem mình thuộc lĩnh vực phù hợp nào chưa? Nếu bạn có chuyên ngành mình yêu thích rồi thì hãy cho tớ biết nhé!' }]);
-        setStage('courseConsultation');
-      } else if (lowerInput.includes('giá')) {
-        setMessages(prev => [...prev, { sender: 'bot', text: 'Vui lòng cho tôi biết lĩnh vực và khoảng giá mà bạn quan tâm (ví dụ: lĩnh vực Nghệ Thuật từ 2000000 đến 5000000 ).' }]);
-        setStage('awaitingPriceInfo');
-      } else if (lowerInput.includes('đề xuất')) {
-        handleCourseRecommendation();
-      } 
-       else if (lowerInput.includes('cảm ơn')||lowerInput.includes('thanks')) {
-          handleEnding();
-      }
-      else {
-        setMessages(prev => [...prev, { sender: 'bot', text: 'Xin lỗi, bạn có thể nhập lại được không' }]);
-      }
+    if ((lowerInput.includes('appointment'))) {
+      handleGetschedule();
+    } else if (lowerInput.includes('service')) {
+      handleService();
+      setStage('Middle')
     }
-    else {
-      const errorMessage = { sender: 'bot', text: 'Đã xảy ra lỗi nhập liệu' };
-      setMessages(prev => [...prev, errorMessage]);
+    else if (lowerInput.includes('offers')) {
+      handleOffers();
     }
-};
-// hàm in ra khóa học mỗi tin nhắn là 1 khóa học dùng vòng for
-const displayCourses = (courses, formatCourseText) => {
-  
-  
-  courses.forEach((course, index) => {
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          sender: 'bot',
-          text: formatCourseText(course) // Sử dụng hàm định dạng văn bản
-        }
-      ]);
-    }, index * 1000); // 1000ms delay for each message
-  });
-  
-  setTimeout(() => {
-    setMessages((prev) => [
-      ...prev,
-      { 
-        sender: 'bot', 
-        text: 'Trên đây là những khóa học mà chúng tôi có thể gửi đến bạn!' 
-      }
-    ]);
-    changeStage();
-  }, courses.length * 1000); // delay based on the number of courses
-};
-
-  // Tư vấn khóa học
-  
-const [awaitingCourseName, setAwaitingCourseName] = useState(false);
-
-const handleCourseConsultation = async (input) => {
-    const lowerInput = input.toLowerCase(); // Chuyển input về chữ thường để dễ so sánh
-  
-    // Xử lý khi người dùng nhập "chưa"
-    if (lowerInput.includes('chưa')) {
-      setMessages(prev => [...prev, { sender: 'bot', text: 'Bạn hãy nhấn vào link dưới đây để làm thử bài test nhằm hiểu rõ hơn về lĩnh vực phù hợp nhé! ' }]);
-      
+    else if (lowerInput.includes('notes')) {
+      handleNotes();
+    }
+    else if (lowerInput.includes('advice')) {
+      setMessages(prev => [...prev, { sender: 'bot', text: 'Can you tell me about your current physical condition?' }]);
+      setStage('Middle')
+    }
+    else if (lowerInput.includes('goodbye') || lowerInput.includes('thanks') || lowerInput.includes('ok')) {
+      handleEnding();
+    } else {
+      setMessages(prev => [...prev, { sender: 'bot', text: 'Sorry, can you re-enter?' }]);
+    }
+  };
+  // hiện link đặt lịch 
+  const handleGetschedule = async () => {
+    try {
       setMessages(prev => [
         ...prev,
         {
@@ -155,287 +92,159 @@ const handleCourseConsultation = async (input) => {
               <span role="gridcell">
                 <a
                   className="link-servey"
-                  href="http://localhost:5173/servey"
+                  href="http://localhost:"
                   target="_blank"
-                  rel="noopener noreferrer" // Added for security
                 >
-                  http://localhost:5173/servey
+                  http://localhost:
                 </a>
               </span>
             </div>
           ),
         },
       ]);
-      
-      setMessages(prev => [...prev, { sender: 'bot', text: 'Giờ bạn hãy nhập vào khóa học mà hệ thống đã đề xuất nhé!' }]);
-      
-      setAwaitingCourseName(true);
-      
-    } 
-    else if (lowerInput.includes('rồi') || lowerInput.includes('xong')|| lowerInput.includes('mới')) {
-        setMessages(prev => [...prev, { sender: 'bot', text: 'Bạn thuộc lĩnh vực nào nhỉ? Vui lòng nhập tên khóa học bạn quan tâm.' }]);
-        
-        // Đặt biến cờ để chờ người dùng nhập tên khóa học
-        setAwaitingCourseName(true);
-    } 
-    else if (awaitingCourseName) {
-        await sendMessageToBot(input);
-        // setAwaitingCourseName(false);
-      } 
-    else {
-        setMessages(prev => [...prev, { sender: 'bot', text: 'Xin lỗi, bạn đã làm bài test chưa? Hãy trả lời "chưa" hoặc "rồi" để tớ hỗ trợ bạn nhé!' }]);
+    } catch (error) {
+      console.error('Error getting schedule link');
     }
-};
+  };
+  //call Api
+  const handleMiddle = async (input) => {
+    const lowwerInput = input.toLowerCase();
 
-const handleInputFields = async (input) => {
-  try {
-    const fieldName = input.toLowerCase().trim(); // Chuyển input sang chữ thường và loại bỏ khoảng trắng thừa
-    const response = await axios.get('http://localhost:5000/chatbot/getfield');
-    const dataField = response.data.Fields; // Giả sử `Fields` là mảng chứa tên lĩnh vực trong dữ liệu trả về
-    let matchedField = null; // Khởi tạo biến để lưu trữ kết quả nếu tìm thấy
-    for (let field of dataField) {
-      // Kiểm tra xem fieldName có chứa tên field không
-      if (fieldName.includes(field.field_name.toLowerCase())) {
-          matchedField = field;
+    if (lowwerInput.includes('thanks') || lowwerInput.includes('good') || lowwerInput.includes('thank')) {
+      setMessages(prev => [...prev, { sender: 'bot', text: 'Do you want me to hepl you any option?' }]);
+      setStage('welcome')
+    }
+    else {
+      try {
+        const response = await axios.post('http://127.0.0.1:5000/chat', {
+          message: input,
+        });
+
+        const answer = response.data?.response || "No suitable answer found.";
+        setMessages(prev => [...prev, { sender: 'bot', text: answer }]);
+      } catch (error) {
+        console.error('Error fetching data from API:', error);
+        setMessages(prev => [...prev, { sender: 'bot', text: 'An error occurred while calling the API. Please try again later.' }]);
       }
     }
-  return matchedField.field_name
-  }
-  catch{
-    console.log("error");
-    
-  }
-}
-  const sendMessageToBot = async (input) => {
-    try {
 
-        // Call the API with the user's input
-        const fieldName = await handleInputFields(input);
-        const response = await axios.post('http://localhost:5000/chatbot/GetCourse', {
-          fieldName: fieldName,
-        });
-        // Check if the response contains a courses array
-        if (response.data.courses && response.data.courses.length > 0) {
-            const matchedCourse = response.data.courses;            
-            if (matchedCourse) {
-              const defaultFormatCourseText = (course) => {
-                return (
-                  <div className='courseChat'> <Link to={`/course/${course.course_id}`} className="course-link">
-                    <h1>Khóa học:{course.course_name}</h1>
-                    <h1>Lĩnh vực: {course.field_name}</h1>
-                    <h1>Mô tả: {course.course_short_description}</h1>
-                    <h1>Giá: {course.course_price}VNĐ </h1>
-                    </Link>
-                  </div>);
-              };
-              displayCourses(matchedCourse,defaultFormatCourseText);
-            }
-            
-            else {
-                console.log('Không tìm thấy khóa học phù hợp với tên đã nhập.');
-                setMessages(prev => [...prev, { sender: 'bot', text: 'Không tìm thấy khóa học phù hợp với tên đã nhập.' }]);
-            }
-          
-
-        } 
-        else {
-            console.log(response.data.message || 'Không có khóa học nào.');
-            setMessages(prev => [...prev, { sender: 'bot', text: response.data.message || 'Xin lỗi tôi không tìm thấy khóa học như trên.' }]);
-        }
-    } catch (error) {
-        console.error('Lỗi khi gọi API:', error);
-        setMessages(prev => [...prev, { sender: 'bot', text: 'Có lỗi xảy ra khi kết nối với hệ thống.' }]);
-    }
-};
-
-
-  // Xử lý giá cả khóa học
-  const handleAwaitingPriceInfo = async (input) => {
-    // Tìm khoảng giá từ input và chuyển đổi sang dạng số
-    const prices = input.match(/\d+/g)?.map(Number);
-    const [lowPrice, highPrice] = prices.sort((a, b) => a - b); // Sắp xếp từ nhỏ đến lớn
-        const matchedField = await handleInputFields(input);
-        if (matchedField) {
-          if (prices && prices.length === 2) {
-            try {
-              const response = await axios.post('http://localhost:5000/chatbot/PrizeRange', {
-                fieldName: matchedField,
-                minPrize: lowPrice,
-                maxPrize: highPrice
-              });
-              const matchedCourses = response.data.courses;
-              if (matchedCourses && matchedCourses.length >0) {
-                if (matchedCourses) {
-                  const defaultFormatCourseText = (course) => {
-                    return (
-                      <div className='courseChat'> <Link to={`/course/${course.course_id}`} className="course-link">
-                        <h1>Khóa học: {course.course_name}</h1>
-                        <h1>Mô tả: {course.course_short_description}</h1>
-                        <h1>Giá: {course.course_price}VNĐ </h1>
-                        </Link>
-                      </div>);
-                  }
-                  displayCourses(matchedCourses,defaultFormatCourseText);
-                }
-                else {
-                  setMessages(prev => [...prev, { sender: 'bot', text: 'Xin lỗi, khóa học ' }]);
-
-                }
-              }
-              else {
-                setMessages(prev => [...prev, { sender: 'bot', text: 'Xin lỗi, không tìm thấy khóa học nào phù hợp với mức giá trên! vui lòng thử lại.' }]);
-              }
-            }
-             catch (error) {
-              console.error('Error fetching courses by price range:', error);
-              setMessages(prev => [...prev, { sender: 'bot', text: 'Đã xảy ra lỗi khi lấy thông tin khóa học. Vui lòng thử lại sau.' }]);
-             changeStage();
-            }
-          }
-          else if (prices && prices.length === 1) {
-            const prize = prices[0];
-            if (input.includes('trên')){
-              try {
-                // Gửi yêu cầu POST với minPrize và maxPrize tới API /Prize 
-                const response = await axios.post('http://localhost:5000/chatbot/PrizeRange', {
-                fieldName: matchedField.field_name,
-                minPrize:prize
-                });
-          
-                const matchedCourses = response.data.courses;
-          
-                if (matchedCourses) {
-                  const defaultFormatCourseText = (course) => {
-                    return (
-                      <div className='courseChat'> <Link to={`/course/${course.course_id}`} className="course-link">
-                        <h1>Khóa học: {course.course_name}</h1>
-                        <h1>Mô tả: {course.course_short_description}</h1>
-                        <h1>Giá: {course.course_price}VNĐ </h1>
-                        </Link>
-                      </div>
-                    );
-                  }
-                  displayCourses(matchedCourses,defaultFormatCourseText);
-                } else {
-                  setMessages(prev => [...prev, { sender: 'bot', text: 'Xin lỗi, không tìm thấy khóa học nào phù hợp với mức giá trên! vui lòng thử lại' }]);
-                }
-              } 
-              catch (error) {
-                console.error('Error fetching courses by price:', error);
-                setMessages(prev => [...prev, { sender: 'bot', text: 'Đã xảy ra lỗi khi lấy thông tin khóa học. Vui lòng thử lại sau.' }]);
-              }
-            }
-            else{
-              try {
-                // Gửi yêu cầu POST với minPrize và maxPrize tới API /Prize 
-                const response = await axios.post('http://localhost:5000/chatbot/PrizeRange', {
-                fieldName: matchedField.field_name,
-                maxPrize:prize
-                });
-          
-                const matchedCourses = response.data.courses;
-          
-                if (matchedCourses) {
-                  const defaultFormatCourseText = (course) => {
-                    return (
-                      <div className='courseChat'> <Link to={`/course/${course.course_id}`} className="course-link">
-                        <h1>Khóa học: {course.course_name}</h1>
-                        <h1>Mô tả: {course.course_short_description}</h1>
-                        <h1>Giá: {course.course_price}VNĐ </h1>
-                        </Link>
-                      </div>);
-                  }
-                  displayCourses(matchedCourses,defaultFormatCourseText);
-                } else {
-                  setMessages(prev => [...prev, { sender: 'bot', text: 'Xin lỗi, không tìm thấy khóa học nào phù hợp trên '}]);
-                }
-              } 
-              catch (error) {
-                console.error('Error fetching courses by price:', error);
-                setMessages(prev => [...prev, { sender: 'bot', text: 'Đã xảy ra lỗi khi lấy thông tin khóa học. Vui lòng thử lại sau.' }]);
-              }
-            }     
-          }
-          else {
-            setMessages(prev => [...prev, { sender: 'bot', text: 'Vui lòng cung cấp khoảng giá rõ ràng hơn để tôi có thể tìm khóa học phù hợp.' }]);
-            setStage('awaitingPriceInfo');
-          }
-        }
-        else{
-          try {
-            // Gửi yêu cầu POST với minPrize và maxPrize tới API /Prize 
-            const response = await axios.post('http://localhost:5000/chatbot/PrizeOnly', {
-            maxPrize:highPrice,
-            minPrize:lowPrice
-            });
-            const matchedCourses = response.data.courses;
-            console.log('matchedCourses:', matchedCourses);
-            
-            if (matchedCourses.length > 0) {
-            setMessages(prev => [...prev, { sender: 'bot', text: 'Tôi không tìm thấy thông tin khóa học nào phù hợp nhưng dưới đây là gợi ý một số khóa học đáp ứng khoảng giá mà bạn chọn' }]);
-              const defaultFormatCourseText = (course) => {
-                return (
-                  <div className='courseChat'> <Link to={`/course/${course.course_id}`} className="course-link">
-                        <h1>Khóa học: {course.course_name}</h1>
-                        <h1>Mô tả: {course.course_short_description}</h1>
-                        <h1>Giá: {course.course_price}VNĐ </h1>
-                        </Link>
-                      </div>);
-              }
-              displayCourses(matchedCourses,defaultFormatCourseText);
-            } else {
-              setMessages(prev => [...prev, { sender: 'bot', text: 'Xin lỗi, không tìm thấy khóa học nào phù hợp trên '}]);
-            }
-          } 
-          catch (error) {
-            console.error('Error fetching courses by price:', error);
-            setMessages(prev => [...prev, { sender: 'bot', text: 'Đã xảy ra lỗi khi lấy thông tin khóa học. Vui lòng thử lại sau.' }]);
-          }
-        }
   };
-  
-
-  // Đề xuất khóa học
-  const handleCourseRecommendation = async () => {
+  //hàm gọi dịch vụ
+  const handleService = async (input) => {
     try {
-      const response = await axios.get('http://localhost:5000/chatbot/Recomment');
-      const matchedCourses = response.data.courses;
-    
-          if (matchedCourses) {
-            setMessages(prev => [...prev, { sender: 'bot', text: 'Dưới đây là gợi ý một số khóa học có nhiều người đăng kí nhất' }]);
-            const defaultFormatCourseText = (course) => {
-              return (
-                <div className='courseChat'> <Link to={`/course/${course.course_id}`} className="course-link">
-                  <h1>Khóa học: {course.course_name}</h1>
-                  <h1>Mô tả: {course.course_short_description}</h1>
-                  <h1>Giá: {course.course_price}$ </h1>
-                  <h1>Thời Lượng: {course.course_duration} </h1>
-                  <h1>Số Thành Viên: {course.enrollment_count}  </h1>
-                  </Link>
-                </div>);
-            }
-            displayCourses(matchedCourses,defaultFormatCourseText);
-          } else {
-            setMessages(prev => [...prev, { sender: 'bot', text: 'Không tìm thấy khóa học'}]);
-          }
+      setMessages(prev => [
+        ...prev,
+        {
+          sender: 'bot',
+          text: (
+            <div className="offers">
+              <p>1.Mandila Full Care</p>
+              <p>2.Body Detoxing Care</p>
+              <p>3.Warm Stone Massage</p>
+              <p>4.Aromatherapy Massage</p>
+              <p>5.Thai Massage Stretch</p>
+              <p>6.Back & Neck Massage</p>
+              <p>7.Foot Massage</p>
+              <p>8.Head Massage</p>
+              <p>9.Green Tea Body Scrub</p>
+              <p>10.Coffee Body Scrub</p>
+              <p>11.Manicure & Pedicure</p>
+              <p>12.Steam Bath</p>
+            </div>
+          ),
+        },
+      ]);
     } catch (error) {
-      console.error('Error fetching courses:', error);
-      setMessages(prev => [...prev, { sender: 'bot', text: 'Đã xảy ra lỗi khi lấy thông tin khóa học. Vui lòng thử lại sau.' }]);
+      setMessages(prev => [...prev, { sender: 'bot', text: 'An error occurred. Please try again later.' }]);
+    }
+  };
+  //hàm gọi ưu đãi
+  const handleOffers = async (input) => {
+    try {
+      setMessages(prev => [
+        ...prev,
+        {
+          sender: 'bot',
+          text: (
+            <div className="offers">
+              <p>1.Mandila Full Care: Book a session for two and get a 15% discount.</p>
+              <p>2.Body Detoxing Care: Receive a free consultation for bookings over 900,000 VND.</p>
+              <p>3.Warm Stone Massage: Book a session for two and get a 15% discoun.</p>
+              <p>4.Aromatherapy Massage: Get a free bottle of essential oil for bookings over 700,000 VND.</p>
+              <p>5.Thai Massage Stretch: Enjoy a complimentary herbal tea after the session.</p>
+              <p>6.Back & Neck Massage: Book 3 sessions and get the 4th session free.</p>
+              <p>7.Foot Massage: Get a 10% discount for bookings made before 6 PM.</p>
+              <p>8.Head Massage: Book with another massage service and get 20% off the Head Massage.</p>
+              <p>9.Green Tea Body Scrub: Get a free mini green tea face mask for every session.</p>
+              <p>10.Coffee Body Scrub: Book any two treatments and receive a 10% discount.</p>
+              <p>11.Manicure & Pedicure: Book a group appointment (3+ people) and get 20% off each session.</p>
+              <p>12.Steam Bath: Combine with any other therapy and get 50% off the Steam Bath session.</p>
+            </div>
+          ),
+        },
+      ]);
+    } catch (error) {
+      setMessages(prev => [...prev, { sender: 'bot', text: 'An error occurred. Please try again later.' }]);
+    }
+  };
+  //hàm gọi dịch vụ
+  const handleNotes = async (input) => {
+    try {
+      setMessages(prev => [
+        ...prev,
+        {
+          sender: 'bot',
+          text: (
+            <div className="notes">
+              <p>Here are some special notes about our Spa services: </p>
+              <p>1.Book your appointment in advance: Please book your appointment at least 1 day in advance to ensure the best preparation for your session.</p>
+              <p>2.Arrive on time: Please arrive on time or 10 minutes earlier to prepare and fully enjoy your spa session.</p>
+              <p>3.Allergies to products: If you have any allergies to essential oils or products used during treatments, please inform our staff before starting the session.</p>
+              <p>4.Schedule and service changes: If you need to change your schedule or service, please notify us at least 24 hours in advance.</p>
+              <p>5.Privacy and safety: All customer personal information will be kept strictly confidential and will not be shared with third parties.</p>
+              <p>6.Services for all age groups: Some treatments may not be suitable for children or pregnant women. Please ask our staff if you need more details before booking.</p>
+              <p>7.Disclose your health condition: If you have any health concerns, chronic illnesses, or are in an unstable health condition, inform our staff before starting your treatment.</p>
+            </div>
+          ),
+        },
+      ]);
+    } catch (error) {
+      setMessages(prev => [...prev, { sender: 'bot', text: 'An error occurred. Please try again later.' }]);
     }
   };
 
+  const handleEnding = () => {
+    setMessages(prev => [...prev, { sender: 'bot', text: 'Glad to have been of any help! Thanks for using the system!' }]);
+  };
 
- 
+  const toggleVisibility = () => {
+    setIsVisible(prev => !prev); // Ẩn hoặc hiện chatbot
+  };
 
-
+  if (!isVisible) {
+    return null; // Không hiển thị gì khi ẩn chatbot
+  }
 
   return (
     <div className="chatbot-container">
+      {/* Nút X để tắt chatbot */}
+      <div className="chatbot-header">
+        <div className="chatbot-logo">
+          <img className="chatbot-icon" src={logo} alt="" />
+          <h3 className="chatbot-title">Relux</h3>
+        </div>
+        <button className="close-button" onClick={toggleVisibility}>
+          &#10005;
+        </button>
+      </div>
+
       <div className="chatbot-messages">
         {messages.map((msg, index) => (
-          <div key={index} className={`message ${msg.sender}`}
-          onClick={() => msg.clickable && handleClickOption(msg.text)} // Nếu clickable, cho phép click
-            style={{ cursor: msg.clickable ? 'pointer' : 'default' }} // Thay đổi con trỏ nếu có thể click
+          <div
+            key={index}
+            className={`message ${msg.sender}`}
+            onClick={() => msg.clickable && handleClickOption(msg.text)}
+            style={{ cursor: msg.clickable ? 'pointer' : 'default' }}
           >
             {msg.text}
           </div>
