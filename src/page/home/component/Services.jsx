@@ -45,7 +45,7 @@ const Services = () => {
         return '💆‍♂️';
       case 'Body Care':
         return '👣';
-      case 'wellness':
+      case 'Wellness':
         return '🌿';
       case 'Beauty':
         return '💅';
@@ -57,7 +57,7 @@ const Services = () => {
   const handleServiceClick = (typeService) => {
     let path = '/services';
     switch (typeService) {
-      case 'wellness':
+      case 'Wellness':
         path += '/body-treatments';
         break;
       case 'Relaxation':
