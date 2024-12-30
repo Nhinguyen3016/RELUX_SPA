@@ -504,7 +504,7 @@ const StaffList = () => {
           {employees.length > 0 ?(
           employees.map((item, index) => (
             <tr key={index}>
-              <td>{item.Name || 'N/A'}</td>
+              <td className='NameStaff'>{item.Name || 'N/A'}</td>
               <td>{item.Phone || 'N/A'}</td>
               <td>{item.Email || 'N/A'}</td>
               <td>{item.Description || 'N/A'}</td>

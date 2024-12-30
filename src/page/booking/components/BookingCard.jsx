@@ -107,6 +107,7 @@ const BookingCard = ({
             const start = new Date(`2000-01-01T${schedule.startTime}:00`);
             const end = new Date(`2000-01-01T${schedule.endTime}:00`);
             let current = new Date(start);
+            
            while (current < end) {
                 availableSlots.add(convertTo12Hour(current.toTimeString().slice(0, 5)))
               

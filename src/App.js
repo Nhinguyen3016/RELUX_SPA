@@ -39,6 +39,7 @@ import SpaPrograms from './page/services/component/SpaPrograms';
 // Dashboard
 import Dashboard from './page/dashboard/dashboard-dashboard.jsx';
 import Booking from './page/dashboard/booking-dashboard.jsx';
+import BookingEmployees from './page/dashboard/booking-dashboard-employees.jsx';
 import ServiceCategory from './page/dashboard/service-category-dashboard.jsx';
 import Service from './page/dashboard/service-dashboard.jsx';
 import Schedules from './page/dashboard/schedules-dashboard.jsx';
@@ -109,6 +110,14 @@ function App() {
                 element={
                   <PrivateRoute allowedRoles={['ADMIN', 'MANAGER']}>
                     <Booking />
+                  </PrivateRoute>
+                }
+              />
+              <Route 
+                path="/bookingemployees" 
+                element={
+                  <PrivateRoute allowedRoles={['EMPLOYEES']}>
+                    <BookingEmployees />
                   </PrivateRoute>
                 }
               />

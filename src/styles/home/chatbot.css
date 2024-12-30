@@ -157,11 +157,11 @@ align-items: center;
 }
 
 /* Nút X để ẩn chatbot */
-.close-button {
+.close-button-chatbox {
   border: none;
   background: none;
   font-size: 20px;
-  color: #fff;
+  color: #000000;
   cursor: pointer;
 }
 

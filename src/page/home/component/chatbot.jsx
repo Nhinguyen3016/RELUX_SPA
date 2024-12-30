@@ -99,10 +99,10 @@ function Chatbot() {
               <span role="gridcell">
                 <a
                   className="link-servey"
-                  href="http://localhost:"
+                  href="http://localhost:3001"
                   target="_blank"
                 >
-                  http://localhost:
+                  Relux
                 </a>
               </span>
             </div>
@@ -174,6 +174,7 @@ function Chatbot() {
           sender: 'bot',
           text: (
             <div className="offers">
+
               <p>Customers using any service package 3 times will receive the above offer.</p>
               <p>1.Mandila Full Care: Book a session for two and get a 15% discount.</p>
               <p>2.Body Detoxing Care: Receive a free consultation for bookings over 36$.</p>
@@ -241,7 +242,7 @@ function Chatbot() {
           <img className="chatbot-icon" src={logo} alt="" />
           <h3 className="chatbot-title">Relux</h3>
         </div>
-        <button className="close-button" onClick={toggleVisibility}>
+        <button className="close-button-chatbox" onClick={toggleVisibility}>
           &#10005;
         </button>
       </div>
