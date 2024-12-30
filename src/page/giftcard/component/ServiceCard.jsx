@@ -6,6 +6,7 @@ const ServiceCard = ({
   title, 
   price, 
   oldPrice, 
+  discountPercentage, 
   image, 
   description1, 
   description2, 
@@ -21,6 +22,7 @@ const ServiceCard = ({
         name: title,
         price: price,
         oldPrice: oldPrice,
+        discountPercentage: discountPercentage,
         description1: description1,
         description2: description2,
         imageDescription: imageDescription,
@@ -37,11 +39,10 @@ const ServiceCard = ({
           <span className="current-price-g">{price}$</span>
           {oldPrice && <span className="old-price-g">{oldPrice}$</span>}
         </div>
+        {/* Removed the discount section */}
         <div className="service-image-g">
           <img src={image} alt={title} />
         </div>
-
-       
       </div>
 
       <button className="book-button-g" onClick={handleBooking}>

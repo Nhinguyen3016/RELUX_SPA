@@ -1,3 +1,4 @@
+// GiftCardsPage.js
 import React, { useState, useEffect } from 'react';
 import ServiceCard from './component/ServiceCard';
 import '../../styles/giftcard/GiftCardPage.css';
@@ -15,7 +16,21 @@ const GiftCardsPage = () => {
     const fetchServices = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_HOST || 'http://localhost:3000'}/v1/services/promotion`);
-        setServices(response.data.data); // Assuming the API response is in the format `{ data: [...] }`
+        const servicesWithDiscount = response.data.data.map(service => {
+          const discountPercentage = service.promotion?.discountPercentage || 0;
+          // Calculating the discount amount
+          const discountAmount = parseFloat(((service.price * (discountPercentage / 100))).toFixed(2)); // Discount amount
+          // Calculating the discounted price
+          const discountedPrice = parseFloat((service.price - discountAmount).toFixed(2)); // Price after discount
+
+          return {
+            ...service,
+            discountPercentage, // Percentage of discount
+            discountAmount, // Discount amount
+            discountedPrice, // Price after discount
+          };
+        });
+        setServices(servicesWithDiscount);
       } catch (error) {
         console.error('Error fetching services:', error);
       }
@@ -48,8 +63,10 @@ const GiftCardsPage = () => {
           <ServiceCard
             key={service.id}
             title={service.name}
-            price={service.price}
-            oldPrice={service.discountPercentage}
+            price={service.discountedPrice} // Display the discounted price
+            oldPrice={service.price} // Display the original price
+            discountPercentage={service.discountPercentage} // Display the discount percentage
+            discountAmount={service.discountAmount} // Display the discount amount
             image={service.imageMain}
             description1={service.description1}
             description2={service.description2}

@@ -36,18 +36,22 @@
 .price-tag-g {
   margin-bottom: 15px;
   text-align: left;
+  display: flex;
+  flex-direction: column; /* Sắp xếp theo cột (dọc) */
 }
 
 .current-price-g {
   font-size: 24px;
   color: #fff;
   margin-right: 10px;
+  font-weight: bold; 
 }
 
 .old-price-g {
   font-size: 20px;
-  color: rgba(255, 255, 255, 0.6);
-  text-decoration: line-through; 
+  color: rgba(255, 255, 255, 0.6); 
+  text-decoration: line-through;
+  margin-top: 4px; 
 }
 
 /* Image Styling */
@@ -64,10 +68,10 @@
 .service-image-g img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ensures the image covers the circular space without distortion */
+  object-fit: cover; 
 }
 
-/* Button Styling */
+
 .book-button-g {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -80,13 +84,13 @@
 }
 
 .book-button-g:hover {
-  background: rgba(255, 255, 255, 0.1); /* Button hover effect */
+  background: rgba(255, 255, 255, 0.1); 
 }
 
 /* Responsive Design */
 @media (max-width: 992px) {
   .services-grid-g {
-    grid-template-columns: repeat(2, 1fr); /* Two columns on medium screens */
+    grid-template-columns: repeat(2, 1fr); 
   }
 }
 
