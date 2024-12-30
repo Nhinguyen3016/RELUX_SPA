@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import '../../../styles/home/chatbot.css';
 import axios from 'axios';
 import logo from '../../../images/Logo.png';
@@ -9,6 +9,13 @@ function Chatbot() {
   const [input, setInput] = useState('');
   const [stage, setStage] = useState('welcome');
   const [isVisible, setIsVisible] = useState(true); // Trạng thái hiển thị chatbot
+
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    // Cuộn xuống cuối mỗi khi `messages` thay đổi
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   useEffect(() => {
     const welcomeMessage = {
@@ -74,7 +81,7 @@ function Chatbot() {
       setMessages(prev => [...prev, { sender: 'bot', text: 'Can you tell me about your current physical condition?' }]);
       setStage('Middle')
     }
-    else if (lowerInput.includes('goodbye') || lowerInput.includes('thanks') || lowerInput.includes('ok')) {
+    else if (lowerInput.includes('goodbye') || lowerInput.includes('thanks') || lowerInput.includes('ok')| lowerInput.includes('Thank')| lowerInput.includes('Thanks')| lowerInput.includes('thanks')) {
       handleEnding();
     } else {
       setMessages(prev => [...prev, { sender: 'bot', text: 'Sorry, can you re-enter?' }]);
@@ -167,11 +174,12 @@ function Chatbot() {
           sender: 'bot',
           text: (
             <div className="offers">
-              <p>Customers who order any service more than three times will receive the following incentives:</p>
+
+              <p>Customers using any service package 3 times will receive the above offer.</p>
               <p>1.Mandila Full Care: Book a session for two and get a 15% discount.</p>
-              <p>2.Body Detoxing Care: Receive a free consultation for bookings over 900,000 VND.</p>
-              <p>3.Warm Stone Massage: Book a session for two and get a 15% discount.</p>
-              <p>4.Aromatherapy Massage: Get a free bottle of essential oil for bookings over 700,000 VND.</p>
+              <p>2.Body Detoxing Care: Receive a free consultation for bookings over 36$.</p>
+              <p>3.Warm Stone Massage: Book a session for two and get a 15% discoun.</p>
+              <p>4.Aromatherapy Massage: Get a free bottle of essential oil for bookings over 28$.</p>
               <p>5.Thai Massage Stretch: Enjoy a complimentary herbal tea after the session.</p>
               <p>6.Back & Neck Massage: Book 3 sessions and get the 4th session free.</p>
               <p>7.Foot Massage: Get a 10% discount for bookings made before 6 PM.</p>
@@ -250,6 +258,7 @@ function Chatbot() {
             {msg.text}
           </div>
         ))}
+        <div ref={messagesEndRef}></div> {/* Giữ scroll đến cuối */}
       </div>
       <div className="chatbot-input">
         <input

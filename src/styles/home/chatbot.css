@@ -110,7 +110,7 @@ align-items: center;
 
 .message.user {
   align-self: flex-end;
-  background-color: #27ae60;
+  background-color: #0f94e7;
   /* Xanh lá Giáng Sinh cho người dùng */
   color: white;
 }
