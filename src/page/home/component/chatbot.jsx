@@ -92,10 +92,10 @@ function Chatbot() {
               <span role="gridcell">
                 <a
                   className="link-servey"
-                  href="http://localhost:"
+                  href="http://localhost:3001"
                   target="_blank"
                 >
-                  http://localhost:
+                  Relux
                 </a>
               </span>
             </div>
@@ -167,9 +167,10 @@ function Chatbot() {
           sender: 'bot',
           text: (
             <div className="offers">
+              <p>Customers who order any service more than three times will receive the following incentives:</p>
               <p>1.Mandila Full Care: Book a session for two and get a 15% discount.</p>
               <p>2.Body Detoxing Care: Receive a free consultation for bookings over 900,000 VND.</p>
-              <p>3.Warm Stone Massage: Book a session for two and get a 15% discoun.</p>
+              <p>3.Warm Stone Massage: Book a session for two and get a 15% discount.</p>
               <p>4.Aromatherapy Massage: Get a free bottle of essential oil for bookings over 700,000 VND.</p>
               <p>5.Thai Massage Stretch: Enjoy a complimentary herbal tea after the session.</p>
               <p>6.Back & Neck Massage: Book 3 sessions and get the 4th session free.</p>
@@ -233,7 +234,7 @@ function Chatbot() {
           <img className="chatbot-icon" src={logo} alt="" />
           <h3 className="chatbot-title">Relux</h3>
         </div>
-        <button className="close-button" onClick={toggleVisibility}>
+        <button className="close-button-chatbox" onClick={toggleVisibility}>
           &#10005;
         </button>
       </div>
