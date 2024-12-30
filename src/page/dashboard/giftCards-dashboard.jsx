@@ -389,7 +389,7 @@ const GiftCardsList = () => {
           giftCards.map((item, index) => (
             <tr key={index}>
               <td>{item.ServiceName || 'N/A'}</td>
-              <td className="discount">{item.Discount ? (item.Discount *100) : 0 || 'N/A'}%</td>
+              <td className="discount">{item.Discount ? item.Discount : 0 || 'N/A'}%</td>
               <td>{item.Description || 'N/A'}</td>
               <td className="text">{item.StartDate || 'N/A'}</td>
               <td className="text">{item.EndDate || 'N/A'}</td>
