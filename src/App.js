@@ -7,7 +7,7 @@ import MainLayoutDashboard from './layout/MainLayoutDashboard';
 import HomePage from './page/home/HomePage';
 import GalleryPage from './page/gallery/GalleryPage';
 import GiftCardPage from './page/giftcard/GiftCardPage';
-
+import AboutPage from './page/aboutpage/AboutPage.jsx';
 // Booking
 import BookingPage from './page/booking/BookingPage';
 import BookNowPage from './page/giftcard/BookNowPage';
@@ -65,6 +65,7 @@ function App() {
             {/* Main Routes */}
             <Route element={<MainLayout />}>
               <Route path="/" element={<HomePage />} />
+              <Route path="/about" element={<AboutPage />} />
               <Route path="/gallery" element={<GalleryPage />} />
               <Route path="/team-our" element={<TeamOurPage />} />
               <Route path="/team/:id" element={<DetailEmployee />} />
